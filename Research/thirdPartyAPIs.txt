@@ -1,0 +1,19 @@
+• Catalog API
+  ○ APPROVAL STATUS: PENDING
+
+  ○ Documentation: https://developer.ebay.com/api-docs/commerce/catalog/overview.html
+  
+  ○ Search for Matching Catalog Products: Ability to search
+  for products that match what the sponsor is offering.
+
+  ○ Complete and Accurate Information: Titles, descriptions,
+  item specifics.
+
+  ○ Prefilled Listing Details: Titles, descriptions, item
+  specifics, images.
+
+  ○ Product Identifiers
+
+  ○ getProduct will return product information.
+
+  ○ 10,000 API calls per day.
