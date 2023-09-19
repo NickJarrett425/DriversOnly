@@ -1,0 +1,29 @@
+What does IAM do? - 
+With AWS Identity and Access Management (IAM), we can specify who or what can access services and resources in AWS, centrally manage fine-grained permissions, and analyze access to refine permissions across AWS.
+
+How can we use it ? - 
+We can create granular permissions based on user attributes - such as department, job role, and team name by using attribute-based access control. So we can have different permissions for drivers, sponsors and admins. For example, instead of creating AWS Identity and Access Management (IAM) roles with distinct policies for every team or individual to ensure the right levels of access, you can use ABAC (attribute based access control like users job, permissions,  role etc) to group attributes to identify which resources a set of users can access.
+IAM Access Analyzer Guides You Toward Least-Privilege Permissions
+
+AWS IAM Main Concepts
+Users
+Individuals/entities needing AWS access.
+Have unique credentials: username/password or access keys.
+Groups
+Collections of users for easier permission management.
+Attach policies to groups to grant permissions to all members.
+Roles
+Similar to users but not tied to individuals.
+Used for granting permissions to services or other accounts.
+Associated with policies defining permissions.
+Policies
+JSON documents defining permissions.
+Specify allowed/denied actions on AWS resources.
+Attached to users, groups, or roles.
+Access Keys
+Key pairs for programmatic access (access key ID + secret access key).
+Associated with IAM users.
+MFA (Multi-Factor Authentication)
+Adds an extra layer of security during sign-in.
+Requires a second form of authentication.
+
