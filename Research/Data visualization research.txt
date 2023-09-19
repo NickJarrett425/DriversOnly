@@ -1,0 +1,11 @@
+3. As a developer, I will explore data visualization libraries and reporting frameworks, so that I can generate visually appealing reports.
+
+	For graph generation we should use Matplotlib  because it is the biggest data visualization library for python. We could also use Seaborn which is a library built ontop of Matplotlib to make it easier to use. 
+
+
+
+sources/helpfull links
+
+https://python-graph-gallery.com/
+https://python-graph-gallery.com/matplotlib/
+https://python-graph-gallery.com/seaborn/

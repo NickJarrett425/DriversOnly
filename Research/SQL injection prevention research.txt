@@ -1,0 +1,10 @@
+
+2. As a developer, I will research SQL injection prevention techniques, so that I can protect the application's database from malicious attacks.
+	
+	SQL injection can be prevented with multiple techniques. For best practices bellow should be used at a minimum. 
+	Using prepared SQL statements. This is helpful because if a sql injection does happen the attacker will not be able to change the intent of the query just the data the query is searching for. 
+	Use stored procedures in the SQL database. This is helpful for a similar reason as SQL statements. If a attacker can take over a query if the query uses a stored procedure it can help cleanse input and make sure queries are doing what they were intended to do
+
+sources/helpfull links
+
+https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html

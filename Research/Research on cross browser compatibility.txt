@@ -1,0 +1,15 @@
+
+1. As a developer, I will learn about cross-browser compatibility to ensure the application works seamlessly on various web browsers.
+
+	There are many different issues that can cause compatibility issues between browsers. Here are a few common issues I found
+	The lack of HTML/CSS validation. Browsers can interpret HTML/CSS differently and have different assumptions, so it is helpful to use tools that help validate that your code will work on different browsers
+	Not using CSS resets. The CSS styling for each browser is different so if it is not reset then each browser will render the website differently
+	Using browser version dection instead of feature detection. This approach was used in the past so for modern browsers it may cause code to malfunction
+
+	I didn’t see any special requirements for security browsers. 
+
+sources/helpfull links
+
+https://testsigma.com/blog/9-tips-to-avoid-cross-browser-compatibility-issues-from-the-start/
+
+https://www.browserstack.com/guide/what-is-browser-compatibility
