@@ -1,0 +1,19 @@
+User Registration and Onboarding: Send welcome emails to new drivers upon registration, including information about the program and how to get started.
+
+Points Updates: Notify drivers via email or in-app notifications when they earn points through various activities, such as completing trips or meeting specific milestones.
+
+Redemption Alerts: Inform drivers when they have accumulated enough points to redeem them for products, providing details on available options and the redemption process.
+
+Communication with Sponsors: Enable sponsors to communicate with drivers through email or notifications, such as promoting special offers or announcing partnership updates.
+
+Admin Notifications: Alert administrators when critical events occur on the platform, such as driver-sponsor partnerships, high point redemptions, or unusual activities.
+
+
+How can we do it ?
+
+AWS SNS - Amazon Simple Notification Service (Amazon SNS) is a managed service that provides message delivery from publishers to subscribers (also known as producers and consumers). AWS SNS is a fully managed messaging service that supports SMS, email, and push notifications.It can be used to send real-time notifications to users and administrators based on various triggers. SNS is a suitable choice for sending alerts, updates, and notifications to users and admins.
+
+Django Email Backend - Django provides an email backend that supports various email providers, including SMTP, SendGrid, and more. This can be used to configure email settings within Django for sending registration emails and other notifications.
+
+Push Notifications: - Consider integrating a push notification service like Firebase Cloud Messaging (FCM) for sending real-time updates to mobile app users. FCM can be used to notify drivers about points earned, product redemption opportunities, and sponsor messages if a mobile app is part of the project.
+
