@@ -1,6 +1,4 @@
 • Catalog API
-  ○ APPROVAL STATUS: PENDING
-
   ○ Documentation: https://developer.ebay.com/api-docs/commerce/catalog/overview.html
   
   ○ Search for Matching Catalog Products: Ability to search
