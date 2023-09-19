@@ -1,0 +1,28 @@
+Amazon Simple Storage Service (Amazon S3):
+	Data is stored as objects in buckets
+	Virtually unlimited storage (up to 5TB per object)
+	Designed for 11 9s of durability
+		Designed to have at least 99.999999999% annual durability. So if you stored 1 billion objects, you could probably go 100 years without losing a single one.
+	Granular access to buckets and objects
+Access through HTTP or HTTPS provides low-latency access to buckets; in addition, you can also access S3 through a VPC (Virtual Private Cloud) endpoint.
+Object-level storage classes:
+	S3 standard - is designed for high durability, availability, and performance object storage for frequently accessed data
+	S3 Intelligent-Tiering - designed to optimize costs by moving data to the most cost-effective access tier
+	S3 Standard-Infrequent Access - used for data that is accessed less frequently, but requires rapid access when needed
+	S3 Glacier - is a secure, durable, and low-cost storage class for data archiving
+	S3 Glacier Deep Archive - lowest-cost storage class for S3. It supports long-term retention and digital preservation that might be accessed once or twice a year.
+Amazon S3 bucket URLs
+	Uploading data:
+		Create bucket in any AWS region
+		Upload any number of objects to the bucket
+	Bucket path-style URL endpoint
+		https://s3.us-east-1.amazonaws.com/bucket-name
+	Virtual hosted-style endpoint
+		https://bucket-name.s3-us-east-1.amazonaws.com
+Common use cases:
+	Storing application assets
+	Static web hosting
+	Backup and disaster recovery
+	Staging area for Big Data
+Secure way to store our data
+What is S3 Confidentiality:https://www.youtube.com/watch?v=jdcBmHCq7UE&list=PLQVJk9oC5JKoUHSLkFdRhzugNyrvbOjuY&index=7&ab_channel=CBTNuggets

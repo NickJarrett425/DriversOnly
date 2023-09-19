@@ -1,0 +1,15 @@
+Amazon RDS:
+	Amazon RDS is a managed service that sets up and operates a relational database in the cloud
+Launching an RDS DB instance (and connecting to MySQL Workbench):
+Step by step guide below:
+https://drive.google.com/file/d/1GUYr6x95paEBc8YEnd9CBW0YwpquXndA/view?usp=drive_link
+Use cases:
+	Web and mobile applications
+	Ecommerce applications
+	Mobile and online games
+Requests:
+	The number of input and output requests that are made to the database
+Data transfer:
+	No charge for inbound data transfer
+	Tiered charges for outbound data transfer
+	What is Amazon RDS and How It Works: https://www.youtube.com/watch?v=tLp8pPNdDXQ&ab_channel=CBTNuggets
