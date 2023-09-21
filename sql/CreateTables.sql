@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `user` (
     UserID INTEGER NOT NULL,
     UserUsername VARCHAR(255) NOT NULL,
     UserEmail VARCHAR(255) NOT NULL,
-    UserEncryptedPW BIT NOT NULL,
+    UserEncryptedPW VARCHAR(255) NOT NULL,
     UserFName VARCHAR(255) NOT NULL,
     UserLName VARCHAR(255) NOT NULL,
     UserMiddleInitial CHAR NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS sponsor (
     SponsorSponsorOrganizationID INTEGER NOT NULL,
     FOREIGN KEY (SponsorUserID)
 		REFERENCES `user` (UserID),
-	FOREIGN KEY (SponsorSponsorOrgID)
+	FOREIGN KEY (SponsorSponsorOrganizationID)
 		REFERENCES sponsor_organization (SponsorOrganizationID),		
     PRIMARY KEY (SponsorID)
 );
@@ -113,9 +113,9 @@ CREATE TABLE IF NOT EXISTS line_item (
 	LineItemID INTEGER NOT NULL,
     LineItemCatalogID INTEGER NOT NULL,
     LineItemUnitPrice INTEGER NOT NULL,
-    FOREIGN KEY (LineItemsCatalogID)
+    FOREIGN KEY (LineItemCatalogID)
 		REFERENCES catalog (CatalogID),	
-    PRIMARY KEY (LineItemsID)
+    PRIMARY KEY (LineItemID)
 );
 
 CREATE TABLE IF NOT EXISTS order_item (
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS order_item (
     FOREIGN KEY (OrderItemOrderID)
 		REFERENCES `order` (OrderID),
 	FOREIGN KEY (OrderItemLineID)
-		REFERENCES line (LineID),		
+		REFERENCES line_item (LineItemID),		
     PRIMARY KEY (OrderItemOrderID, OrderItemLineID)
 );
 
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS catalog_line (
     FOREIGN KEY (CatalogLineCatalogID)
 		REFERENCES catalog (CatalogID),
 	FOREIGN KEY (CatalogLineLineID)
-		REFERENCES line (LineID),	 
+		REFERENCES line_item (LineItemID),	 
     PRIMARY KEY (CatalogLineCatalogID, CatalogLineLineID)
 );
 
