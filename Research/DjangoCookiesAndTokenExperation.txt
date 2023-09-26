@@ -1,0 +1,4 @@
+﻿In Django, there is something called a session framework. This will make it so that the cookie’s data will not have to be directly stored on the client side. What is stored is a cookie with a session ID so that whenever a session is resumed, it can be loaded from the database. Meaning the database will store the cookies instead. 
+
+
+Authentication is handled separately from the sessions, so if a user is required, then it must first be logged. When doing so, it is given a token that can be compared against in the database to see if the token is still valid. The time that is allowed per session would be determined by us when developing the system. The way to determine how valid a token still is by checking the timestamp of the token creation and see if it's too old.
