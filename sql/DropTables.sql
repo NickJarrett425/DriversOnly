@@ -1,7 +1,7 @@
 -- Team06
 -- David, Dhruvisha, Neil, Nick, Ryan
 
-USE Incentive;
+USE onlydrivers;
 
 DROP TABLE IF EXISTS catalog_line;
 DROP TABLE IF EXISTS order_item;
@@ -17,4 +17,4 @@ DROP TABLE IF EXISTS sponsor_organization;
 DROP TABLE IF EXISTS `user`;
 
 
-DROP SCHEMA IF EXISTS Incentive;
+DROP SCHEMA IF EXISTS onlydrivers;
