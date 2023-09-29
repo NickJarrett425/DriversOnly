@@ -1,0 +1,31 @@
+{% extends 'about/base.html' %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="display-4">About {{ product_name }}</h1>
+            <p class="lead">{{ description }}</p>
+
+            <h2>Our Team</h2>
+            <ul class="list-group">
+                <li class="list-group-item">{{ David }}</li>
+                <li class="list-group-item">{{ Nick }}</li>
+                <li class="list-group-item">{{ Neil }}</li>
+                <li class="list-group-item">{{ Dhruvisha }}</li>
+                <li class="list-group-item">{{ Ryan }}</li>
+            </ul>
+
+            <div class="card mt-4">
+                <div class="card-header bg-dark text-white">
+                    Version Information
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Version: {{ version }}</p>
+                    <p class="card-text">Release Date: {{ release_date_month }}/{{ release_date_day }}/{{ release_date_year }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
