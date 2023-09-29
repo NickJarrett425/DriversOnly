@@ -2,8 +2,8 @@
 -- David, Dhruvisha, Neil, Nick, Ryan
 
 
-CREATE SCHEMA IF NOT EXISTS Incentive;
-USE Incentive;
+CREATE SCHEMA IF NOT EXISTS onlydrivers;
+USE onlydrivers;
 
 CREATE TABLE IF NOT EXISTS `user` (
     UserID INTEGER NOT NULL,
