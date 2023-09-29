@@ -1,5 +1,5 @@
 Creating a Django Project
-  1. Setup vScriptsirtual environment
+  1. Setup virtual environment
         python -m venv <name>
   2. Activate the virtual environment
         source virt/Scripts/activate
