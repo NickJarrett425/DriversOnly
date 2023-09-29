@@ -4,16 +4,16 @@
 <div class="container text-center mt-5">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="display-4">About {{ product_name }}</h1>
-            <p class="lead">{{ description }}</p>
+            <h1 class="display-4">About {{ newestAbout.product_name }}</h1>
+            <p class="lead">{{ newestAbout.description }}</p>
 
-            <h2>{{ team_name }}</h2>
+            <h2>{{ newestAbout.team_name }}</h2>
             <ul class="list-group">
-                <li class="list-group-item">{{ David }}</li>
-                <li class="list-group-item">{{ Nick }}</li>
-                <li class="list-group-item">{{ Neil }}</li>
-                <li class="list-group-item">{{ Dhruvisha }}</li>
-                <li class="list-group-item">{{ Ryan }}</li>
+                <li class="list-group-item">{{ newestAbout.david }}</li>
+                <li class="list-group-item">{{ newestAbout.nick }}</li>
+                <li class="list-group-item">{{ newestAbout.neil }}</li>
+                <li class="list-group-item">{{ newestAbout.dhruvisha }}</li>
+                <li class="list-group-item">{{ newestAbout.ryan }}</li>
             </ul>
 
             <div class="card mt-4">
@@ -21,8 +21,8 @@
                     Version Information
                 </div>
                 <div class="card-body">
-                    <p class="card-text">Version: {{ version }}</p>
-                    <p class="card-text">Release Date: {{ release_date_month }}/{{ release_date_day }}/{{ release_date_year }}</p>
+                    <p class="card-text">Version: {{ newestAbout.version }}</p>
+                    <p class="card-text">Release Date: {{ newestAbout.release_date }}</p>
                 </div>
             </div>
         </div>
