@@ -12,7 +12,7 @@ def about_page(request):
         and can redeem them for products from their sponsor's catalog. Sponsors manage driver applications, point distribution, and product offerings. \
         The program is designed to enhance road safety and driver engagement."""
 
-    return render(request, 'about_page.html', {
+    return render(request, 'about/about_page.html', {
         "team_name" : team_name,
         "David" : team_members[0],
         "Nick" : team_members[1],
