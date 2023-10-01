@@ -1,0 +1,6 @@
+# Ignore the virtual environment
+virt/
+virtual/
+
+# Ignore the .env file.
+Website/website/.env
