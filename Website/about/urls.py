@@ -9,5 +9,5 @@ urlpatterns = [
     # slug: hyphen-and_underscores_stuff
     # UUID: universally unique identifer (usernames & such)
 
-    path('about/', views.about_page, name="about_page"),
+    path('', views.about_page, name="about_page"),
 ]
