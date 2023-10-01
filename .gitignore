@@ -4,3 +4,6 @@ virtual/
 
 # Ignore the .env file.
 Website/website/.env
+
+#Ignore __pycache__
+Website/members/__pycache__/
