@@ -2,7 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import user_passes_test
 from .forms import RegisterUserForm
+
+@user_passes_test(lambda user: not user.username, login_url='/about', redirect_field_name=None)
 
 def login_user(request):
     if request.method == "POST":
@@ -23,6 +26,7 @@ def logout_user(request):
     messages.success(request, ("You were successfully logged out."))
     return redirect('/')
 
+@user_passes_test(lambda user: not user.username, login_url='/about', redirect_field_name=None)
 def register_user(request):
     if request.method == "POST":
         form = RegisterUserForm(request.POST)
