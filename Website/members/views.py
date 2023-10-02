@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import RegisterUserForm
 
 def login_user(request):
+    if request.user.is_authenticated:
+        return redirect('/about')
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -20,10 +22,15 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    messages.success(request, ("You were successfully logged out."))
+    if request.user.is_authenticated:
+        messages.success(request, ("You were successfully logged out."))
+    else:
+        messages.success(request, ("You are not currently logged in to an account."))
     return redirect('/')
 
 def register_user(request):
+    if request.user.is_authenticated:
+        return redirect('/about')
     if request.method == "POST":
         form = RegisterUserForm(request.POST)
         if form.is_valid():
