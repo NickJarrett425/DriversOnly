@@ -1,6 +1,7 @@
-{% extends 'about/base.html' %}
+{% extends 'registration/base.html' %}
 
 {% block content %}
+<br/><br/>    
     <h1>Login</h1>
 <br/>
     <form action="" method=POST>
@@ -18,5 +19,8 @@
         value="Login" class="
         btn btn-secondary">
     </form>
+
 <br/><br/>
+or<br/><br/>
+<a href="{% url "register_user" %}" class="btn btn-secondary" role="button">Create an Account</a>
 {% endblock %}
