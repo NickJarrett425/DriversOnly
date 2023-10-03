@@ -21,11 +21,11 @@ def login_user(request):
         return render(request, 'registration/login.html', {})
 
 def logout_user(request):
+    logout(request)
     if request.user.is_authenticated:
-        logout(request)
-        messages.success(request, ("You were successfully logged out."))       
+        messages.success(request, ("You were successfully logged out."))
     else:
-        messages.success(request, ("You are not currently logged in to an account."))   
+        messages.success(request, ("You are not currently logged in to an account."))
     return redirect('/')
 
 def register_user(request):
