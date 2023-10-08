@@ -1,3 +1,5 @@
+from .models import UserProfile
+from .forms import UserProfileForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -45,3 +47,25 @@ def register_user(request):
         form = RegisterUserForm()
 
     return render(request, 'registration/register_user.html', {'form':form,})
+
+def view_profile(request):
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    return render(request, 'registration/profile.html', {'profile': profile})
+
+def edit_profile(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to edit your profile.")
+        return redirect('login_user')
+    
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect('view_profile')
+    else:
+        form = UserProfileForm(instance=profile)
+    
+    return render(request, 'registration/edit_profile.html', {'profile': profile, 'form': form})

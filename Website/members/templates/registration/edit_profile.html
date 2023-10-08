@@ -1,0 +1,12 @@
+<!-- members/templates/members/edit_profile.html -->
+
+{% extends "registration/base.html" %}
+
+{% block content %}
+  <h1>Edit Your Profile</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+  </form>
+{% endblock %}
