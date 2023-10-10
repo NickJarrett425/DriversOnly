@@ -1,0 +1,39 @@
+{% extends 'about/base.html' %}
+
+{% block content %}
+
+    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">       
+        <h1>{{ driver.user.username }}'s Profile</h1>
+        <p>Points: {{ driver.points }}</p>
+        <p>First Name: {{ driver.first_name }}</p>
+        <p>Middle Initial: {{ driver.middle_initial }}</p>
+        <p>Last Name: {{ driver.last_name }}</p>
+        <p>Date of Birth: {{ driver.date_of_birth }}</p>
+        <p>Street Address: {{ driver.street_address }}</p>
+        <p>City: {{ driver.city }}</p>
+        {% comment %} <p>State: {{ driver.get_state_display }}</p> {% endcomment %}
+        <p>State: {{ driver.state }}</p>
+        <p>Zipcode: {{ driver.zipcode }}</p>
+        <p>Phone Number: {{ driver.phone_number }}</p>
+        <p>Driver's License: {{ driver.drivers_license }}</p>
+
+        <h2>Vehicle Information</h2>
+        {% for vehicle in driver.vehicles.all %}
+            <strong>Vehicle {{ forloop.counter }}</strong>
+            <p>Vehicle Year: {{ vehicle.year }}</p>
+            <p>Vehicle Make: {{ vehicle.make }}</p>
+            <p>Vehicle Model: {{ vehicle.model }}</p>
+            <p>Vehicle VIN: {{ vehicle.vin }}</p>
+            <p>Insurance Provider: {{ vehicle.provider_name }}</p>
+            <p>Insurance Policy Number: {{ vehicle.policy_number }}</p>
+        {% endfor %}
+        Need to add a new vehicle? <a href="{% url "add_vehicle" %}" class="btn btn-primary" role="button">Add Vehicle</a>
+
+        <h2>Emergency Contact</h2>
+        <p>Name: {{ driver.emergency_contact_name }}</p>
+        <p>Phone: {{ driver.emergency_contact_phone }}</p>
+    </div>
+</br>
+    <a href="{% url "edit_driver_profile" %}" class="btn btn-secondary" role="button">Edit Profile</a>
+</br></br></br></br></br></br>
+{% endblock %}
