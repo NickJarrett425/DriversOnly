@@ -1,5 +1,8 @@
 from .models import UserProfile, DriverProfile
-from .forms import RegisterUserForm, UserProfileForm, DriverProfileForm
+from .forms import RegisterUserForm, UserProfileForm, DriverProfileForm, CustomPasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -54,25 +57,37 @@ def view_profile(request):
     else:
         return render(request, 'registration/profile.html', {'profile': profile})
 
+
 def edit_profile(request):
     if not request.user.is_authenticated:
         messages.error(request, "You need to be logged in to edit your profile.")
         return redirect('login_user')
-    
+
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=profile)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Profile updated successfully!")
-            return redirect('view_profile')
+        if 'password_change' in request.POST:
+            password_change_form = CustomPasswordChangeForm(request.user, request.POST)
+            if password_change_form.is_valid():
+                password_change_form.save()
+                update_session_auth_hash(request, request.user)
+                messages.success(request, "Password changed successfully!")
+                return redirect('view_profile')
+        else:
+            form = UserProfileForm(request.POST, instance=profile)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Profile updated successfully!")
+                return redirect('view_profile')
     else:
         form = UserProfileForm(instance=profile)
+        password_change_form = CustomPasswordChangeForm(request.user)
+
     if request.user.is_superuser:
-        return render(request, 'registration/edit_admin_profile.html', {'profile': profile, 'form': form})
+        return render(request, 'registration/edit_admin_profile.html', {'profile': profile, 'form': form, 'password_change_form': password_change_form})
     else:
-        return render(request, 'registration/edit_profile.html', {'profile': profile, 'form': form})
+        return render(request, 'registration/edit_profile.html', {'profile': profile, 'form': form, 'password_change_form': password_change_form})
+
 
 def view_driver_profile(request):
     try:

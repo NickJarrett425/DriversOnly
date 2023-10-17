@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import UserProfile, DriverProfile
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 class RegisterUserForm(UserCreationForm):
@@ -19,6 +20,12 @@ class RegisterUserForm(UserCreationForm):
         self.fields['username'].widget.attrs['class'] = 'form-control'
         self.fields['password1'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
+
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    class Meta:
+        model = User 
+
 
 class UserProfileForm(forms.ModelForm):
     class Meta:

@@ -10,4 +10,5 @@ urlpatterns = [
     # UUID: universally unique identifer (usernames & such)
 
     path('', views.about_page, name="about_page"),
+
 ]

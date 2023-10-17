@@ -7,6 +7,10 @@
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
+
+    <!-- Include password change form fields -->
+    {{ password_change_form.as_p }}
+
     <button type="submit" class="btn btn-primary">Save Changes</button>
   </form>
 {% endblock %}
