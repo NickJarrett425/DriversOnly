@@ -1,0 +1,15 @@
+
+{% extends "about/base.html" %}
+
+{% block content %}
+<div class="shadow p-4 mx-auto bg-body rounded" style="width: 25"> 
+    <h1>Your Admin Profile</h1>
+    <p>Username: {{ user.username }}</p>
+    <p>First Name: {{ profile.first_name }}</p>
+    <p>Last Name: {{ profile.last_name }}</p>
+    <p>Middle Initial: {{ profile.middle_initial }}</p>
+</div>
+</br>
+<a href="{% url "edit_driver_profile" %}" class="btn btn-secondary" role="button">Edit Profile</a>
+
+{% endblock %}
