@@ -13,5 +13,4 @@ urlpatterns = [
     # Keeping Driver Profile separate for now
     path('driver_profile/', views.view_driver_profile, name='view_driver_profile'),
     path('driver_profile/edit/', views.edit_driver_profile, name='edit_driver_profile'),
-    path('driver_profile/add_vehicle/', views.add_vehicle, name='add_vehicle'),
 ]

@@ -8,12 +8,6 @@
     </br>      
             <h2>General Information</h2>
             {{ driver_form.as_p }}
-    </br>
-            <h3>My Vehicles</h3>
-            {% for vehicle in driver.vehicles.all %}
-                <strong>Vehicle {{ forloop.counter }}</strong>
-                {{ vehicle_form.as_p }}
-            {% endfor %}
             <button type="submit" class="btn btn-secondary">Save Changes</button>
     </form>
 </div>

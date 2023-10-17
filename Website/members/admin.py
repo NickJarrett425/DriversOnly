@@ -1,5 +1,4 @@
 from django.contrib import admin
-from .models import DriverProfile, Vehicle
+from .models import DriverProfile
 
 admin.site.register(DriverProfile)
-admin.site.register(Vehicle)
