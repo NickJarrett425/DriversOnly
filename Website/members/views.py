@@ -51,8 +51,7 @@ def view_profile(request):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     if request.user.is_superuser:
         return render(request, 'registration/admin_profile.html', {'profile': profile})
-    else:  
-        redirect('about')  
+    else:
         return render(request, 'registration/profile.html', {'profile': profile})
 
 def edit_profile(request):
