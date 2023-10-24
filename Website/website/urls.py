@@ -8,4 +8,5 @@ urlpatterns = [
     path('members/', include('django.contrib.auth.urls')),
     path('', include('members.urls')),
     path('search/', search_catalog, name='search_catalog'),
+    path('dashboard/', include('dashboard.urls'))
 ]
