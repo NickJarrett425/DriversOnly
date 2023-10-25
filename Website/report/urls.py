@@ -1,13 +1,8 @@
 from django.urls import path
-from . import views
+from .import views
 
 urlpatterns = [
-    # Path Converters
-    # int: numbers
-    # str: strings
-    # path: whole urls /
-    # slug: hyphen-and_underscores_stuff
-    # UUID: universally unique identifer (usernames & such)
-
-    path('', views.about_page, name="about_page"),
+    path('login_report', views.all_login_attempts, name="login_report"),
+    path('login_report/downcsv', views.all_login_attempts_download_csv, name="login_report_download_csv"),
+    path('login_report/downpdf', views.all_login_attempts_download_pdf, name="login_report_download_pdf"),
 ]
