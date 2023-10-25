@@ -5,8 +5,4 @@ virtual/
 # Ignore the .env file.
 Website/website/.env
 Website/.env
-Website/website/about/__pycache__/.pyc
-Website/website/dashboard/__pycache__/.pyc
-Website/website/report/__pycache__/.pyc
-Website/website/members/__pycache__/.pyc
-Website/website/Catalog/__pycache__/.pyc
+.pyc
