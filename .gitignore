@@ -3,6 +3,3 @@ virt/
 virtual/
 
 # Ignore the .env file.
-Website/website/.env
-Website/.env
-*.pyc
