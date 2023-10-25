@@ -4,4 +4,4 @@ virtual/
 
 # Ignore the .env file.
 Website/website/.env
-*.pyc
+Website/about/__pycache__/
