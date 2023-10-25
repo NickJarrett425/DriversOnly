@@ -5,3 +5,6 @@ virtual/
 # Ignore the .env file.
 **/.env
 **/.pyc
+Website/website/about/__pycache__/
+Website/website/dashboard/__pycache__/
+Website/website/report/__pycache__/
