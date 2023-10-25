@@ -16,14 +16,19 @@
           </li>
           {% if user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'view_profile' %}">View Profile</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">Logout</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'login_report' %}">Report</a>
+                <a class="nav-link" href="{% url 'view_driver_profile' %}">Driver Profile</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login_report' %}">Report</a>
+          </li>
+            {% if user.is_superuser %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_admin_profile' %}">Admin Profile</a>
+                </li>
+            {% endif %}
           {% else %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'register_user' %}">Register</a>

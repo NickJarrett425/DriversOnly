@@ -1,0 +1,80 @@
+{% extends 'about/base.html' %}
+
+{% block content %}
+<style>
+    .ind{
+        padding-left: 25px;
+        padding-right: 25px;
+
+    }
+    .fistind{
+        padding-right: 25px;
+
+    }
+    .inside_button {
+        text-align: center;
+
+    }
+    .left-button {
+        float:right;
+        padding-right: 15px;
+    }
+    .right-button {
+        float:right;
+        padding-left: 10px;
+    }
+</style>
+<h1>
+    Logins 
+    <button class="right-button" id="dbutton2">
+        <div class="inside_button">
+            download .csv
+        </div>
+    </button>
+    <script>         
+        const button = document.getElementById("dbutton2");
+        function download(){
+            window.location.href = window.location.href + "/downcsv";
+        }
+
+        button.addEventListener("click",download);
+    </script>
+    <button class="left-button" id="dbutton1">
+        <div class="inside_button">
+            download .pdf 
+        </div>
+    </button>
+    <script>         
+        const tbutton = document.getElementById("dbutton1");
+        function download(){
+            window.location.href = window.location.href + "/downpdf";
+        }
+
+        tbutton.addEventListener("click",download);
+    </script>
+</h1>
+<table>
+    <thead>
+        <tr>
+            <th><div class="firstind">ID</div></th>
+            <th><div class="ind">Date & Time</div></th>
+            <th><div class="ind">user</div></th>
+            <th><div class="ind">Login result</div></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for login_log in login_list %}
+            <tr>
+                <td><div class="firstind">{{ login_log.id }}</div></td>
+                <td><div class="ind">{{ login_log.Datestamp }}</div></td>
+                <td><div class="ind">{{ login_log.username }}</div></td>
+                <td><div class="ind">{{ login_log.login_success }}</div></td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">No objects found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
