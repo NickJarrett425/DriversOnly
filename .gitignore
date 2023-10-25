@@ -3,9 +3,5 @@ virt/
 virtual/
 
 # Ignore the .env file.
-Website/website/.env
-Website/Catalog/__pycache__
-Website/about/__pycache__
-Website/dashboard/__pycache__
-Website/members/__pycache__
-Website/website/__pycache__
+**/.env
+**/.pyc
