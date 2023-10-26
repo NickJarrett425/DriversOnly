@@ -21,9 +21,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">Logout</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'login_report' %}">Report</a>
-            </li>
+            {% if profile.is_sponsor or user.is_superuser %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login_report' %}">Report</a>
+                </li>
+            {% endif %}   
           {% else %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'register_user' %}">Register</a>
