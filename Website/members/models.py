@@ -7,6 +7,7 @@ class UserProfile(models.Model):
     last_name = models.CharField(max_length=30, blank=True)
     middle_initial = models.CharField(max_length=1, blank=True)
     email = models.EmailField(max_length=75, blank=True)
+    sponsor_name = models.CharField(max_length=30, blank=True)
     is_driver = models.BooleanField('driver status', default=False)
     is_sponsor = models.BooleanField('sponsor status', default=False)
 

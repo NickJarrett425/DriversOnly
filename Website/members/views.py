@@ -45,6 +45,16 @@ def register_user(request):
             password = form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
             login(request, user)
+            try:
+                driver, created = DriverProfile.objects.get_or_create(user=request.user)
+            except DriverProfile.DoesNotExist:
+                driver = None
+            driver.first_name = form.cleaned_data['first_name']
+            driver.last_name = form.cleaned_data['last_name']
+            driver.email = form.cleaned_data['email']
+            driver.is_driver = True
+            driver.user = request.user
+            driver.save()
             login_attempt = login_log(username=username, login_success="True")
             login_attempt.save()
             messages.success(request, ("You were successfully registered."))
@@ -61,7 +71,7 @@ def view_profile(request):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     if profile.is_driver:
         try:
-            driver, created = DriverProfile.objects.get_or_create(user=request.user)
+            driver = DriverProfile.objects.get(user=request.user)
         except DriverProfile.DoesNotExist:
             driver = None
 

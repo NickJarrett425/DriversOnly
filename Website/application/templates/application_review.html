@@ -1,0 +1,68 @@
+{% extends "about/base.html" %}
+
+{% block content %}
+{% if application.is_open %}
+    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">
+        <h1>{{ application.driver.user.username }}'s Application</h1> 
+        <h2>Driver's General Information</h2> 
+        <p>Driver's First Name: {{ application.first_name }}</p>
+        <p>Driver's Last Name: {{ application.last_name }}</p>
+        <p>Driver's Middle Initial: {{ application.middle_initial }}</p>
+        <p>Driver's Email: {{ application.email }}</p>
+        <p>Driver's Phone Number: {{ application.phone }}</p>
+        
+        <h2>Driver's Address Information</h2>
+        <p>Driver's Street Address: {{ application.street_address }}</p>
+        <p>Driver's City: {{ application.city }}</p>
+        <p>Driver's State: {{ application.state }}</p>    
+        <p>Driver's Zip Code: {{ application.zipcode }}</p>
+
+        <h2>Vehicle Information</h2>
+        <p>Driver's License Number: {{ application.license_num }}</p>
+        <p>Plate Number: {{ application.plate_num }}</p>
+        <p>Vehicle Year: {{ application.year }}</p>
+        <p>Vehicle Make: {{ application.make }}</p>
+        <p>Vehicle Model: {{ application.model }}</p>
+        <p>VIN: {{ application.vin }}</p>
+        <p>Insurance Provider: {{ application.provider_name }}</p>
+        <p>Policy Number: {{ application.policy_number }}</p>
+    </div>
+</br>
+    <a href="{% url "application_approve" application.id %}" class="btn btn-secondary" role="button">Approve Application</a>
+</br></br>
+    <a href="{% url "application_deny" application.id %}" class="btn btn-secondary" role="button">Deny Application</a>
+    </br>
+    </br></br></br></br></br></br>
+{% elif not application.is_open %}
+    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">
+        <h1>{{ application.driver.user.username }}'s Application</h1> 
+        <h2>Driver's General Information</h2> 
+        <p>Driver's First Name: {{ application.first_name }}</p>
+        <p>Driver's Last Name: {{ application.last_name }}</p>
+        <p>Driver's Middle Initial: {{ application.middle_initial }}</p>
+        <p>Driver's Email: {{ application.email }}</p>
+        <p>Driver's Phone Number: {{ application.phone }}</p>
+        
+        <h2>Driver's Address Information</h2>
+        <p>Driver's Street Address: {{ application.street_address }}</p>
+        <p>Driver's City: {{ application.city }}</p>
+        <p>Driver's State: {{ application.state }}</p>    
+        <p>Driver's Zip Code: {{ application.zipcode }}</p>
+
+        <h2>Vehicle Information</h2>
+        <p>Driver's License Number: {{ application.license_num }}</p>
+        <p>Plate Number: {{ application.plate_num }}</p>
+        <p>Vehicle Year: {{ application.year }}</p>
+        <p>Vehicle Make: {{ application.make }}</p>
+        <p>Vehicle Model: {{ application.model }}</p>
+        <p>VIN: {{ application.vin }}</p>
+        <p>Insurance Provider: {{ application.provider_name }}</p>
+        <p>Policy Number: {{ application.policy_number }}</p>
+    </div>
+</br>
+{% else %}
+    <strong>There was an error.</strong>
+{% endif %}
+{% endblock %}
+
+

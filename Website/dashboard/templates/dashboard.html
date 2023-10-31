@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
-        <a href=# class="text-center" style="margin-bottom: 20px; text-decoration: none; color: black;">
+        <a href="{% url 'application_form' %}" class="text-center" style="margin-bottom: 20px; text-decoration: none; color: black;">
             <p>It looks like you don't have a sponsor yet.</p>
             <img src="{% static 'application.png' %}" alt="Application" width="300">
             <p>Click here to start an application!</p>
