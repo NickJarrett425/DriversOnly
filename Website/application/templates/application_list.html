@@ -11,7 +11,7 @@
             <li>No open applications for {{profile.sponsor_name}} </li>
         {% endfor %}
     </ul>
-{% else %}
+{% elif sponsor.is_sponsor %}
     <h1>Applications to {{sponsor.sponsor_name}}</h1>
     <ul>
         {% for result in results %}
@@ -19,6 +19,16 @@
     </br>
         {% empty %}
             <li>No open applications for {{sponsor.sponsor_name}} </li>
+        {% endfor %}
+    </ul>
+{% elif profile.is_driver %}
+    <h1>Your open applications</h1>
+    <ul>
+        {% for result in results %}
+        <strong>Your Application to {{ result.sponsor_name }}:</strong> <a href="{% url "application_review" result.id %}" class="btn btn-secondary" role="button">Review Application</a>
+    </br>
+        {% empty %}
+            <li>No open applications</li>
         {% endfor %}
     </ul>
 {% endif %}

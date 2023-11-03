@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Application
 from members.models import UserProfile, DriverProfile, SponsorUserProfile, SponsorList
-from .forms import ApplicationForm
+from .forms import ApplicationForm, ApplicatonReasonForm
 
 def application_form(request):
     if request.method == 'POST':
@@ -28,12 +28,19 @@ def application_form(request):
 
     return render(request, 'application_form.html', {'form': form})
 
+def success_page(request):
+    return render(request, 'success.html')
+
 def application_list(request):
     if not request.user.is_authenticated:
         messages.error(request, "You need to log in or register to view driver applications.")
         return redirect('/')
     profile = UserProfile.objects.get(user=request.user)
-    if profile.is_sponsor:
+    if profile.is_driver:
+        driver = DriverProfile.objects.get(user=request.user)
+        results = Application.objects.filter(driver=driver, is_open=True)
+        return render(request, 'application_list.html', {'results': results, 'profile': profile,})
+    elif profile.is_sponsor:
         sponsor = SponsorUserProfile.objects.get(user=request.user)
         results = Application.objects.filter(sponsor_name=sponsor.sponsor_name, is_open=True)
         return render(request, 'application_list.html', {'results': results, 'sponsor': sponsor})
@@ -50,7 +57,11 @@ def application_closed(request):
         messages.error(request, "You need to log in or register to view driver applications.")
         return redirect('/')
     profile = UserProfile.objects.get(user=request.user)
-    if profile.is_sponsor:
+    if profile.is_driver:
+        driver = DriverProfile.objects.get(user=request.user)
+        results = Application.objects.filter(driver=driver, is_open=False)
+        return render(request, 'application_closed.html', {'results': results, 'driver': driver,})
+    elif profile.is_sponsor:
         sponsor = SponsorUserProfile.objects.get(user=request.user)
         results = Application.objects.filter(sponsor_name=sponsor.sponsor_name, is_open=False)
         return render(request, 'application_closed.html', {'results': results, 'sponsor': sponsor,})
@@ -66,10 +77,14 @@ def application_review(request, id):
         messages.error(request, "You need to log in or register to review driver applications")
         return redirect('/')
     profile = UserProfile.objects.get(user=request.user)
+    if profile.is_driver:
+        app_id = id
+        application = Application.objects.get(id=app_id)
+        return render(request, 'application_review.html', {'application': application, 'profile': profile,})
     if profile.is_sponsor:
         app_id = id
         application = Application.objects.get(id=app_id)
-        return render(request, 'application_review.html', {'application': application,})
+        return render(request, 'application_review.html', {'application': application, 'profile': profile,})
     elif request.user.is_superuser:
         app_id = id
         application = Application.objects.get(id=app_id)
@@ -81,8 +96,18 @@ def application_review(request, id):
 def application_deny(request, id):
     application = Application.objects.get(id=id)
     application.is_open = False
-    application.save()
-    return redirect('/application/list')
+    if request.method == 'POST':
+        form = ApplicatonReasonForm(request.POST)
+
+        if form.is_valid():
+            application.application_reason = form.cleaned_data['application_reason']
+            application.save()
+            messages.success(request, "Application successfully denied")
+            return redirect('/application/list')
+    else:
+        form = ApplicatonReasonForm()
+    return render (request, 'application_reason.html', {'application': application, 'form': form})
+
 def application_approve(request, id):
     application = Application.objects.get(id=id)
     application.is_approved = True
@@ -94,6 +119,3 @@ def application_approve(request, id):
     driver.sponsors.add(sponsor)
     driver.save()
     return redirect('/application/list')
-
-def success_page(request):
-    return render(request, 'success.html')
