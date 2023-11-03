@@ -7,13 +7,22 @@ from .forms import ApplicationForm
 def application_form(request):
     if request.method == 'POST':
         form = ApplicationForm(request.POST)
+        sponsor_list = SponsorList.objects.all()
         if form.is_valid():
-            instance = form.save()
-            driver = DriverProfile.objects.get(user=request.user)
-            application = Application.objects.get(id = instance.id)
-            application.driver = driver
-            application.save()
-            return redirect('success_page')
+            valid_sponsor = False
+            for sponsor in sponsor_list:
+                if form.cleaned_data["sponsor_name"] == sponsor.sponsor_name:
+                    valid_sponsor = True
+            if valid_sponsor:
+                instance = form.save()
+                driver = DriverProfile.objects.get(user=request.user)
+                application = Application.objects.get(id = instance.id)
+                application.driver = driver
+                application.save()
+                return redirect('success_page')
+            else:
+                messages.success(request, "The sponsor provided does not exist.")
+                return render(request, 'application_form.html', {'form': form})
     else:
         form = ApplicationForm()
 
