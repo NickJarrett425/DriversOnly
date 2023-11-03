@@ -1,7 +1,8 @@
 {% extends "about/base.html" %}
 
 {% block content %}
-<h1>Applications to {{profile.sponsor_name}}</h1>
+{% if user.is_superuser %}
+    <h1>Applications to OnlyDrivers</h1>
     <ul>
         {% for result in results %}
         <strong>{{ result.driver.user.username }}'s Application</strong> <a href="{% url "application_review" result.id %}" class="btn btn-secondary" role="button">Review Application</a>
@@ -10,6 +11,17 @@
             <li>No open applications for {{profile.sponsor_name}} </li>
         {% endfor %}
     </ul>
+{% else %}
+    <h1>Applications to {{sponsor.sponsor_name}}</h1>
+    <ul>
+        {% for result in results %}
+        <strong>{{ result.driver.user.username }}'s Application</strong> <a href="{% url "application_review" result.id %}" class="btn btn-secondary" role="button">Review Application</a>
+    </br>
+        {% empty %}
+            <li>No open applications for {{sponsor.sponsor_name}} </li>
+        {% endfor %}
+    </ul>
+{% endif %}
     <h2>View Closed Applications</h2>
     <a href="{% url "application_closed" %}" class="btn btn-primary" role="button">Closed Applications</a>
 {% endblock %}

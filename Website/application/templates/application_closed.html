@@ -1,15 +1,38 @@
 {% extends "about/base.html" %}
 
 {% block content %}
-<h1>Closed Applications to {{profile.sponsor_name}}</h1>
-    <ul>
+{% if user.is_superuser %}
+    <h1>Closed Driver Applications to OnlyDrivers</h1>
+    <ul class="application-list">
         {% for result in results %}
-        <strong>{{ result.driver.user.username }}'s Application</strong> <a href="{% url "application_review" result.id %}" class="btn btn-secondary" role="button">Review Application</a>
-    </br>
+            <li class="application-item">
+                <strong>Application {{ result.id }}:</strong> 
+                <a href="{% url 'application_review' result.id %}" class="btn btn-secondary" role="button">
+                    {{ result.driver.user.username }}'s Application to {{ result.sponsor_name }}
+                </a>
+            </li>
+        </br>
         {% empty %}
-            <li>No closed applications for {{profile.sponsor_name}} </li>
+            <li class="no-applications">No closed applications available</li>
         {% endfor %}
     </ul>
-    <h2>Go Back</h2>
-    <a href="{% url "application_list" %}" class="btn btn-primary" role="button">List of Applications</a>
+    <a href="{% url "application_list" %}" class="btn btn-primary" role="button">Back</a>
+{% else %}
+    <h1>Closed Applications to {{sponsor.sponsor_name}}</h1>
+    <ul class="application-list">
+        {% for result in results %}
+            <li class="application-item">
+                <strong>Application {{ result.id }}:</strong> 
+                <a href="{% url 'application_review' result.id %}" class="btn btn-secondary" role="button">
+                    {{ result.driver.user.username }}'s Application
+                </a>
+            </li>
+        </br>
+        {% empty %}
+            <li class="no-applications">No closed applications available</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url "application_list" %}" class="btn btn-primary" role="button">Back</a>
+{% endif %}
+
 {% endblock %}

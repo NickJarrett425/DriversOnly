@@ -1,4 +1,4 @@
-from .models import UserProfile, DriverProfile
+from .models import UserProfile, DriverProfile, SponsorList, SponsorUserProfile
 from .forms import RegisterUserForm, UserProfileForm, DriverProfileForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -75,7 +75,16 @@ def view_profile(request):
         except DriverProfile.DoesNotExist:
             driver = None
 
-        return render(request, 'registration/profile.html', {'profile': profile, 'driver': driver})
+        sponsors = driver.sponsors.all()
+
+        return render(request, 'registration/profile.html', {'profile': profile, 'driver': driver, 'sponsors': sponsors})
+    elif profile.is_sponsor:
+        try:
+            sponsor_user, created = SponsorUserProfile.objects.get_or_create(user=request.user)
+        except DriverProfile.DoesNotExist:
+            sponsor_user = None
+
+        return render(request, 'registration/profile.html', {'profile': profile, 'sponsor_user': sponsor_user})
     else:
         return render(request, 'registration/profile.html', {'profile': profile})
 
@@ -106,6 +115,21 @@ def edit_profile(request):
             driver_form = DriverProfileForm(instance=driver)
 
         return render(request, 'registration/edit_profile.html', {'driver_form': driver_form, 'driver': driver, 'profile': profile})
+    elif profile.is_sponsor:
+        try:
+            sponsor_user = SponsorUserProfile.objects.get(user=request.user)
+        except DriverProfile.DoesNotExist:
+            sponsor_user = None
+
+        if request.method == 'POST':
+            form = UserProfileForm(request.POST, instance=sponsor_user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Profile updated successfully!")
+                return redirect('view_profile')
+        else:
+            form = UserProfileForm(instance=sponsor_user)
+        return render(request, 'registration/edit_profile.html', {'profile': profile,'sponsor_user': sponsor_user, 'form': form})
     
     else:
         if request.method == 'POST':

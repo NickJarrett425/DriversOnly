@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -7,15 +7,21 @@ class UserProfile(models.Model):
     last_name = models.CharField(max_length=30, blank=True)
     middle_initial = models.CharField(max_length=1, blank=True)
     email = models.EmailField(max_length=75, blank=True)
-    sponsor_name = models.CharField(max_length=30, blank=True)
     is_driver = models.BooleanField('driver status', default=False)
     is_sponsor = models.BooleanField('sponsor status', default=False)
 
     def __str__(self):
         return self.user.username
 
+class SponsorUserProfile(UserProfile):
+    sponsor_name = models.CharField(max_length=25, unique=True)
+
+class SponsorList(models.Model):
+    sponsor_name = models.CharField(max_length=25, unique=True)
+
 class DriverProfile(UserProfile):
     points = models.IntegerField(default=0, blank=True)
+    sponsors = models.ManyToManyField(SponsorList, related_name='sponsored_users')
     street_address = models.CharField(max_length= 85, blank=True)
     city = models.CharField(max_length=40, blank=True)
     state = models.CharField(max_length=2, blank=True)
