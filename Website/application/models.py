@@ -36,6 +36,8 @@ class Application(models.Model):
     provider_name = models.CharField(max_length=100, blank=False)
     policy_number = models.CharField(max_length=50, blank=False)
     date_created = models.DateTimeField(auto_now=True)
+    application_reason = models.TextField(max_length=250, blank=True)
+
     is_open = models.BooleanField('application status', default=True)
     is_approved = models.BooleanField('approval status', default=False)
     
