@@ -98,19 +98,52 @@ def application_deny(request, id):
         messages.error(request, "You need to log in or register to review driver applications")
         return redirect('/')
     profile = UserProfile.objects.get(user=request.user)
-    if profile.is_sponsor or request.user.is_superuser:
-        application = Application.objects.get(id=id)
+    application = Application.objects.get(id=id)
+    if not application.is_open and not request.user.is_superuser:
+        messages.success(request, "Unable to deny application, applicaton is already closed.")
+        return redirect('/application/review/'+str(id))
+    
+    if request.user.is_superuser:
         application.is_open = False
         if request.method == 'POST':
             form = ApplicatonReasonForm(request.POST)
 
             if form.is_valid():
                 application.application_reason = form.cleaned_data['application_reason']
+                application.is_approved = False
                 application.save()
+                if request.user.is_superuser:
+                    driver = DriverProfile.objects.get(user=application.driver.user)
+                    sponsor = SponsorList.objects.get(sponsor_name=application.sponsor_name)
+                    driver.sponsors.remove(sponsor)
+                    driver.save()
                 messages.success(request, "Application successfully denied")
                 return redirect('/application/list')
         else:
             form = ApplicatonReasonForm()
+    elif profile.is_sponsor:
+        sponsor = SponsorUserProfile.objects.get(user=request.user)
+        if sponsor.sponsor_name == application.sponsor_name:
+            application.is_open = False
+            if request.method == 'POST':
+                form = ApplicatonReasonForm(request.POST)
+
+                if form.is_valid():
+                    application.application_reason = form.cleaned_data['application_reason']
+                    application.is_approved = False
+                    application.save()
+                    if request.user.is_superuser:
+                        driver = DriverProfile.objects.get(user=application.driver.user)
+                        sponsor = SponsorList.objects.get(sponsor_name=application.sponsor_name)
+                        driver.sponsors.remove(sponsor)
+                        driver.save()
+                    messages.success(request, "Application successfully denied")
+                    return redirect('/application/list')
+            else:
+                form = ApplicatonReasonForm()
+        else:
+            messages.success(request, "Application is not for your sponsor organization")
+            return redirect('/application/list')
     else:
         messages.error(request, "You do not have the proper permissions to access this page.")
         return redirect('/application/review/'+str(id))
@@ -120,18 +153,22 @@ def application_approve(request, id):
     if not request.user.is_authenticated:
         messages.error(request, "You need to log in or register to review driver applications")
         return redirect('/')
+    application = Application.objects.get(id=id)
+    if not application.is_open and not request.user.is_superuser:
+        messages.success(request, "Unable to approve application, applicaton is already closed.")
+        return redirect('/application/review/'+str(id))
     profile = UserProfile.objects.get(user=request.user)
     if profile.is_sponsor or request.user.is_superuser:
-        application = Application.objects.get(id=id)
         application.is_approved = True
         application.is_open = False
+        application.application_reason = ""
         application.save()
 
         driver = DriverProfile.objects.get(user=application.driver.user)
         sponsor = SponsorList.objects.get(sponsor_name=application.sponsor_name)
         driver.sponsors.add(sponsor)
         driver.save()
-    else:
+    elif not request.user.is_superuser:
         messages.error(request, "You do not have the proper permissions to access this page.")
         return redirect('/application/review/'+str(id))
     return redirect('/application/list')
