@@ -60,11 +60,11 @@ def application_closed(request):
     if profile.is_driver:
         driver = DriverProfile.objects.get(user=request.user)
         results = Application.objects.filter(driver=driver, is_open=False)
-        return render(request, 'application_closed.html', {'results': results, 'driver': driver,})
+        return render(request, 'application_closed.html', {'results': results, 'profile': profile,})
     elif profile.is_sponsor:
         sponsor = SponsorUserProfile.objects.get(user=request.user)
         results = Application.objects.filter(sponsor_name=sponsor.sponsor_name, is_open=False)
-        return render(request, 'application_closed.html', {'results': results, 'sponsor': sponsor,})
+        return render(request, 'application_closed.html', {'results': results, 'profile': profile, 'sponsor': sponsor,})
     elif request.user.is_superuser:
         results = Application.objects.filter(is_open=False)
         return render(request, 'application_closed.html', {'results': results,})
