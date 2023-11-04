@@ -94,28 +94,44 @@ def application_review(request, id):
         return redirect('/about')
 
 def application_deny(request, id):
-    application = Application.objects.get(id=id)
-    application.is_open = False
-    if request.method == 'POST':
-        form = ApplicatonReasonForm(request.POST)
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to log in or register to review driver applications")
+        return redirect('/')
+    profile = UserProfile.objects.get(user=request.user)
+    if profile.is_sponsor or request.user.is_superuser:
+        application = Application.objects.get(id=id)
+        application.is_open = False
+        if request.method == 'POST':
+            form = ApplicatonReasonForm(request.POST)
 
-        if form.is_valid():
-            application.application_reason = form.cleaned_data['application_reason']
-            application.save()
-            messages.success(request, "Application successfully denied")
-            return redirect('/application/list')
+            if form.is_valid():
+                application.application_reason = form.cleaned_data['application_reason']
+                application.save()
+                messages.success(request, "Application successfully denied")
+                return redirect('/application/list')
+        else:
+            form = ApplicatonReasonForm()
     else:
-        form = ApplicatonReasonForm()
+        messages.error(request, "You do not have the proper permissions to access this page.")
+        return redirect('/application/review/'+str(id))
     return render (request, 'application_reason.html', {'application': application, 'form': form})
 
 def application_approve(request, id):
-    application = Application.objects.get(id=id)
-    application.is_approved = True
-    application.is_open = False
-    application.save()
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to log in or register to review driver applications")
+        return redirect('/')
+    profile = UserProfile.objects.get(user=request.user)
+    if profile.is_sponsor or request.user.is_superuser:
+        application = Application.objects.get(id=id)
+        application.is_approved = True
+        application.is_open = False
+        application.save()
 
-    driver = DriverProfile.objects.get(user=application.driver.user)
-    sponsor = SponsorList.objects.get(sponsor_name=application.sponsor_name)
-    driver.sponsors.add(sponsor)
-    driver.save()
+        driver = DriverProfile.objects.get(user=application.driver.user)
+        sponsor = SponsorList.objects.get(sponsor_name=application.sponsor_name)
+        driver.sponsors.add(sponsor)
+        driver.save()
+    else:
+        messages.error(request, "You do not have the proper permissions to access this page.")
+        return redirect('/application/review/'+str(id))
     return redirect('/application/list')
