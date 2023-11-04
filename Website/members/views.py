@@ -141,3 +141,60 @@ def edit_profile(request):
         else:
             form = UserProfileForm(instance=profile)
         return render(request, 'registration/edit_profile.html', {'profile': profile, 'form': form})
+    
+def driver_list(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to log in to an authorized account to view this page.")
+        return redirect('/')
+    profile = UserProfile.objects.get(user=request.user)
+    if profile.is_sponsor:
+        sponsor = SponsorUserProfile.objects.get(user=request.user)
+        results = DriverProfile.objects.filter(sponsors__sponsor_name=sponsor.sponsor_name)
+        return render(request, 'sponsor_organization/driver_list.html', {'results': results, 'sponsor': sponsor})
+    elif request.user.is_superuser:
+        results = DriverProfile.objects.all()
+        return render(request, 'sponsor_organization/driver_list.html', {'results': results})    
+    else:
+        messages.error(request, "You do not have the proper permissions to access this page.")
+        return redirect('/about')
+
+def view_driver(request, id):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to log in to an authorized account to view this page.")
+        return redirect('/')
+    profile = UserProfile.objects.get(user=request.user)
+    if profile.is_sponsor:
+        driver = DriverProfile.objects.get(userprofile_ptr_id=id)
+        return render(request, 'sponsor_organization/view_driver.html', {'driver': driver, 'profile': profile,})
+    elif request.user.is_superuser:
+        driver = DriverProfile.objects.get(userprofile_ptr_id=id)
+        return render(request, 'sponsor_organization/view_driver.html', {'driver': driver,})
+    else:
+        messages.error(request, "You do not have the proper permissions to access this page.")
+        return redirect('/about')
+    
+def edit_driver(request, id):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to edit your profile.")
+        return redirect('login_user')
+
+    profile = UserProfile.objects.get(user=request.user)
+
+    if profile.is_sponsor or request.user.is_superuser:
+        try:
+            driver = DriverProfile.objects.get(id=id)
+        except DriverProfile.DoesNotExist:
+            driver = None
+        if request.method == 'POST':
+            driver_form = DriverProfileForm(request.POST, instance=driver)
+
+            if driver_form.is_valid():
+                driver = driver_form.save(commit=False)
+                driver.save()
+
+                messages.success(request, "Profile updated successfully!")
+                return redirect('/organization/drivers/list')
+        else:
+            driver_form = DriverProfileForm(instance=driver)
+
+        return render(request, 'sponsor_organization/edit_driver.html', {'driver_form': driver_form, 'driver': driver, 'profile': profile})
