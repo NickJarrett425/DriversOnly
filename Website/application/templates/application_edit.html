@@ -2,19 +2,19 @@
 
 {% block content %}
 {% if profile.is_sponsor %}
-    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 425">
-        <h1>Edit Your Profile</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-        </br>
-            <button type="submit" class="btn btn-secondary">Save Changes</button>
-        </br></br></br></br>
-        </form>
-    </div>
+        <div class="shadow p-4 mx-auto bg-body rounded" style="width: 425">
+            <h1>Edit {{ application.driver.user.username }}'s' Application to {{ application.sponsor_name }}</h1>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+            </br>
+                <button type="submit" class="btn btn-secondary">Save Changes</button>
+            </br></br></br></br>
+            </form>
+        </div>
 {% elif user.is_superuser %}
     <div class="shadow p-4 mx-auto bg-body rounded" style="width: 425"> 
-        <h1>Edit Your Profile</h1>
+        <h1>Edit {{ application.driver.user.username }}'s' Application to {{ application.sponsor_name }}</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
