@@ -13,6 +13,7 @@ urlpatterns = [
     path('list/', views.application_list, name='application_list'),
     path('list/closed', views.application_closed, name='application_closed'),
     path('review/<int:id>/', views.application_review, name='application_review'),
+    path('review/<int:id>/edit', views.application_edit, name='application_edit'),
     path('review/<int:id>/deny/', views.application_deny, name='application_deny'),
     path('review/<int:id>/approve/', views.application_approve, name='application_approve'),
     path('success/', views.success_page, name='success_page'),

@@ -60,6 +60,8 @@
     </br>
     <a href="{% url "application_approve" application.id %}" class="btn btn-secondary" role="button">Approve Application</a>
     </br></br>
+    <a href="{% url "application_edit" application.id %}" class="btn btn-secondary" role="button">Edit Application</a>
+    </br></br>
     <a href="{% url "application_deny" application.id %}" class="btn btn-secondary" role="button">Deny Application</a>
     </br>
     </br></br></br></br></br></br>
@@ -93,8 +95,9 @@
     </br>
     <a href="{% url "application_approve" application.id %}" class="btn btn-secondary" role="button">Approve Application</a>
     </br></br>
+    <a href="{% url "application_edit" application.id %}" class="btn btn-secondary" role="button">Edit Application</a>
+    </br></br>
     <a href="{% url "application_deny" application.id %}" class="btn btn-secondary" role="button">Deny Application</a>
-    </br>
     </br></br></br></br></br></br>
 {% elif not application.is_open and not user.is_superuser %}
     {% if profile.is_driver %}
@@ -135,7 +138,9 @@
         <p>Insurance Provider: {{ application.provider_name }}</p>
         <p>Policy Number: {{ application.policy_number }}</p>       
     </div>
-</br>
+    </br></br>
+    <a href="{% url "application_edit" application.id %}" class="btn btn-secondary" role="button">Edit Application</a>
+    </br></br>
 {% elif not application.is_open and user.is_superuser %}
     <h1>{{ application.driver.user.username }}'s Application</h1>
     Application Date:<strong> {{ application.date_created }}</strong>
@@ -172,11 +177,12 @@
         <p>Policy Number: {{ application.policy_number }}</p>       
     </div>
     </br>
-        <a href="{% url "application_approve" application.id %}" class="btn btn-secondary" role="button">Approve Application</a>
-        </br></br>
-        <a href="{% url "application_deny" application.id %}" class="btn btn-secondary" role="button">Deny Application</a>
-    </br>
+    <a href="{% url "application_approve" application.id %}" class="btn btn-secondary" role="button">Approve Application</a>
     </br></br>
+    <a href="{% url "application_edit" application.id %}" class="btn btn-secondary" role="button">Edit Application</a>
+    </br></br>
+    <a href="{% url "application_deny" application.id %}" class="btn btn-secondary" role="button">Deny Application</a>
+    </br></br></br>
 {% else %}
     <strong>There was an error.</strong>
 {% endif %}
@@ -184,5 +190,3 @@
 </br>
 </br></br></br></br></br></br>
 {% endblock %}
-
-
