@@ -1,0 +1,32 @@
+{% extends "about/base.html" %}
+
+{% block content %}
+{% if user.is_superuser %}
+    <h1>Active Driver Users in OnlyDrivers</h1>
+    <ul>
+        {% for result in results %}
+        <li class="application-item">
+            <strong>{{ result.user.username }}: </strong>
+            <a href="{% url "view_driver" result.userprofile_ptr_id %}" class="btn btn-secondary" role="button">Review Driver Information</a>
+        </li>
+    </br>
+        {% empty %}
+            <li>No active drivers in OnlyDrivers</li>
+        {% endfor %}
+    </ul>
+{% elif sponsor.is_sponsor %}
+    <h1>Active Driver Users in {{sponsor.sponsor_name}}</h1>
+    <ul>
+        {% for result in results %}
+        <li class="driver-item">
+            <strong>{{ result.user.username }}: </strong>
+            <a href="{% url "view_driver" result.userprofile_ptr_id %}" class="btn btn-secondary" role="button">Review Driver Information</a>
+        </li>
+    </br>
+        {% empty %}
+            <li>No active drivers in {{sponsor.sponsor_name}}'s sponsor organization.</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}
+ 
