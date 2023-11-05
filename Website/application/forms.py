@@ -1,5 +1,6 @@
 from django import forms
 from .models import Application
+from Catalog.models import Product
 from members.models import SponsorList
 
 class ApplicationForm(forms.ModelForm):
@@ -26,3 +27,8 @@ class ApplicatonReasonForm(forms.ModelForm):
         super(ApplicatonReasonForm, self).__init__(*args, **kwargs)
 
         self.fields['application_reason'].widget.attrs['class'] = 'form-control'
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'artist']
