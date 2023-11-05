@@ -4,3 +4,5 @@ virtual/
 
 # Ignore the .env file.
 Website/website/.env
+
+*.pyc
