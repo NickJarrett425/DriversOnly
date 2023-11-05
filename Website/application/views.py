@@ -176,7 +176,7 @@ def application_edit(request, id):
         if request.method == 'POST':
             form = ApplicationForm(request.POST, instance=application)
             if form.is_valid():
-                application = form.save(commit=False)
+                application = form.save()
                 application.save()
                 return redirect('/application/review/'+str(id))
         else:
