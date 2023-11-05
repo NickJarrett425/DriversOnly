@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product List</title>
+</head>
+<body>
+
+<div id="content">
+    <h1>Product List</h1>
+    
+    {% if products %}
+        <ul>
+            {% for product in products %}
+                <li>
+                    <img src="{{ product.image }}" alt="{{ product.title }} cover">
+                    <h2>{{ product.title }}</h2>
+                    <p>Artist: {{ product.artist }}</p>
+                    <p>Genre: {{ product.genre }}</p>
+                    <p>Price: ${{ product.price }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No products found.</p>
+    {% endif %}
+    
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
