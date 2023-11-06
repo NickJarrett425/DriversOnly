@@ -14,7 +14,7 @@ class UserProfile(models.Model):
         return self.user.username
 
 class SponsorUserProfile(UserProfile):
-    sponsor_name = models.CharField(max_length=25, unique=True)
+    sponsor_name = models.CharField(max_length=25)
 
 class SponsorList(models.Model):
     sponsor_name = models.CharField(max_length=25, unique=True)
