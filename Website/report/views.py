@@ -6,19 +6,51 @@ import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate,Table,TableStyle,Image 
+from reportlab.platypus import SimpleDocTemplate,Table,TableStyle,Image,PageTemplate,Frame,Paragraph,PageBreak,Spacer 
 from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
 import os
 from django.conf import settings
+import datetime
 
 
 
 # Create your views here.
 def build_pdf_page(canvas, doc):
-    rel_path = "static/logo.png"
-    file_path = os.path.join(settings.STATICFILES_DIRS, rel_path)
-    logo = Image(str(file_path), width=200, height=200)
-    canvas.drawImage(logo)
+
+    width, height = letter
+    
+    styles = getSampleStyleSheet()  
+    title_style = styles['Title']
+    title_style.alighnment = 1
+
+    title = Paragraph(doc.title, title_style)    
+
+    text_width = title.wrap(width, height)[0]
+    x = (width - text_width) / 2
+    y = height - inch 
+
+    title.drawOn(canvas, x, y)
+
+    img_dem = 80
+    rel_path = "logo.png"
+    file_path = os.path.join(settings.STATICFILES_DIRS[0], rel_path)
+    canvas.drawImage(file_path,x=0,y=(800-img_dem),width=img_dem,height=img_dem,preserveAspectRatio=True,anchor='ne')
+
+    footer_string = "Page Number:" + str(canvas.getPageNumber()) 
+    footer_style = styles["Normal"]
+    footer_style.alignment = 2
+    footer = Paragraph(footer_string)
+    footer_w,footer_h = footer.wrap(width,height)
+    y = footer_h
+    footer.drawOn(canvas,500,y)
+
+         
+
+
+
+    
+
 
 
 
@@ -55,8 +87,11 @@ def all_login_attempts_download_csv(request):
 
 def all_login_attempts_download_pdf(request):
     buff = io.BytesIO()
-    doc = SimpleDocTemplate(buff, pagesize=letter)
-    doc.build([], onFirstPage=build_pdf_page, onLaterPages=build_pdf_page)
+    current_date = datetime.datetime.today()
+    formatted_date = current_date.strftime("%m-%d-%Y")
+    report_title = "Login Attempts Report " + formatted_date
+    doc = SimpleDocTemplate(buff, pagesize=letter, title=report_title)
+     
 
     # Headers
     login_list = login_log.objects.all()
@@ -89,13 +124,12 @@ def all_login_attempts_download_pdf(request):
     elements = []
     elements.append(table)
 
-    doc.build(elements)
-    buff.seek(0)
 
-    
-    doc.showPage()
-    
+    doc.build(
+        elements,
+        onFirstPage=build_pdf_page,
+        onLaterPages=build_pdf_page
+    ) 
 
-
-
+    buff.seek(0)  
     return HttpResponse(buff, content_type='application/pdf')
