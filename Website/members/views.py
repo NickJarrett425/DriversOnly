@@ -1,7 +1,8 @@
 from .models import UserProfile, DriverProfile, SponsorList, SponsorUserProfile
-from .forms import RegisterUserForm, UserProfileForm, DriverProfileForm
+from .forms import RegisterUserForm, UserProfileForm, DriverProfileForm, AssignSponsorForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import Group
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from report.models import login_log
@@ -198,3 +199,88 @@ def edit_driver(request, id):
             driver_form = DriverProfileForm(instance=driver)
 
         return render(request, 'sponsor_organization/edit_driver.html', {'driver_form': driver_form, 'driver': driver, 'profile': profile})
+
+def add_sponsor_user(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
+    profile = UserProfile.objects.get(user=request.user)
+    if profile.is_sponsor:
+        sponsor_user = SponsorUserProfile.objects.get(user=request.user)
+        if request.method == "POST":
+            form = RegisterUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                username = form.cleaned_data['username']
+                password = form.cleaned_data['password1']
+                user = authenticate(username=username, password=password)
+                try:
+                    sponsor, created = SponsorUserProfile.objects.get_or_create(user=user)
+                except SponsorUserProfile.DoesNotExist:
+                    sponsor = None
+                sponsor.first_name = form.cleaned_data['first_name']
+                sponsor.last_name = form.cleaned_data['last_name']
+                sponsor.email = form.cleaned_data['email']
+                sponsor.is_sponsor = True
+                sponsor.user.is_staff = True
+                sponsor.user.is_active = True
+                sponsor.sponsor_name = sponsor_user.sponsor_name
+                sponsor.save()
+                my_group = Group.objects.get(name='Sponsor User') 
+                my_group.user_set.add(sponsor.user)
+                messages.success(request, ("You successfully added a new sponsor user to " + sponsor_user.sponsor_name +"."))
+                return redirect('/organization/home')
+        else:
+            form = RegisterUserForm()
+
+        return render(request, 'sponsor_organization/add_sponsor_user.html', {'form':form, 'sponsor_user': sponsor_user,})
+    
+    elif request.user.is_superuser:
+        if request.method == "POST":
+            form = RegisterUserForm(request.POST)
+            assign_form = AssignSponsorForm(request.POST)
+            if form.is_valid():
+                form.save()
+                username = form.cleaned_data['username']
+                password = form.cleaned_data['password1']
+                user = authenticate(username=username, password=password)
+                try:
+                    sponsor, created = SponsorUserProfile.objects.get_or_create(user=user)
+                except SponsorUserProfile.DoesNotExist:
+                    sponsor = None
+                sponsor.first_name = form.cleaned_data['first_name']
+                sponsor.last_name = form.cleaned_data['last_name']
+                sponsor.email = form.cleaned_data['email']
+                sponsor.is_sponsor = True
+                sponsor.user.is_staff = True
+                sponsor.user.is_active = True
+                assign_form.save(commit=False)
+                sponsor.sponsor_name = assign_form.cleaned_data['sponsor_name']
+                sponsor.user = user
+                sponsor.save()
+                my_group = Group.objects.get(name='Sponsor User') 
+                my_group.user_set.add(sponsor.user)
+                messages.success(request, ("You successfully added a new sponsor user to " + sponsor.sponsor_name +"."))
+                return redirect('/organization/home')
+        else:
+            form = RegisterUserForm()
+            assign_form = AssignSponsorForm()
+
+        return render(request, 'sponsor_organization/add_sponsor_user.html', {'form':form, 'assign_form': assign_form,})
+    
+    else:
+        messages.error(request, "You do not have the proper permissions to access this page.")
+        return redirect('/about')
+
+
+def organization_home(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
+    profile = UserProfile.objects.get(user=request.user)
+    if profile.is_sponsor:
+        sponsor = SponsorUserProfile.objects.get(user=request.user)
+        return render(request, 'sponsor_organization/organization_home.html', {'sponsor': sponsor,})
+    elif request.user.is_superuser:
+        return render(request, 'sponsor_organization/organization_home.html', {'profile': profile,})
+    else:
+        messages.error(request, "You do not have the proper permissions to access this page.")
+        return redirect('/about')
