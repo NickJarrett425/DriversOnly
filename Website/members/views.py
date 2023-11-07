@@ -270,17 +270,3 @@ def add_sponsor_user(request):
     else:
         messages.error(request, "You do not have the proper permissions to access this page.")
         return redirect('/about')
-
-
-def organization_home(request):
-    if not request.user.is_authenticated:
-        return redirect('/')
-    profile = UserProfile.objects.get(user=request.user)
-    if profile.is_sponsor:
-        sponsor = SponsorUserProfile.objects.get(user=request.user)
-        return render(request, 'sponsor_organization/organization_home.html', {'sponsor': sponsor,})
-    elif request.user.is_superuser:
-        return render(request, 'sponsor_organization/organization_home.html', {'profile': profile,})
-    else:
-        messages.error(request, "You do not have the proper permissions to access this page.")
-        return redirect('/about')
