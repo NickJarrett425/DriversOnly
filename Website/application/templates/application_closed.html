@@ -1,0 +1,55 @@
+{% extends "about/base.html" %}
+
+{% block content %}
+{% if user.is_superuser %}
+    <h1>Closed Driver Applications to OnlyDrivers</h1>
+    <ul class="application-list">
+        {% for result in results %}
+            <li class="application-item">
+                <strong>Application {{ result.id }}:</strong> 
+                <a href="{% url 'application_review' result.id %}" class="btn btn-secondary" role="button">
+                    {{ result.driver.user.username }}'s Application to {{ result.sponsor_name }}
+                </a>
+            </li>
+        </br>
+        {% empty %}
+            <li class="no-applications">No closed applications available</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url "application_list" %}" class="btn btn-primary" role="button">Back</a>
+{% elif profile.is_sponsor %}
+    <h1>Closed Applications to {{sponsor.sponsor_name}}</h1>
+    <ul class="application-list">
+        {% for result in results %}
+            <li class="application-item">
+                <strong>Application {{ result.id }}:</strong> 
+                <a href="{% url 'application_review' result.id %}" class="btn btn-secondary" role="button">
+                    {{ result.driver.user.username }}'s Application
+                </a>
+            </li>
+        </br>
+        {% empty %}
+            <li class="no-applications">No closed applications available</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url "application_list" %}" class="btn btn-primary" role="button">Back</a>
+{% elif profile.is_driver %}
+<h1>Your Closed Applications</h1>
+    <ul class="application-list">
+        {% for result in results %}
+            <li class="application-item">
+                <strong>Your Application to {{ result.sponsor_name }}</strong> 
+                <a href="{% url 'application_review' result.id %}" class="btn btn-secondary" role="button">
+                    Review</a>
+            </li>
+        </br>
+        {% empty %}
+            <li class="no-applications">No closed applications available</li>
+            <a href="{% url "application_form" %}" class="btn btn-secondary" role="button">Apply Here</a>
+        {% endfor %}
+    </ul>
+    <a href="{% url "application_list" %}" class="btn btn-primary" role="button">Back</a>
+{% else %}
+{% endif %}
+
+{% endblock %}

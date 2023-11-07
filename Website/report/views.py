@@ -1,5 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from .models import login_log
+from members.models import UserProfile
 from django.http import HttpResponse, FileResponse
 import csv
 import io
@@ -55,35 +57,60 @@ def build_pdf_page(canvas, doc):
 
 
 def all_login_attempts(request):
-    login_list = login_log.objects.all()
-    return render(request, 'report/all_login_attempts.html',
-                  {'login_list': login_list})
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to view reports.")
+        return redirect('/')
+    user = request.user
+
+    if user.is_superuser:
+        login_list = login_log.objects.all()
+        return render(request, 'report/all_login_attempts.html',
+                    {'login_list': login_list})
+    else:
+        return redirect('/about')
 
 def all_login_attempts_download_txt(request):
-    response = HttpResponse(content_type='text/plain')
-    response['Content-Disposition'] = 'attachment; filename=logins.txt'
-    login_list = login_log.objects.all()
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to view reports.")
+        return redirect('/')
+    user = request.user
 
-    lines = []
-    template = "{date}, {username}, {result}\n"
+    if user.is_superuser:
+        response = HttpResponse(content_type='text/plain')
+        response['Content-Disposition'] = 'attachment; filename=logins.txt'
+        login_list = login_log.objects.all()
 
-    for log in login_list:
-        lines.append(template.format(date=log.Datestamp,username=log.username,result=log.login_success))
-    response.writelines(lines)
-    return response
+        lines = []
+        template = "{date}, {username}, {result}\n"
+
+        for log in login_list:
+            lines.append(template.format(date=log.Datestamp,username=log.username,result=log.login_success))
+        response.writelines(lines)
+        return response
+    else:
+        return redirect('/about')
+
 
 def all_login_attempts_download_csv(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=logins.csv'
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to view reports.")
+        return redirect('/')
+    user = request.user
 
-    login_list = login_log.objects.all()
-    writer = csv.writer(response)
-    writer.writerow(['Date& Time', 'user', 'result'])
+    if user.is_superuser:
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=logins.csv'
 
-    for log in login_list:
-        writer.writerow([log.Datestamp, log.username, log.login_success])
-    
-    return response
+        login_list = login_log.objects.all()
+        writer = csv.writer(response)
+        writer.writerow(['Date& Time', 'user', 'result'])
+
+        for log in login_list:
+            writer.writerow([log.Datestamp, log.username, log.login_success])
+        
+        return response
+    else:
+        return redirect('/about')
 
 def all_login_attempts_download_pdf(request):
     buff = io.BytesIO()

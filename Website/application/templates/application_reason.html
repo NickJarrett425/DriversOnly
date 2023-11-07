@@ -1,0 +1,26 @@
+{% extends "about/base.html" %}
+{% block content %}
+{% if form.errors %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    There was an error with your form...
+    <button type="button" class="btn-close" data-bs-dismiss="alert"
+    aria-label="Close"></button>
+</div>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    <h1>Driver's application for {{ application.sponsor_name }} was denied due the below reasons:</h1>
+    {{ driver_form.non_field_errors }}
+    <p></p>
+    <div class="fieldWrapper">
+        {{ form.application_reason.errors }}
+        {{ form.application_reason }}
+    </div>
+    <p></p>
+    <input type="submit"
+                value="Submit" class="
+                btn btn-secondary">    
+    </form>
+    
+{% endblock %}

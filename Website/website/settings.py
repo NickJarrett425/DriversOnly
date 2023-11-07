@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'Catalog',
     'dashboard',
     'report',
+    'application',
 ]
 
 MIDDLEWARE = [
