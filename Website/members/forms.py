@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import UserProfile, DriverProfile
+from .models import UserProfile, DriverProfile, SponsorUserProfile, SponsorList
 
 
 class RegisterUserForm(UserCreationForm):
@@ -52,3 +52,17 @@ class DriverProfileForm(UserProfileForm):
         self.fields['emergency_contact_name'].widget.attrs['class'] = 'form-control-sm'
         self.fields['emergency_contact_phone'].widget.attrs['class'] = 'form-control-sm'
 
+class AssignSponsorForm(forms.ModelForm):
+    class Meta:
+        model = SponsorUserProfile
+        fields = ('sponsor_name',)
+    
+    sponsor_name = forms.ChoiceField()
+
+    def __init__(self, *args, **kwargs):
+        super(AssignSponsorForm, self).__init__(*args, **kwargs)
+        self.fields['sponsor_name'].choices = self.get_choices()
+
+    def get_choices(self):
+        choices = SponsorList.objects.values_list('sponsor_name', 'sponsor_name').distinct()
+        return choices
