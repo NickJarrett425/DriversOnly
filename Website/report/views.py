@@ -8,9 +8,53 @@ import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate,Table,TableStyle,Image,PageTemplate,Frame,Paragraph,PageBreak,Spacer 
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+import os
+from django.conf import settings
+import datetime
+
 
 
 # Create your views here.
+def build_pdf_page(canvas, doc):
+
+    width, height = letter
+    
+    styles = getSampleStyleSheet()  
+    title_style = styles['Title']
+    title_style.alighnment = 1
+
+    title = Paragraph(doc.title, title_style)    
+
+    text_width = title.wrap(width, height)[0]
+    x = (width - text_width) / 2
+    y = height - inch 
+
+    title.drawOn(canvas, x, y)
+
+    img_dem = 80
+    rel_path = "logo.png"
+    file_path = os.path.join(settings.STATICFILES_DIRS[0], rel_path)
+    canvas.drawImage(file_path,x=0,y=(800-img_dem),width=img_dem,height=img_dem,preserveAspectRatio=True,anchor='ne')
+
+    footer_string = "Page Number:" + str(canvas.getPageNumber()) 
+    footer_style = styles["Normal"]
+    footer_style.alignment = 2
+    footer = Paragraph(footer_string)
+    footer_w,footer_h = footer.wrap(width,height)
+    y = footer_h
+    footer.drawOn(canvas,500,y)
+
+         
+
+
+
+    
+
+
+
 
 def all_login_attempts(request):
     if not request.user.is_authenticated:
@@ -69,35 +113,50 @@ def all_login_attempts_download_csv(request):
         return redirect('/about')
 
 def all_login_attempts_download_pdf(request):
-    if not request.user.is_authenticated:
-        messages.error(request, "You need to be logged in to view reports.")
-        return redirect('/')
-    user = request.user
+    buff = io.BytesIO()
+    current_date = datetime.datetime.today()
+    formatted_date = current_date.strftime("%m-%d-%Y")
+    report_title = "Login Attempts Report " + formatted_date
+    doc = SimpleDocTemplate(buff, pagesize=letter, title=report_title)
+     
 
-    if user.is_superuser:
-        buff = io.BytesIO()
-        can = canvas.Canvas(buff, pagesize=letter, bottomup=0)
-        textobj = can.beginText()
-        textobj.setTextOrigin(inch,inch)
-        textobj.setFont("Times-Roman", 12)
+    # Headers
+    login_list = login_log.objects.all()
 
-        lines = []
-        login_list = login_log.objects.all()
+    table_header = ['Date and Time', 'Username', 'Login Success']
 
-        for log in login_list:
-            lines.append(str(log.Datestamp))
-            lines.append(log.username)
-            lines.append(str(log.login_success))
-            lines.append(" ")
+    data = [table_header]
 
-        for line in lines: 
-            textobj.textLine(line)
+    for log in login_list:
+        formatted_date = log.Datestamp.strftime('%m-%d-%Y %H:%M')
+        login_result = bool(log.login_success)
+        row = [formatted_date, log.username, login_result]
+        data.append(row)
 
-        can.drawText(textobj)
-        can.showPage()
-        can.save()
-        buff.seek(0)
-        
-        return FileResponse(buff, as_attachment=True, filename='logins.pdf')
-    else:
-        return redirect('/about')
+    common_row_height = 25
+    page_height = letter[1]
+    max_rows_per_page = int((page_height - 100) / common_row_height)
+
+    table = Table(data, repeatRows=1)
+    table.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#B3B6B7")),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+        ('BACKGROUND', (1, 1), (1, -1), colors.HexColor("#E6E6E6")),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+    ]))
+
+    elements = []
+    elements.append(table)
+
+
+    doc.build(
+        elements,
+        onFirstPage=build_pdf_page,
+        onLaterPages=build_pdf_page
+    ) 
+
+    buff.seek(0)  
+    return HttpResponse(buff, content_type='application/pdf')
