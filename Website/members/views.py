@@ -224,16 +224,16 @@ def add_sponsor_user(request):
                 sponsor.user.is_staff = True
                 sponsor.user.is_active = True
                 sponsor.sponsor_name = sponsor_user.sponsor_name
+                sponsor.user = user
                 sponsor.save()
                 my_group = Group.objects.get(name='Sponsor User') 
                 my_group.user_set.add(sponsor.user)
                 messages.success(request, ("You successfully added a new sponsor user to " + sponsor_user.sponsor_name +"."))
-                return redirect('/organization/home')
+                return redirect('/dashboard')
         else:
             form = RegisterUserForm()
 
         return render(request, 'sponsor_organization/add_sponsor_user.html', {'form':form, 'sponsor_user': sponsor_user,})
-    
     elif request.user.is_superuser:
         if request.method == "POST":
             form = RegisterUserForm(request.POST)
@@ -260,7 +260,7 @@ def add_sponsor_user(request):
                 my_group = Group.objects.get(name='Sponsor User') 
                 my_group.user_set.add(sponsor.user)
                 messages.success(request, ("You successfully added a new sponsor user to " + sponsor.sponsor_name +"."))
-                return redirect('/organization/home')
+                return redirect('/dashboard')
         else:
             form = RegisterUserForm()
             assign_form = AssignSponsorForm()
