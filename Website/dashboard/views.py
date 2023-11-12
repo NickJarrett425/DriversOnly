@@ -6,7 +6,13 @@ def dashboard(request):
         messages.error(request, "You need to be logged in to view your dashboard.")
         return redirect('/')
     
-    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    try:
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = None
+    if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
+        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        return redirect('/about')
 
     if profile.is_driver or request.user.is_superuser:   
         return render(request, 'dashboard.html', {})

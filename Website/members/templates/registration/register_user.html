@@ -8,18 +8,18 @@
     aria-label="Close"></button>
 </div>
 {% endif %}
-    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">
-    <h1>Register</h1>
-<br/>
-    <form action="{% url "register_user" %}" method=POST>
-        {% csrf_token %}
-        {{ form.as_p }}
-            
-<br/><br/>
-        <input type="submit"
-        value="Register" class="
-        btn btn-secondary">
-    </form>
-</div>
+    <div class="shadow w-75 p-4 mx-auto bg-body rounded">
+        <h1>Register</h1>
+        <br/>
+        <form action="{% url "register_user" %}" method=POST>
+            {% csrf_token %}
+            {{ form.as_p }}
+                
+            <br/><br/>
+            <input type="submit"
+            value="Register" class="
+            btn btn-secondary">
+        </form>
+    </div>
 <br/><br/>
 {% endblock %}
