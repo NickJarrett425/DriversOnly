@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, Http404
 import requests
 
+
 def search_catalog(request):
     search_type = request.GET.get('type')
 
@@ -22,20 +23,24 @@ def search_catalog(request):
         }
 
         response = requests.get('https://itunes.apple.com/search', params=params)
-        
+
         if response.status_code == 200:
             itunes_data = response.json()
             products = []
             for item in itunes_data.get('results', []):
+                track_price = item.get('trackPrice', 0)
+                points = int(track_price / 0.01)
+
                 product = {
                     'title': item.get('trackName'),
                     'artist': item.get('artistName'),
                     'image': item.get('artworkUrl100'),
                     'genre': item.get('primaryGenreName'),
-                    'price': item.get('trackPrice'),
+                    'price': points,
                 }
                 products.append(product)
             context = {'products': products}
+            
             return render(request, 'product_list.html', context)
         else:
             context = {'error': 'An error occurred while fetching data from iTunes.'}
