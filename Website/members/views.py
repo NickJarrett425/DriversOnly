@@ -98,7 +98,7 @@ def view_profile(request):
 def edit_profile(request):
     if not request.user.is_authenticated:
         messages.error(request, "You need to be logged in to edit your profile.")
-        return redirect('login_user')
+        return redirect('/')
     
     try:
         profile, created = UserProfile.objects.get_or_create(user=request.user)
@@ -203,7 +203,7 @@ def view_driver(request, id):
 def edit_driver(request, id):
     if not request.user.is_authenticated:
         messages.error(request, "You need to be logged in to edit your profile.")
-        return redirect('login_user')
+        return redirect('/')
     try:
         profile, created = UserProfile.objects.get_or_create(user=request.user)
     except UserProfile.DoesNotExist:
@@ -214,6 +214,7 @@ def edit_driver(request, id):
     if profile.is_sponsor or request.user.is_superuser:
         try:
             driver = DriverProfile.objects.get(id=id)
+            driver.sponsors
         except DriverProfile.DoesNotExist:
             driver = None
         if request.method == 'POST':
@@ -306,3 +307,59 @@ def add_sponsor_user(request):
     else:
         messages.error(request, "You do not have the proper permissions to access this page.")
         return redirect('/about')
+    
+def sponsor_list(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to log in or register to view driver applications.")
+        return redirect('/')
+    try:
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = None
+    if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
+        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        return redirect('/about')
+    if profile.is_driver:
+        driver = DriverProfile.objects.get(user=request.user)
+        sponsors = driver.sponsors.all()
+        sponsor_ids = sponsors.values_list('id', flat=True)
+        sponsors_and_sponsor_ids = list(zip(sponsors, sponsor_ids))
+
+        return render(request, 'driver_functions/sponsors_list.html', {'sponsors_and_sponsor_ids': sponsors_and_sponsor_ids, 'profile': profile,})
+    else:
+        messages.error(request, "You do not have the proper permissions to access this page.")
+        return redirect('/about')
+
+def leave_sponsor_confirm(request, id):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to edit your profile.")
+        return redirect('/')
+    try:
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = None
+    if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
+        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        return redirect('/about')
+    if profile.is_driver:
+        sponsor = SponsorList.objects.get(id=id)
+        sponsor_id = id
+        return render(request, 'driver_functions/leave_sponsor.html', {'profile': profile, 'sponsor': sponsor, 'sponsor_id': sponsor_id,})
+        
+def leave_sponsor(request, id):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to edit your profile.")
+        return redirect('/')
+    try:
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = None
+    if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
+        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        return redirect('/about')
+    driver = DriverProfile.objects.get(user=request.user)
+    sponsor = SponsorList.objects.get(id=id)
+    driver.sponsors.remove(sponsor)
+    driver.save()
+    messages.success(request, ("You successfully left the " + sponsor.sponsor_name +" sponsor organization."))
+    return redirect('/dashboard')

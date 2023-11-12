@@ -1,0 +1,17 @@
+{% extends "about/base.html" %}
+
+{% block content %}
+{% if profile.is_driver %}
+    <h1>Want to leave a current sponsor?</h1>
+    <ul>
+        {% for sponsor, sponsor_id in sponsors_and_sponsor_ids %}
+            <li class="sponsor-item">
+                <a href="{% url "leave_sponsor_confirm" sponsor_id %}" class="btn btn-primary" role="button"> Leave {{ sponsor.sponsor_name }}</a>
+            </li>
+        </br>
+        {% endfor %}
+    </ul>
+{% endif %}
+<a href="{% url "dashboard" %}" class="btn btn-outline-primary" role="button">Back</a>
+{% endblock %}
+ 
