@@ -24,7 +24,7 @@
         <a href="{% url "login_report" %}" class="btn btn-primary" role="button">Login Report</a>
     </li>
 </br>
-{% elif sponsor.is_sponsor %}
+{% elif profile.is_sponsor %}
     <p> <h1>{{ sponsor.sponsor_name }} Sponsor Organization Dashboard</h1></p>
     <li>
         <strong>Applications to {{ sponsor.sponsor_name }}</strong>
@@ -49,7 +49,20 @@
     </li>
 </br>
 {% endcomment %}
-{% else %}
+{% elif profile.is_driver and driver.sponsors.all%}
+    <h1>Your Driver Dashboard</h1>
+    <li>
+        <strong>Manage your sponsors:</strong>
+        <a href="{% url "sponsors_list" %}" class="btn btn-primary" role="button">Your Sponsors</a>
+    </li>
+    </br>
+    <li>
+        <strong>Your applications:</strong>
+        <a href="{% url "application_list" %}" class="btn btn-primary" role="button">View Applications</a>
+    </li>
+    
+    
+{% elif profile.is_driver and not driver.sponsors.all %}
     <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
         <a href="{% url 'application_form' %}" class="text-center" style="margin-bottom: 20px; text-decoration: none; color: black;">
             <p>It looks like you don't have a sponsor yet.</p>
