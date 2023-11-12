@@ -18,6 +18,7 @@ class SponsorUserProfile(UserProfile):
 
 class SponsorList(models.Model):
     sponsor_name = models.CharField(max_length=25, unique=True)
+    point_conversion = models.FloatField(default=0.01)
 
 class DriverProfile(UserProfile):
     points = models.IntegerField(default=0, blank=True)
