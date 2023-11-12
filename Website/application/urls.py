@@ -16,5 +16,6 @@ urlpatterns = [
     path('review/<int:id>/edit', views.application_edit, name='application_edit'),
     path('review/<int:id>/deny/', views.application_deny, name='application_deny'),
     path('review/<int:id>/approve/', views.application_approve, name='application_approve'),
+    path('review/<int:id>/waitlist/', views.application_waitlist, name='application_waitlist'),
     path('success/', views.success_page, name='success_page'),
 ]

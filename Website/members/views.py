@@ -69,7 +69,13 @@ def view_profile(request):
     if not request.user.is_authenticated:
         messages.error(request, "You need to log in or register to view your profile")
         return redirect('/')
-    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    try:
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = None
+    if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
+        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        return redirect('/about')
     if profile.is_driver:
         try:
             driver = DriverProfile.objects.get(user=request.user)
@@ -94,7 +100,13 @@ def edit_profile(request):
         messages.error(request, "You need to be logged in to edit your profile.")
         return redirect('login_user')
     
-    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    try:
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = None
+    if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
+        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        return redirect('/about')
 
     if profile.is_driver:
         try:
@@ -147,7 +159,14 @@ def driver_list(request):
     if not request.user.is_authenticated:
         messages.error(request, "You need to log in to an authorized account to view this page.")
         return redirect('/')
-    profile = UserProfile.objects.get(user=request.user)
+    try:
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = None
+    if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
+        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        return redirect('/about')
+    
     if profile.is_sponsor:
         sponsor = SponsorUserProfile.objects.get(user=request.user)
         results = DriverProfile.objects.filter(sponsors__sponsor_name=sponsor.sponsor_name)
@@ -163,7 +182,14 @@ def view_driver(request, id):
     if not request.user.is_authenticated:
         messages.error(request, "You need to log in to an authorized account to view this page.")
         return redirect('/')
-    profile = UserProfile.objects.get(user=request.user)
+    try:
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = None
+    if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
+        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        return redirect('/about')
+    
     if profile.is_sponsor:
         driver = DriverProfile.objects.get(userprofile_ptr_id=id)
         return render(request, 'sponsor_organization/view_driver.html', {'driver': driver, 'profile': profile,})
@@ -178,9 +204,13 @@ def edit_driver(request, id):
     if not request.user.is_authenticated:
         messages.error(request, "You need to be logged in to edit your profile.")
         return redirect('login_user')
-
-    profile = UserProfile.objects.get(user=request.user)
-
+    try:
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = None
+    if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
+        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        return redirect('/about')
     if profile.is_sponsor or request.user.is_superuser:
         try:
             driver = DriverProfile.objects.get(id=id)
@@ -203,7 +233,13 @@ def edit_driver(request, id):
 def add_sponsor_user(request):
     if not request.user.is_authenticated:
         return redirect('/')
-    profile = UserProfile.objects.get(user=request.user)
+    try:
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = None
+    if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
+        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        return redirect('/about')
     if profile.is_sponsor:
         sponsor_user = SponsorUserProfile.objects.get(user=request.user)
         if request.method == "POST":

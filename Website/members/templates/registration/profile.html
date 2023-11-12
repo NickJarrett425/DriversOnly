@@ -2,7 +2,7 @@
 
 {% block content %}
 {% if profile.is_driver %}
-    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">       
+    <div class="shadow w-50 p-4 mx-auto bg-body rounded">      
         <h1>{{ driver.user.username }}'s Driver Profile</h1>
         <p>Points: {{ driver.points }}</p>
         <p>First Name: {{ driver.first_name }}</p>
@@ -20,10 +20,10 @@
         <h2>Sponsors:</h2>
         <ul>
             {% for sponsor in sponsors %}
-            <li>{{ sponsor.sponsor_name }}</li>
-        </br>
+            <p><li>{{ sponsor.sponsor_name }}</li></p>
+            
             {% empty %}
-                <li>No sponsors for {{driver.user.username}} </li>
+                <p><li>No sponsors for {{driver.user.username}}</li></p>
             {% endfor %}
         </ul>
 
@@ -41,17 +41,19 @@
     </div>
     </br>
 {% elif profile.is_sponsor %}
-    <h1>Your Sponsor Profile</h1>
-    <p>Username: {{ user.username }}</p>
-    <p>First Name: {{ profile.first_name }}</p>
-    <p>Last Name: {{ profile.last_name }}</p>
-    <p>Middle Initial: {{ profile.middle_initial }}</p>
-    <p>Email: {{ profile.email }}</p>
-    <!-- You can add more fields as you expand the UserProfile model -->
-
+    <div class="shadow w-50 p-4 mx-auto bg-body rounded">
+        <h1>Your Sponsor Profile</h1>
+        <p>Username: {{ user.username }}</p>
+        <p>First Name: {{ profile.first_name }}</p>
+        <p>Last Name: {{ profile.last_name }}</p>
+        <p>Middle Initial: {{ profile.middle_initial }}</p>
+        <p>Email: {{ profile.email }}</p>
+        <p>Sponsor Organizaton: {{ sponsor_user.sponsor_name }}</p>
+    </div>
     </br>
+    <!-- You can add more fields as you expand the UserProfile model -->
 {% elif user.is_superuser %}
-    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 25"> 
+    <div class="shadow w-50 p-4 mx-auto bg-body rounded">
         <h1>Your Admin Profile</h1>
         <p>Username: {{ user.username }}</p>
         <p>First Name: {{ profile.first_name }}</p>
@@ -59,6 +61,7 @@
         <p>Middle Initial: {{ profile.middle_initial }}</p>
     </div>
     </br>
+    
 {% else %}
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
         There has been an error, please log in and try again.
@@ -66,6 +69,7 @@
         aria-label="Close"></button>
     </div>
 {% endif %}
-<a href="{% url "edit_profile" %}" class="btn btn-secondary" role="button">Edit Profile</a>
-</br></br></br></br></br></br>
+<div class="w-50 mx-auto"><a href="{% url "edit_profile" %}" class="btn btn-secondary" role="button">Edit Profile</a></div>
+<p></p>
+<p></p>
 {% endblock %}

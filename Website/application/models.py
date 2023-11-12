@@ -40,6 +40,7 @@ class Application(models.Model):
 
     is_open = models.BooleanField('application status', default=True)
     is_approved = models.BooleanField('approval status', default=False)
+    is_waitlisted = models.BooleanField('waitlist status', default=False)
     
 
     def __str__(self):

@@ -3,9 +3,15 @@
 {% block content %}
 
 {% if application.is_open and profile.is_driver %}
-    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">
-        <h1>Application to {{ application.sponsor_name }} ( --OPEN-- )</h1>
-        <h2>Application Date: {{ application.date_created }}</h2> 
+    <div class="w-75 mx-auto"><h1>Application to {{ application.sponsor_name }} ( --OPEN-- )</h1></div>
+    <div class="shadow w-75 p-4 mx-auto bg-body rounded">
+        Application Date:<strong> {{ application.date_created }}</strong><a href="{% url "application_edit" application.id %}" class="btn btn-secondary float-end" role="button">Edit Application</a>
+        </br>
+        {% if application.is_waitlisted %}
+            Application Status: <strong class="text-secondary">Waitlisted</strong>
+            </br>
+            Reason: <strong>{{ application.application_reason }}</strong></br></br>
+        {% endif %}
         <strong>Driver's General Information</strong> 
         <p>First Name: {{ application.first_name }}</p>
         <p>Last Name: {{ application.last_name }}</p>
@@ -29,47 +35,60 @@
         <p>Insurance Provider: {{ application.provider_name }}</p>
         <p>Policy Number: {{ application.policy_number }}</p>
     </div>
-    </br></br></br>
+    </br></br>
 {% elif application.is_open and profile.is_sponsor %}
-    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">
-        <h1>{{ application.driver.user.username }}'s Application</h1>
-        <h2>Application Date: {{ application.date_created }}</h2> 
-        <strong>Driver's General Information</strong> 
-        <p>First Name: {{ application.first_name }}</p>
-        <p>Last Name: {{ application.last_name }}</p>
-        <p>Middle Initial: {{ application.middle_initial }}</p>
-        <p>Email: {{ application.email }}</p>
-        <p>Phone Number: {{ application.phone }}</p>
-        
-        <strong>Driver's Address Information</strong>
-        <p>Street Address: {{ application.street_address }}</p>
-        <p>City: {{ application.city }}</p>
-        <p>State: {{ application.state }}</p>    
-        <p>Zip Code: {{ application.zipcode }}</p>
-
-        <strong>Vehicle Information</strong>
-        <p>Driver's License Number: {{ application.license_num }}</p>
-        <p>Plate Number: {{ application.plate_num }}</p>
-        <p>Vehicle Year: {{ application.year }}</p>
-        <p>Vehicle Make: {{ application.make }}</p>
-        <p>Vehicle Model: {{ application.model }}</p>
-        <p>VIN: {{ application.vin }}</p>
-        <p>Insurance Provider: {{ application.provider_name }}</p>
-        <p>Policy Number: {{ application.policy_number }}</p>
-    </div>
-    </br>
-    <a href="{% url "application_approve" application.id %}" class="btn btn-secondary" role="button">Approve Application</a>
-    </br></br>
-    <a href="{% url "application_edit" application.id %}" class="btn btn-secondary" role="button">Edit Application</a>
-    </br></br>
-    <a href="{% url "application_deny" application.id %}" class="btn btn-secondary" role="button">Deny Application</a>
-    </br>
-    </br></br></br></br></br></br>
+        <div class="w-75 mx-auto"><h1>{{ application.driver.user.username }}'s Application</h1></div>    
+        <div class="shadow w-75 p-4 mx-auto bg-body rounded">
+            Application Date:<strong> {{ application.date_created }}</strong><a href="{% url "application_edit" application.id %}" class="btn btn-secondary float-end" role="button">Edit Application</a>
+            </br>
+            {% if application.is_waitlisted %}
+                Application Status: <strong class="text-secondary">Waitlisted</strong>
+                </br>
+                Reason: <strong>{{ application.application_reason }}</strong></br></br>
+            {% endif %}
+            <strong>Driver's General Information</strong>
+            <p>First Name: {{ application.first_name }}</p>
+            <p>Last Name: {{ application.last_name }}</p>
+            <p>Middle Initial: {{ application.middle_initial }}</p>
+            <p>Email: {{ application.email }}</p>
+            <p>Phone Number: {{ application.phone }}</p>
+            
+            <strong>Driver's Address Information</strong>
+            <p>Street Address: {{ application.street_address }}</p>
+            <p>City: {{ application.city }}</p>
+            <p>State: {{ application.state }}</p>    
+            <p>Zip Code: {{ application.zipcode }}</p>
+    
+            <strong>Vehicle Information</strong>
+            <p>Driver's License Number: {{ application.license_num }}</p>
+            <p>Plate Number: {{ application.plate_num }}</p>
+            <p>Vehicle Year: {{ application.year }}</p>
+            <p>Vehicle Make: {{ application.make }}</p>
+            <p>Vehicle Model: {{ application.model }}</p>
+            <p>VIN: {{ application.vin }}</p>
+            <p>Insurance Provider: {{ application.provider_name }}</p>
+            <p>Policy Number: {{ application.policy_number }}</p>       
+        </div>
+        </br>
+        <div class="w-75 mx-auto"><a href="{% url "application_approve" application.id %}" class="btn btn-success" role="button">Approve Application</a></div>
+        </br>
+        {% if not application.is_waitlisted %}
+            <div class="w-75 mx-auto"><a href="{% url "application_waitlist" application.id %}" class="btn btn-outline-secondary" role="button">Waitlist Application</a></div>
+            </br>
+        {% endif %}
+        <div class="w-75 mx-auto"><a href="{% url "application_deny" application.id %}" class="btn btn-danger" role="button">Deny Application</a></div>
+        </br></br>
 {% elif application.is_open and user.is_superuser %}
-    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">
-        <h1>{{ application.driver.user.username }}'s Application</h1>
-        <h2>Application Date: {{ application.date_created }}</h2> 
-        <strong>Driver's General Information</strong> 
+    <div class="w-75 mx-auto"><h1>{{ application.driver.user.username }}'s Application</h1></div>    
+    <div class="shadow w-75 p-4 mx-auto bg-body rounded">
+        Application Date:<strong> {{ application.date_created }}</strong><a href="{% url "application_edit" application.id %}" class="btn btn-secondary float-end" role="button">Edit Application</a>
+        </br>
+        {% if application.is_waitlisted %}
+            Application Status: <strong class="text-secondary">Waitlisted</strong>
+            </br>
+            Reason: <strong>{{ application.application_reason }}</strong></br></br>
+        {% endif %}
+        <strong>Driver's General Information</strong>
         <p>First Name: {{ application.first_name }}</p>
         <p>Last Name: {{ application.last_name }}</p>
         <p>Middle Initial: {{ application.middle_initial }}</p>
@@ -90,32 +109,32 @@
         <p>Vehicle Model: {{ application.model }}</p>
         <p>VIN: {{ application.vin }}</p>
         <p>Insurance Provider: {{ application.provider_name }}</p>
-        <p>Policy Number: {{ application.policy_number }}</p>
+        <p>Policy Number: {{ application.policy_number }}</p>       
     </div>
     </br>
-    <a href="{% url "application_approve" application.id %}" class="btn btn-secondary" role="button">Approve Application</a>
+    <div class="w-75 mx-auto"><a href="{% url "application_approve" application.id %}" class="btn btn-success" role="button">Approve Application</a></div>
+    </br>
+    <div class="w-75 mx-auto"><a href="{% url "application_waitlist" application.id %}" class="btn btn-outline-secondary" role="button">Waitlist Application</a></div>
+    </br>
+    <div class="w-75 mx-auto"><a href="{% url "application_deny" application.id %}" class="btn btn-danger" role="button">Deny Application</a></div>
     </br></br>
-    <a href="{% url "application_edit" application.id %}" class="btn btn-secondary" role="button">Edit Application</a>
-    </br></br>
-    <a href="{% url "application_deny" application.id %}" class="btn btn-secondary" role="button">Deny Application</a>
-    </br></br></br></br></br></br>
 {% elif not application.is_open and not user.is_superuser %}
     {% if profile.is_driver %}
-        <h1>Application to {{ application.sponsor_name }} ( --CLOSED-- )</h1>
+        <div class="w-75 mx-auto"><h1>Application to {{ application.sponsor_name }} ( --CLOSED-- )</h1></div>
     {% else %}
-        <h1>{{ application.driver.user.username }}'s Application</h1>
+        <div class="w-75 mx-auto"><h1>{{ application.driver.user.username }}'s Application</h1></div>
     {% endif %}
-    Application Date:<strong> {{ application.date_created }}</strong>
-    </br>
-    {% if application.is_approved %}
-        <p>Application Status: <strong style="color: rgb(50, 205, 50);">Approved</strong></p>
-    {% else %}
-        Application Status: <strong style="color: rgb(255, 0, 0);">Denied</strong>
+    <div class="shadow w-75 p-4 mx-auto bg-body rounded">
+        Application Date:<strong> {{ application.date_created }}</strong><a href="{% url "application_edit" application.id %}" class="btn btn-secondary float-end" role="button">Edit Application</a>
         </br>
-        Reason: <strong>{{ application.application_reason }}</strong></br></br>
-    {% endif %}
-    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">
-        <strong>Driver's General Information</strong> 
+        {% if application.is_approved %}
+            <p>Application Status: <strong style="color: rgb(50, 205, 50);">Approved</strong></p>
+        {% else %}
+            Application Status: <strong style="color: rgb(255, 0, 0);">Denied</strong>
+            </br>
+            Reason: <strong>{{ application.application_reason }}</strong></br></br>
+        {% endif %}
+        <strong>Driver's General Information</strong>
         <p>First Name: {{ application.first_name }}</p>
         <p>Last Name: {{ application.last_name }}</p>
         <p>Middle Initial: {{ application.middle_initial }}</p>
@@ -138,22 +157,24 @@
         <p>Insurance Provider: {{ application.provider_name }}</p>
         <p>Policy Number: {{ application.policy_number }}</p>       
     </div>
-    </br></br>
-    <a href="{% url "application_edit" application.id %}" class="btn btn-secondary" role="button">Edit Application</a>
+    {% if profile.is_sponsor %}
+        </br>
+        <div class="w-75 mx-auto"><a href="{% url "application_waitlist" application.id %}" class="btn btn-secondary" role="button">Waitlist Application</a></div>
+    {% endif %}
     </br></br>
 {% elif not application.is_open and user.is_superuser %}
-    <h1>{{ application.driver.user.username }}'s Application</h1>
-    Application Date:<strong> {{ application.date_created }}</strong>
+    <div class="w-75 mx-auto"><h1>{{ application.driver.user.username }}'s Application</h1></div>    
+    <div class="shadow w-75 p-4 mx-auto bg-body rounded">
+        Application Date:<strong> {{ application.date_created }}</strong><a href="{% url "application_edit" application.id %}" class="btn btn-secondary float-end" role="button">Edit Application</a>
     </br>
-    {% if application.is_approved %}
-        <p>Application Status: <strong style="color: rgb(50, 205, 50);">Approved</strong></p>
-    {% else %}
-        Application Status: <strong style="color: rgb(255, 0, 0);">Denied</strong>
-        </br>
-        Reason: <strong>{{ application.application_reason }}</strong></br></br>
-    {% endif %}
-    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">
-        <strong>Driver's General Information</strong> 
+        {% if application.is_approved %}
+            <p>Application Status: <strong style="color: rgb(50, 205, 50);">Approved</strong></p>
+        {% else %}
+            Application Status: <strong style="color: rgb(255, 0, 0);">Denied</strong>
+            </br>
+            Reason: <strong>{{ application.application_reason }}</strong></br></br>
+        {% endif %}
+        <strong>Driver's General Information</strong>
         <p>First Name: {{ application.first_name }}</p>
         <p>Last Name: {{ application.last_name }}</p>
         <p>Middle Initial: {{ application.middle_initial }}</p>
@@ -177,16 +198,20 @@
         <p>Policy Number: {{ application.policy_number }}</p>       
     </div>
     </br>
-    <a href="{% url "application_approve" application.id %}" class="btn btn-secondary" role="button">Approve Application</a>
+    <div class="w-75 mx-auto"><a href="{% url "application_approve" application.id %}" class="btn btn-success" role="button">Approve Application</a></div>
+    </br>
+    <div class="w-75 mx-auto"><a href="{% url "application_waitlist" application.id %}" class="btn btn-outline-secondary" role="button">Waitlist Application</a></div>
+    </br>
+    <div class="w-75 mx-auto"><a href="{% url "application_deny" application.id %}" class="btn btn-danger" role="button">Deny Application</a></div>
     </br></br>
-    <a href="{% url "application_edit" application.id %}" class="btn btn-secondary" role="button">Edit Application</a>
-    </br></br>
-    <a href="{% url "application_deny" application.id %}" class="btn btn-secondary" role="button">Deny Application</a>
-    </br></br></br>
 {% else %}
     <strong>There was an error.</strong>
 {% endif %}
-<a href="{% url "application_closed" %}" class="btn btn-primary" role="button">Back</a>
+{% if application.is_open %}
+    <div class="w-75 mx-auto"><a href="{% url "application_list" %}" class="btn btn-outline-primary" role="button">Back</a></div>
+{% elif not application.is_open %}
+    <div class="w-75 mx-auto"><a href="{% url "application_closed" %}" class="btn btn-outline-primary" role="button">Back</a></div>
+{% endif %}
 </br>
 </br></br></br></br></br></br>
 {% endblock %}
