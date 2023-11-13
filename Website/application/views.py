@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Application
 from members.models import UserProfile, DriverProfile, SponsorUserProfile, SponsorList
@@ -8,12 +8,11 @@ def application_form(request):
     if request.method == 'POST':
         form = ApplicationForm(request.POST)
         if form.is_valid():
-            instance = form.save()
-            driver = DriverProfile.objects.get(user=request.user)
-            application = Application.objects.get(id = instance.id)
-            application.driver = driver
-            application.save()
-            return redirect('success_page')
+            instance = form.save(commit=False)
+            driver = get_object_or_404(DriverProfile, user=request.user)
+            instance.driver = driver
+            instance.save()
+            return redirect('/application/success')
     else:
         form = ApplicationForm()
 

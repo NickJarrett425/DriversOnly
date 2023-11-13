@@ -53,6 +53,11 @@
     {% if driver.sponsors.all %}
     <h1>Your Driver Dashboard</h1>
     <li>
+        <strong>Apply to a sponsor.</strong>
+        <a href="{% url "application_form" %}" class="btn btn-primary" role="button">Apply</a>
+    </li>
+    </br>
+    <li>
         <strong>Manage your sponsors:</strong>
         <a href="{% url "sponsors_list" %}" class="btn btn-primary" role="button">Your Sponsors</a>
     </li>
