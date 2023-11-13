@@ -1,7 +1,4 @@
 from members.models import UserProfile, DriverProfile
-from django.contrib import messages
-from django.shortcuts import redirect
-
 
 def navbar_points(request):
     if not request.user.is_authenticated:
