@@ -5,4 +5,5 @@ from django.db import models
 class Product(models.Model):
     name = models.CharField(max_length=255)
     artist = models.CharField(max_length=255)
+    # sponsor_name = models.CharField(max_length=50)
     # Add other fields as needed
