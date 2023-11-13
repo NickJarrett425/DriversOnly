@@ -216,6 +216,12 @@ def application_waitlist(request, id):
     application = Application.objects.get(id=id)
     profile = UserProfile.objects.get(user=request.user)
     if profile.is_sponsor or request.user.is_superuser:
+        if request.user.is_superuser:
+            driver = DriverProfile.objects.get(user=application.driver.user)
+            sponsor = SponsorList.objects.get(sponsor_name=application.sponsor_name)
+            driver.sponsors.remove(sponsor)
+            driver.save()
+
         application.is_waitlisted = True
         application.is_open = True
         application.is_approved = False
@@ -230,7 +236,7 @@ def application_waitlist(request, id):
 
 def application_edit(request, id):
     if not request.user.is_authenticated:
-        messages.error(request, "You need to log in or register to edit driver applications")
+        messages.error(request, "You need to log in or register to review driver applications")
         return redirect('/')
     try:
         profile, created = UserProfile.objects.get_or_create(user=request.user)

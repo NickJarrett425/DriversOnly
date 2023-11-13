@@ -59,13 +59,10 @@
     </br>
         {% empty %}
             <li>No open applications</li>
-            <a href="{% url "application_form" %}" class="btn btn-outline-secondary" role="button">Apply Here</a>
         {% endfor %}
     </ul>
 {% endif %}
     <h2>View Closed Applications</h2>
     <a href="{% url "application_closed" %}" class="btn btn-primary" role="button">Closed Applications</a>
-    <p></p>
-    <a href="{% url "dashboard" %}" class="btn btn-outline-primary" role="button">Back</a>
 {% endblock %}
  
