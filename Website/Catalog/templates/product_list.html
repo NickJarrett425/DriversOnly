@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Product List</title>
-</head>
-<body>
+{% extends "about/base.html" %}
+
+{% block content %}
 
 <div id="content">
     <h1>Product List</h1>
@@ -32,6 +29,4 @@
         <p>{{ error }}</p>
     {% endif %} 
 </div>
-
-</body>
-</html>
+{% endblock %}
