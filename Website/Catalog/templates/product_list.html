@@ -16,7 +16,11 @@
                     <h2>{{ product.title }}</h2>
                     <p>Artist: {{ product.artist }}</p>
                     <p>Genre: {{ product.genre }}</p>
-                    <p>Points: {{ product.price }}</p>
+                    {% if profile.is_driver %}
+                        <p>Points: {{ product.price }}</p>
+                    {% else %}
+                        <p>Points: ${{ product.price }}</p>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
@@ -26,7 +30,7 @@
     
     {% if error %}
         <p>{{ error }}</p>
-    {% endif %}
+    {% endif %} 
 </div>
 
 </body>

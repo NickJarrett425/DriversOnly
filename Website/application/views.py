@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Application
 from members.models import UserProfile, DriverProfile, SponsorUserProfile, SponsorList
@@ -8,12 +8,11 @@ def application_form(request):
     if request.method == 'POST':
         form = ApplicationForm(request.POST)
         if form.is_valid():
-            instance = form.save()
-            driver = DriverProfile.objects.get(user=request.user)
-            application = Application.objects.get(id = instance.id)
-            application.driver = driver
-            application.save()
-            return redirect('success_page')
+            instance = form.save(commit=False)
+            driver = get_object_or_404(DriverProfile, user=request.user)
+            instance.driver = driver
+            instance.save()
+            return redirect('/application/success')
     else:
         form = ApplicationForm()
 
@@ -216,12 +215,6 @@ def application_waitlist(request, id):
     application = Application.objects.get(id=id)
     profile = UserProfile.objects.get(user=request.user)
     if profile.is_sponsor or request.user.is_superuser:
-        if request.user.is_superuser:
-            driver = DriverProfile.objects.get(user=application.driver.user)
-            sponsor = SponsorList.objects.get(sponsor_name=application.sponsor_name)
-            driver.sponsors.remove(sponsor)
-            driver.save()
-
         application.is_waitlisted = True
         application.is_open = True
         application.is_approved = False
@@ -236,7 +229,7 @@ def application_waitlist(request, id):
 
 def application_edit(request, id):
     if not request.user.is_authenticated:
-        messages.error(request, "You need to log in or register to review driver applications")
+        messages.error(request, "You need to log in or register to edit driver applications")
         return redirect('/')
     try:
         profile, created = UserProfile.objects.get_or_create(user=request.user)

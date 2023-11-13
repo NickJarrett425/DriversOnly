@@ -11,13 +11,13 @@
 <div class="shadow w-75 p-4 mx-auto bg-body rounded">
     <h1>Application form</h1>
     <br/>
-    <form action="{% url "register_user" %}" method=POST>
+    <form action="{% url "application_form" %}" method=POST>
         {% csrf_token %}
         {{ form.as_p }}
             
         <br/><br/>
         <input type="submit"
-        value="Register" class="
+        value="Apply" class="
         btn btn-secondary">
     </form>
 </div>
