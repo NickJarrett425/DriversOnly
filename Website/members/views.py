@@ -1,5 +1,5 @@
 from .models import UserProfile, DriverProfile, SponsorList, SponsorUserProfile, PointReason
-from .forms import RegisterUserForm, UserProfileForm, DriverProfileForm, AssignSponsorForm, PointReasonForm
+from .forms import RegisterUserForm, UserProfileForm, DriverProfileForm, AssignSponsorForm, PointReasonForm, EmailForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
@@ -493,3 +493,12 @@ def leave_sponsor(request, id):
     driver.save()
     messages.success(request, ("You successfully left the " + sponsor.sponsor_name +" sponsor organization."))
     return redirect('/dashboard')
+
+def enter_email(request):
+    form = EmailForm(request.POST)
+    if form.is_valid():
+        email_address = form.cleaned_data['email']
+        messages.success(request, f"An email has been sent to {email_address}. \nPlease check your inbox.")
+        
+    return render(request, 'password_change/enter_email.html', {'form': form})
+    
