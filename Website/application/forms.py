@@ -27,8 +27,3 @@ class ApplicatonReasonForm(forms.ModelForm):
         super(ApplicatonReasonForm, self).__init__(*args, **kwargs)
 
         self.fields['application_reason'].widget.attrs['class'] = 'form-control'
-
-class ProductForm(forms.ModelForm):
-    class Meta:
-        model = Product
-        fields = ['name', 'artist']

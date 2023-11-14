@@ -1,0 +1,41 @@
+{% extends "about/base.html" %}
+
+{% block content %}
+{% if form.errors %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    There was an error with your form...
+    <button type="button" class="btn-close" data-bs-dismiss="alert"
+    aria-label="Close"></button>
+</div>
+{% endif %}
+<div class="shadow w-75 p-4 mx-auto bg-body rounded">
+    <h1>Add or Remove points from {{ driver.user.username }}</h1>
+    <br/>
+    <form action="{% url "add_points" driver.userprofile_ptr_id %}" method=POST>
+        {% csrf_token %}
+        <div class="form-group">
+            {{ point_form.point_amt.label_tag }}
+            {{ point_form.point_amt }}
+        </div>
+        <p></p>
+        <div class="form-group">
+            {{ point_form.point_reason.label_tag }}
+            {{ point_form.point_reason }}
+        </div>
+        <p></p>
+        <input type="hidden" name="is_add" id="is-add-field" value="">
+
+        <button type="button" class="btn btn-primary" onclick="setIsAdd(true)">Add</button>
+        <button type="button" class="btn btn-danger" onclick="setIsAdd(false)">Remove</button>
+
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+    <script>
+        function setIsAdd(value) {
+            document.getElementById('is-add-field').value = value;
+        }
+    </script>
+</div>
+<a href="{% url "edit_driver" driver.userprofile_ptr_id %}" class="btn btn-outline-primary" role="button">Back</a>
+<br/><br/>
+{% endblock %}

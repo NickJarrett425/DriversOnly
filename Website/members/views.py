@@ -1,5 +1,5 @@
-from .models import UserProfile, DriverProfile, SponsorList, SponsorUserProfile
-from .forms import RegisterUserForm, UserProfileForm, DriverProfileForm, AssignSponsorForm
+from .models import UserProfile, DriverProfile, SponsorList, SponsorUserProfile, PointReason
+from .forms import RegisterUserForm, UserProfileForm, DriverProfileForm, AssignSponsorForm, PointReasonForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
@@ -192,7 +192,16 @@ def view_driver(request, id):
     
     if profile.is_sponsor:
         driver = DriverProfile.objects.get(userprofile_ptr_id=id)
-        return render(request, 'sponsor_organization/view_driver.html', {'driver': driver, 'profile': profile,})
+        sponsor = SponsorUserProfile.objects.get(user=request.user)
+        s_name = sponsor
+        driver_sponsors = driver.sponsors.all()
+        for driver_sponsor in driver_sponsors:
+            if s_name.sponsor_name == driver_sponsor.sponsor_name:
+                return render(request, 'sponsor_organization/view_driver.html', {'driver': driver, 'profile': profile,})
+        else:
+            messages.error(request, "You do not have the proper permissions to access this page.")
+            return redirect('/about')
+        
     elif request.user.is_superuser:
         driver = DriverProfile.objects.get(userprofile_ptr_id=id)
         return render(request, 'sponsor_organization/view_driver.html', {'driver': driver,})
@@ -202,7 +211,7 @@ def view_driver(request, id):
     
 def edit_driver(request, id):
     if not request.user.is_authenticated:
-        messages.error(request, "You need to be logged in to edit your profile.")
+        messages.error(request, "You need to log in to an authorized account to view this page.")
         return redirect('/')
     try:
         profile, created = UserProfile.objects.get_or_create(user=request.user)
@@ -214,25 +223,146 @@ def edit_driver(request, id):
     if profile.is_sponsor or request.user.is_superuser:
         try:
             driver = DriverProfile.objects.get(id=id)
-            driver.sponsors
+        except DriverProfile.DoesNotExist:
+            driver = None
+        if profile.is_sponsor:
+            sponsor = SponsorUserProfile.objects.get(user=request.user)
+            s_name = sponsor
+            driver_sponsors = driver.sponsors.all()
+            for driver_sponsor in driver_sponsors:
+                if s_name.sponsor_name == driver_sponsor.sponsor_name:
+                    if request.method == 'POST':
+                        driver_form = DriverProfileForm(request.POST, instance=driver)
+
+                        if driver_form.is_valid():
+                            driver = driver_form.save(commit=False)
+                            driver.save()
+
+                            messages.success(request, "Profile updated successfully!")
+                            return redirect('/organization/view/driver/'+str(id))
+                    else:
+                        driver_form = DriverProfileForm(instance=driver)
+
+                    return render(request, 'sponsor_organization/edit_driver.html', {'driver_form': driver_form, 'driver': driver, 'profile': profile})
+        else:
+            if request.method == 'POST':
+                driver_form = DriverProfileForm(request.POST, instance=driver)
+
+                if driver_form.is_valid():
+                    driver = driver_form.save(commit=False)
+                    driver.save()
+
+                    messages.success(request, "Profile updated successfully!")
+                    return redirect('/organization/view/driver/'+str(id))
+            else:
+                driver_form = DriverProfileForm(instance=driver)
+
+            return render(request, 'sponsor_organization/edit_driver.html', {'driver_form': driver_form, 'driver': driver, 'profile': profile})    
+    else:
+        messages.error(request, "You do not have the proper permissions to access this page.")
+        return redirect('/about')
+
+def add_points(request, id):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to log in to an authorized account to view this page.")
+        return redirect('/')
+    try:
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = None
+    if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
+        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        return redirect('/about')
+    if profile.is_sponsor:
+        try:
+            driver = DriverProfile.objects.get(id=id)
+        except DriverProfile.DoesNotExist:
+            driver = None
+        try:
+            sponsor = SponsorUserProfile.objects.get(user=request.user)
+        except SponsorUserProfile.DoesNotExist:
+            sponsor = None
+        s_name = sponsor
+        driver_sponsors = driver.sponsors.all()
+        for driver_sponsor in driver_sponsors:
+            if s_name.sponsor_name == driver_sponsor.sponsor_name:
+                if request.method == 'POST':
+                    point_form = PointReasonForm(request.POST)
+
+                    if point_form.is_valid():
+                        instance = point_form.save()
+                        point_reason, created = PointReason.objects.get_or_create(id=instance.id)
+                        point_reason.point_amt = point_form.cleaned_data['point_amt']
+                        point_reason.point_reason = point_form.cleaned_data['point_reason']
+                        point_reason.sponsor = sponsor
+                        point_reason.driver = driver
+                        point_reason.save()
+                        temp = driver.points
+                        if point_reason.is_add:
+                            add = point_reason.point_amt
+                            temp = temp + add
+                            driver.points = temp
+                            driver.save()
+                            messages.success(request, "Points added to " + str(driver.user.username) + " successfully.")
+                        else:
+                            subtract = point_form.cleaned_data['point_amt']
+
+                            if temp <= 0:
+                                temp = 0
+                                driver.points = temp
+                            else:
+                                temp = temp - subtract
+                                driver.points = temp
+                            driver.save()
+                            messages.success(request, "Points removed from " + str(driver.user.username) + " successfully.")
+
+                        
+                        return redirect('/organization/view/driver/'+str(id))
+                else:
+                    point_form = PointReasonForm()
+                return render(request, 'sponsor_organization/add_points.html', {'point_form': point_form, 'driver': driver, 'sponsor': sponsor, 'profile': profile})
+    elif request.user.is_superuser:
+        try:
+            driver = DriverProfile.objects.get(id=id)
         except DriverProfile.DoesNotExist:
             driver = None
         if request.method == 'POST':
-            driver_form = DriverProfileForm(request.POST, instance=driver)
+            point_form = PointReasonForm(request.POST)
 
-            if driver_form.is_valid():
-                driver = driver_form.save(commit=False)
-                driver.save()
+            if point_form.is_valid():
+                instance = point_form.save()
+                point_reason, created = PointReason.objects.get_or_create(id=instance.id)
+                point_reason.point_amt = point_form.cleaned_data['point_amt']
+                point_reason.point_reason = point_form.cleaned_data['point_reason']
+                point_reason.driver = driver
+                point_reason.save()
+                temp = driver.points
+                if point_reason.is_add:
+                    add = point_reason.point_amt
+                    temp = temp + add
+                    driver.points = temp
+                    driver.save()
+                    messages.success(request, "Points added to " + str(driver.user.username) + " successfully.")
+                else:
+                    subtract = point_form.cleaned_data['point_amt']
 
-                messages.success(request, "Profile updated successfully!")
-                return redirect('/organization/drivers/list')
+                    if temp <= 0:
+                        temp = 0
+                        driver.points = temp
+                    else:
+                        temp = temp - subtract
+                        driver.points = temp
+                    driver.save()
+                    messages.success(request, "Points removed from " + str(driver.user.username) + " successfully.")
+
+                return redirect('/organization/view/driver/'+str(id))
         else:
-            driver_form = DriverProfileForm(instance=driver)
-
-        return render(request, 'sponsor_organization/edit_driver.html', {'driver_form': driver_form, 'driver': driver, 'profile': profile})
+            point_form = PointReasonForm()
+        return render(request, 'sponsor_organization/add_points.html', {'point_form': point_form, 'driver': driver, 'profile': profile})
 
 def add_sponsor_user(request):
     if not request.user.is_authenticated:
+        messages.error(request, "You need to log in to an authorized account to view this page.")
         return redirect('/')
     try:
         profile, created = UserProfile.objects.get_or_create(user=request.user)
@@ -310,7 +440,7 @@ def add_sponsor_user(request):
     
 def sponsor_list(request):
     if not request.user.is_authenticated:
-        messages.error(request, "You need to log in or register to view driver applications.")
+        messages.error(request, "You need to log in to an authorized account to view this page.")
         return redirect('/')
     try:
         profile, created = UserProfile.objects.get_or_create(user=request.user)
@@ -332,7 +462,7 @@ def sponsor_list(request):
 
 def leave_sponsor_confirm(request, id):
     if not request.user.is_authenticated:
-        messages.error(request, "You need to be logged in to edit your profile.")
+        messages.error(request, "You need to log in to an authorized account to view this page.")
         return redirect('/')
     try:
         profile, created = UserProfile.objects.get_or_create(user=request.user)
@@ -348,7 +478,7 @@ def leave_sponsor_confirm(request, id):
         
 def leave_sponsor(request, id):
     if not request.user.is_authenticated:
-        messages.error(request, "You need to be logged in to edit your profile.")
+        messages.error(request, "You need to log in to an authorized account to view this page.")
         return redirect('/')
     try:
         profile, created = UserProfile.objects.get_or_create(user=request.user)

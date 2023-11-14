@@ -31,7 +31,7 @@
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.phone_number.errors }}
+                {{ driver_form.phone_number.errors }}
                 <label for="{{ driver_form.phone_number.id_for_label }}">Phone Number:</label>
                 {{ driver_form.phone_number }}
             </div>
@@ -59,28 +59,28 @@
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.city.errors }}
+                {{ driver_form.city.errors }}
                 <label for="{{ driver_form.city.id_for_label }}">City:</label>
                 {{ driver_form.city }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.state.errors }}
+                {{ driver_form.state.errors }}
                 <label for="{{ driver_form.state.id_for_label }}">State:</label>
                 {{ driver_form.state }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.zipcode.errors }}
+                {{ driver_form.zipcode.errors }}
                 <label for="{{ driver_form.zipcode.id_for_label }}">ZIP Code:</label>
                 {{ driver_form.zipcode }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.drivers_license.errors }}
+                {{ driver_form.drivers_license.errors }}
                 <label for="{{ driver_form.drivers_license.id_for_label }}">Driver's License:</label>
                 {{ driver_form.drivers_license }}
             </div>
@@ -89,42 +89,42 @@
             <h2>Vehicle Information</h2>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.year.errors }}
+                {{ driver_form.year.errors }}
                 <label for="{{ driver_form.year.id_for_label }}">Vehicle Year:</label>
                 {{ driver_form.year }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.make.errors }}
+                {{ driver_form.make.errors }}
                 <label for="{{ driver_form.make.id_for_label }}">Vehicle Make:</label>
                 {{ driver_form.make }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.model.errors }}
+                {{ driver_form.model.errors }}
                 <label for="{{ driver_form.model.id_for_label }}">Vehicle Model:</label>
                 {{ driver_form.model }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.vin.errors }}
+                {{ driver_form.vin.errors }}
                 <label for="{{ driver_form.vin.id_for_label }}">Vehicle VIN:</label>
                 {{ driver_form.vin }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.provider_name.errors }}
+                {{ driver_form.provider_name.errors }}
                 <label for="{{ driver_form.provider_name.id_for_label }}">Insurance Provider:</label>
                 {{ driver_form.provider_name }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.policy_number.errors }}
+                {{ driver_form.policy_number.errors }}
                 <label for="{{ driver_form.policy_number.id_for_label }}">Insurance Policy Number:</label>
                 {{ driver_form.policy_number }}
             </div>
@@ -132,13 +132,13 @@
             <h2>Emergency Contact</h2>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.emergency_contact_name.errors }}
+                {{ driver_form.emergency_contact_name.errors }}
                 <label for="{{ driver_form.emergency_contact_name.id_for_label }}">Name:</label>
                 {{ driver_form.emergency_contact_name }}
             </div>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.emergency_contact_phone.errors }}
+                {{ driver_form.emergency_contact_phone.errors }}
                 <label for="{{ driver_form.emergency_contact_phone.id_for_label }}">Phone:</label>
                 {{ driver_form.emergency_contact_phone }}
             </div>
@@ -149,7 +149,9 @@
             btn btn-secondary">    
         </form>    
     </div>
-    </br></br></br></br>
+    <p></p><p></p>
+    <a href="{% url "add_points" driver.userprofile_ptr_id %}" class="btn btn-secondary" role="button">Update Driver Points</a>
+    <p></p><p></p>
 {% elif profile.is_sponsor%}
     <h1>{{ driver.user.username }}'s Driver Profile</h1>
     <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">
@@ -180,7 +182,7 @@
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.phone_number.errors }}
+                {{ driver_form.phone_number.errors }}
                 <label for="{{ driver_form.phone_number.id_for_label }}">Phone Number:</label>
                 {{ driver_form.phone_number }}
             </div>
@@ -208,28 +210,28 @@
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.city.errors }}
+                {{ driver_form.city.errors }}
                 <label for="{{ driver_form.city.id_for_label }}">City:</label>
                 {{ driver_form.city }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.state.errors }}
+                {{ driver_form.state.errors }}
                 <label for="{{ driver_form.state.id_for_label }}">State:</label>
                 {{ driver_form.state }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.zipcode.errors }}
+                {{ driver_form.zipcode.errors }}
                 <label for="{{ driver_form.zipcode.id_for_label }}">ZIP Code:</label>
                 {{ driver_form.zipcode }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.drivers_license.errors }}
+                {{ driver_form.drivers_license.errors }}
                 <label for="{{ driver_form.drivers_license.id_for_label }}">Driver's License:</label>
                 {{ driver_form.drivers_license }}
             </div>
@@ -238,42 +240,42 @@
             <h2>Vehicle Information</h2>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.year.errors }}
+                {{ driver_form.year.errors }}
                 <label for="{{ driver_form.year.id_for_label }}">Vehicle Year:</label>
                 {{ driver_form.year }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.make.errors }}
+                {{ driver_form.make.errors }}
                 <label for="{{ driver_form.make.id_for_label }}">Vehicle Make:</label>
                 {{ driver_form.make }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.model.errors }}
+                {{ driver_form.model.errors }}
                 <label for="{{ driver_form.model.id_for_label }}">Vehicle Model:</label>
                 {{ driver_form.model }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.vin.errors }}
+                {{ driver_form.vin.errors }}
                 <label for="{{ driver_form.vin.id_for_label }}">Vehicle VIN:</label>
                 {{ driver_form.vin }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.provider_name.errors }}
+                {{ driver_form.provider_name.errors }}
                 <label for="{{ driver_form.provider_name.id_for_label }}">Insurance Provider:</label>
                 {{ driver_form.provider_name }}
             </div>
             <p></p>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.policy_number.errors }}
+                {{ driver_form.policy_number.errors }}
                 <label for="{{ driver_form.policy_number.id_for_label }}">Insurance Policy Number:</label>
                 {{ driver_form.policy_number }}
             </div>
@@ -281,13 +283,13 @@
             <h2>Emergency Contact</h2>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.emergency_contact_name.errors }}
+                {{ driver_form.emergency_contact_name.errors }}
                 <label for="{{ driver_form.emergency_contact_name.id_for_label }}">Name:</label>
                 {{ driver_form.emergency_contact_name }}
             </div>
             <p></p>
             <div class="fieldWrapper">
-                {{ driver.emergency_contact_phone.errors }}
+                {{ driver_form.emergency_contact_phone.errors }}
                 <label for="{{ driver_form.emergency_contact_phone.id_for_label }}">Phone:</label>
                 {{ driver_form.emergency_contact_phone }}
             </div>
@@ -298,7 +300,9 @@
             btn btn-secondary">    
         </form>    
     </div>
-    </br></br></br></br>    
+    <p></p><p></p>
+    <a href="{% url "add_points" driver.userprofile_ptr_id %}" class="btn btn-secondary" role="button">Update Driver Points</a>
+    <p></p><p></p>
 {% endif %}
 
 {% endblock %}
