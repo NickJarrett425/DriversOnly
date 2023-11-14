@@ -3,6 +3,9 @@ from members.models import DriverProfile
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 
+#Encryption
+from django_cryptography.fields import encrypt
+
 # Define the custom validator functions
 def validate_phone_number(value):
     if not value.isdigit():
@@ -16,13 +19,13 @@ phone_number_validator = RegexValidator(
 class Application(models.Model):
     driver = models.ForeignKey(DriverProfile, on_delete=models.SET_NULL, null=True)
     sponsor_name = models.CharField(max_length=50, blank=False)
-    first_name = models.CharField(max_length=30, blank=False)
-    last_name = models.CharField(max_length=30, blank=False)
-    middle_initial = models.CharField(max_length=1, blank=True)
+    first_name = encrypt(models.CharField(max_length=30, blank=False))
+    last_name = encrypt(models.CharField(max_length=30, blank=False))
+    middle_initial = encrypt(models.CharField(max_length=1, blank=True))
     email = models.EmailField(max_length=75, blank=False)
-    phone = models.CharField(max_length=10, validators=[validate_phone_number, phone_number_validator])
+    phone = encrypt(models.CharField(max_length=10, validators=[validate_phone_number, phone_number_validator]))
     
-    street_address = models.CharField(max_length= 85, blank=False)
+    street_address = encrypt(models.CharField(max_length= 85, blank=False))
     city = models.CharField(max_length=40, blank=False)
     state = models.CharField(max_length=2, blank=False)
     zipcode = models.CharField(max_length=5, blank=False)
