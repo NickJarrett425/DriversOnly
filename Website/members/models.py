@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
+# Encryption at rest
+from django_cryptography.fields import encrypt
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
-    middle_initial = models.CharField(max_length=1, blank=True)
+    first_name = encrypt(models.CharField(max_length=30, blank=True))
+    last_name = encrypt(models.CharField(max_length=30, blank=True))
+    middle_initial = encrypt(models.CharField(max_length=1, blank=True))
     email = models.EmailField(max_length=75, blank=True)
     is_driver = models.BooleanField('driver status', default=False)
     is_sponsor = models.BooleanField('sponsor status', default=False)
@@ -30,11 +32,11 @@ class SponsorList(models.Model):
 class DriverProfile(UserProfile):
     points = models.IntegerField(default=0)
     sponsors = models.ManyToManyField(SponsorList, related_name='sponsored_users')
-    street_address = models.CharField(max_length= 85, blank=True)
-    city = models.CharField(max_length=40, blank=True)
-    state = models.CharField(max_length=2, blank=True)
-    zipcode = models.CharField(max_length=5, blank=True)
-    phone_number = models.CharField(max_length=15, blank=True)
+    street_address = encrypt(models.CharField(max_length= 85, blank=True))
+    city = encrypt(models.CharField(max_length=40, blank=True))
+    state = encrypt(models.CharField(max_length=2, blank=True))
+    zipcode = encrypt(models.CharField(max_length=5, blank=True))
+    phone_number = encrypt(models.CharField(max_length=15, blank=True))
     date_of_birth = models.DateField(blank=True, null=True)
     drivers_license = models.CharField(max_length=15, blank=True)
     
