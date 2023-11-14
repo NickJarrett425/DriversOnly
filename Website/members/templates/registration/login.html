@@ -5,22 +5,28 @@
     <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525px">
     <h1 class="center">Login</h1>
 <br/>
-    <form action="" method=POST>
+    <form action="" method="POST">
         {% csrf_token %}
-        <form>
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Username</label>
-              <input type="text" style="width: 475px" class="form-control" name="username" aria-describedby="emailHelp">
-            <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">Password</label>
-              <input type="password" style="width: 475px" class="form-control" name="password">
-            </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Username</label>
+            <input type="text" style="width: 475px" class="form-control" name="username" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" style="width: 475px" class="form-control" name="password">
+        </div>
 
-        <input type="submit"
-        value="Login" class="
-        btn btn-secondary">
+        <div class="d-flex justify-content-between">
+            <input type="submit" value="Login" class="btn btn-secondary">
+            <a href="#" class="btn btn-secondary" role="button">Forgot Password?</a>
+        </div>
     </form>
 
-<br/><br/>
-Need an Account? <a href="{% url "register_user" %}" class="btn btn-secondary" role="button">Register Here</a>
+    <br/><br/>
+    <div>
+        Need an Account? 
+        <br/>
+        <a href="{% url 'register_user' %}" class="btn btn-secondary" role="button">Register Here</a>
+    </div>
+    
 {% endblock %}
