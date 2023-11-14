@@ -35,7 +35,7 @@ def build_pdf_page(canvas, doc):
     title.drawOn(canvas, x, y)
 
     img_dem = 80
-    rel_path = "logo.png"
+    rel_path = "logo_white_background.png"
     file_path = os.path.join(settings.STATICFILES_DIRS[0], rel_path)
     canvas.drawImage(file_path,x=0,y=(800-img_dem),width=img_dem,height=img_dem,preserveAspectRatio=True,anchor='ne')
 
@@ -46,12 +46,6 @@ def build_pdf_page(canvas, doc):
     footer_w,footer_h = footer.wrap(width,height)
     y = footer_h
     footer.drawOn(canvas,500,y)
-
-         
-
-
-
-    
 
 
 
@@ -112,26 +106,13 @@ def all_login_attempts_download_csv(request):
     else:
         return redirect('/about')
 
-def all_login_attempts_download_pdf(request):
+
+def generate_pdf(title,data):
     buff = io.BytesIO()
     current_date = datetime.datetime.today()
     formatted_date = current_date.strftime("%m-%d-%Y")
-    report_title = "Login Attempts Report " + formatted_date
+    report_title = title + " " + formatted_date
     doc = SimpleDocTemplate(buff, pagesize=letter, title=report_title)
-     
-
-    # Headers
-    login_list = login_log.objects.all()
-
-    table_header = ['Date and Time', 'Username', 'Login Success']
-
-    data = [table_header]
-
-    for log in login_list:
-        formatted_date = log.Datestamp.strftime('%m-%d-%Y %H:%M')
-        login_result = bool(log.login_success)
-        row = [formatted_date, log.username, login_result]
-        data.append(row)
 
     common_row_height = 25
     page_height = letter[1]
@@ -159,4 +140,55 @@ def all_login_attempts_download_pdf(request):
     ) 
 
     buff.seek(0)  
+
     return HttpResponse(buff, content_type='application/pdf')
+
+def all_login_attempts_download_pdf(request):    
+    login_list = login_log.objects.all()
+
+    table_header = ['Date and Time', 'Username', 'Login Success'] # Headers
+
+    data = [table_header]
+
+    for log in login_list:
+        formatted_date = log.Datestamp.strftime('%m-%d-%Y %H:%M')
+        login_result = bool(log.login_success)
+        row = [formatted_date, log.username, login_result]
+        data.append(row)
+
+    response = generate_pdf("Login Attempts Report",data)
+    return (response)
+
+def all_user_login_attempts(request,user):
+    #user is expected to be a string not an object
+
+    login_list = login_log(user=user)
+    table_header = ['Date and Time', 'Login Success'] # Headers
+    data = [table_header]
+
+    for log in login_list:
+        formatted_date = log.Datestamp.strftime('%m-%d-%Y %H:%M')
+        login_result = bool(log.login_success)
+        row = [formatted_date, login_result]
+        data.append(row)
+    
+    title = user + "Login Attempts Report"
+    response = generate_pdf(title,data)
+    return(response)
+
+def all_date_range_login_attempts(request,start_range,end_range):
+    #ranges are expected to be strings
+
+    login_list = login_log(date__range=[start_range,end_range])
+    table_header = ['Date and Time', 'Username', 'Login Success'] # Headers
+    data = [table_header]
+
+    for log in login_list:
+        formatted_date = log.Datestamp.strftime('%m-%d-%Y %H:%M')
+        login_result = bool(log.login_success)
+        row = [formatted_date, log.username, login_result]
+        data.append(row)
+    
+    title = "Login Attempts Report in a date range - Generated:"
+    response = generate_pdf(title,data)
+    return(response)
