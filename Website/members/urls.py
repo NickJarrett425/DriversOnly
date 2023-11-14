@@ -15,4 +15,5 @@ urlpatterns = [
     path('profile/sponsors/confirmation/<int:id>', views.leave_sponsor_confirm, name='leave_sponsor_confirm'),
     path('profile/sponsors/leave/<int:id>', views.leave_sponsor, name='leave_sponsor'),
     path('register_user/', views.register_user, name="register_user"),
+    path('enter_email/', views.enter_email, name="enter_email")
 ]
