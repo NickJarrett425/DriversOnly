@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'dashboard',
     'report',
     'application',
+    'EmailReset',
 ]
 
 MIDDLEWARE = [
