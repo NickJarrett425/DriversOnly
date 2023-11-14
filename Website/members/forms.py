@@ -79,3 +79,6 @@ class PointReasonForm(forms.ModelForm):
         self.fields['point_amt'].widget.attrs['class'] = 'form-control'
         self.fields['is_add'].widget = forms.HiddenInput()
         self.fields['point_reason'].widget.attrs['class'] = 'form-control'
+
+class EmailForm(forms.Form):
+    email = forms.EmailField(label='Enter your email', max_length=75)
