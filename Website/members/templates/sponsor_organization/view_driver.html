@@ -66,6 +66,10 @@
         aria-label="Close"></button>
     </div>
 {% endif %}
+<p></p>
 <a href="{% url "edit_driver" driver.userprofile_ptr_id %}" class="btn btn-secondary" role="button">Edit Driver</a>
-</br></br></br></br></br></br>
+<p></p>
+<p></p>
+<a href="{% url "driver_list" %}" class="btn btn-outline-primary" role="button">Back</a>
+<p></p>
 {% endblock %}

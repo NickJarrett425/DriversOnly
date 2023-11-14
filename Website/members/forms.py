@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import UserProfile, DriverProfile, SponsorUserProfile, SponsorList
+from .models import UserProfile, DriverProfile, SponsorUserProfile, SponsorList, PointReason
 
 
 class RegisterUserForm(UserCreationForm):
@@ -66,3 +66,16 @@ class AssignSponsorForm(forms.ModelForm):
     def get_choices(self):
         choices = SponsorList.objects.values_list('sponsor_name', 'sponsor_name').distinct()
         return choices
+    
+class PointReasonForm(forms.ModelForm):
+
+    class Meta:
+        model = PointReason
+        fields = ['point_amt', 'is_add', 'point_reason',]
+
+    def __init__(self, *args, **kwargs):
+        super(PointReasonForm, self).__init__(*args, **kwargs)
+
+        self.fields['point_amt'].widget.attrs['class'] = 'form-control'
+        self.fields['is_add'].widget = forms.HiddenInput()
+        self.fields['point_reason'].widget.attrs['class'] = 'form-control'

@@ -16,12 +16,19 @@ class UserProfile(models.Model):
 class SponsorUserProfile(UserProfile):
     sponsor_name = models.CharField(max_length=25)
 
+    def __str__(self):
+        return self.user.username
+
 class SponsorList(models.Model):
     sponsor_name = models.CharField(max_length=25, unique=True)
     point_conversion = models.FloatField(default=0.01)
+    # point_neg = models.BooleanField('negative points', default=False) # Can negative point values be accepted?
+
+    def __str__(self):
+        return self.sponsor_name
 
 class DriverProfile(UserProfile):
-    points = models.IntegerField(default=0, blank=True)
+    points = models.IntegerField(default=0)
     sponsors = models.ManyToManyField(SponsorList, related_name='sponsored_users')
     street_address = models.CharField(max_length= 85, blank=True)
     city = models.CharField(max_length=40, blank=True)
@@ -44,3 +51,15 @@ class DriverProfile(UserProfile):
 
     def __str__(self):
         return self.user.username
+
+# class SponsorPoints(models.Model):
+#     driver = models.ForeignKey(DriverProfile, on_delete=models.SET_NULL, null=True)
+#     sponsor_list = models.ForeignKey(SponsorList, on_delete=models.SET_NULL, null=True)
+#     points = models.IntegerField(default=0,)
+
+class PointReason(models.Model):
+    point_amt = models.IntegerField(default=0)
+    point_reason = models.TextField(max_length=250, blank=True)
+    driver = models.ForeignKey(DriverProfile, on_delete=models.SET_NULL, null=True)
+    sponsor = models.ForeignKey(SponsorUserProfile, on_delete=models.SET_NULL, null=True)
+    is_add = models.BooleanField('point change type', default=True)
