@@ -312,7 +312,10 @@ def add_points(request, id):
                                 driver.points = temp
                             else:
                                 temp = temp - subtract
-                                driver.points = temp
+                                if temp <= 0:
+                                    temp = 0
+                                else:
+                                    driver.points = temp
                             driver.save()
                             messages.success(request, "Points removed from " + str(driver.user.username) + " successfully.")
 
