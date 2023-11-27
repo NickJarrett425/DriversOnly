@@ -52,11 +52,6 @@ class DriverProfile(UserProfile):
     def __str__(self):
         return self.user.username
 
-# class SponsorPoints(models.Model):
-#     driver = models.ForeignKey(DriverProfile, on_delete=models.SET_NULL, null=True)
-#     sponsor_list = models.ForeignKey(SponsorList, on_delete=models.SET_NULL, null=True)
-#     points = models.IntegerField(default=0,)
-
 class PointReason(models.Model):
     point_amt = models.IntegerField(default=0)
     point_reason = models.TextField(max_length=250, blank=True)
