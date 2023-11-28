@@ -39,24 +39,31 @@ def search_catalog(request):
                 itunes_data = response.json()
                 products = []
                 for item in itunes_data.get('results', []):
+                    title = item.get('trackName')
+                    artist = item.get('artistName')
                     track_price = item.get('trackPrice', 0)
-                    points = int(track_price / 0.01)
+
+                    # Check if the title is 'The Hunger Games' to override the details
+                    if artist == " Gary Ross ":
+                        title = "THG"  # Change artist to "Gary"
+                        track_price = 7.99  # Change track price to 7.99
 
                     product = {
-                        'title': item.get('trackName'),
-                        'artist': item.get('artistName'),
+                        'title': title,
+                        'artist': artist,
                         'image': item.get('artworkUrl100'),
                         'genre': item.get('primaryGenreName'),
-                        'price': points,
+                        'price': f"${track_price:.2f}",  # Format track price as a currency
                     }
                     products.append(product)
-                context = {'products': products, 'profile': profile,}
-                
+
+                context = {'products': products}
                 return render(request, 'product_list.html', context)
+
             else:
                 context = {'error': 'An error occurred while fetching data from iTunes.'}
         else:
-            return HttpResponse("Unsupported search type", status=400)  # Bad request response
+                return HttpResponse("Unsupported search type", status=400)  # Bad request response
     else:
         if search_type == 'itunes':
             term = request.GET.get('term', '')  # Default to an empty string if not provided
