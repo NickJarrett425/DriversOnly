@@ -10,7 +10,7 @@
             {% for product in products %}
                 <li>
                     <img src="{{ product.image }}" alt="{{ product.title }} cover">
-                    <h2>{{ product.title }}</h2>
+                    <p>Title: {{ product.title }}</p>
                     <p>Artist: {{ product.artist }}</p>
                     <p>Genre: {{ product.genre }}</p>
                     {% if profile.is_driver %}
