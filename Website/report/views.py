@@ -14,7 +14,25 @@ from reportlab.lib.styles import getSampleStyleSheet
 import os
 from django.conf import settings
 import datetime
+from .forms import report_filtering
 
+
+
+def report_home(request):
+    if request.method == "POST":
+        report_form = report_filtering(request.POST)                
+        if report_form.is_valid():
+            report_type = report_form.cleaned_data['report_type']
+            user = report_form.cleaned_data['user']
+            start_date_range = report_form.cleaned_data['start_date_range']
+            end_date_range = report_form.cleaned_data['end_date_range']
+            if(report_type == 1):
+                response = all_login_attempts_download_pdf(request)
+                return(response)
+    elif request.method == "GET":
+        context = {}
+        context['form'] = report_filtering
+        return render( request, "report/home.html", context)
 
 
 # Create your views here.
