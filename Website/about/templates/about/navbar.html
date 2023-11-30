@@ -16,6 +16,11 @@
                     <a class="nav-link" href="{% url 'about_page' %}">About</a>
                 </li>
                 {% if user.is_authenticated %}
+                    {% if user.is_superuser %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'admin:index' %}">Site Manager</a>
+                        </li>  
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
                     </li>  
