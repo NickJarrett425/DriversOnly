@@ -4,7 +4,7 @@ from urllib.parse import unquote
 import requests
 from django.contrib import messages
 from members.forms import ChooseSponsorForm
-from members.models import UserProfile, SponsorList
+from members.models import UserProfile, SponsorList, SponsorUserProfile
 
 def choose_catalog(request):
     user_sponsors = SponsorList.objects.filter(sponsored_users__user=request.user)
@@ -56,9 +56,12 @@ def search_catalog(request):
             'lang': lang,
             'explicit': explicit,
         }
-
-        sponsor_name = request.session.get('selected_sponsor')
-        sponsor = SponsorList.objects.get(sponsor_name=sponsor_name)
+        if profile.is_driver:
+            sponsor_name = request.session.get('selected_sponsor')
+            sponsor = SponsorList.objects.get(sponsor_name=sponsor_name)
+        elif profile.is_sponsor:
+            sponsor_user = SponsorUserProfile.objects.get(user=request.user)
+            sponsor = SponsorList.objects.get(sponsor_name=sponsor_user.sponsor_name)
         
         response = requests.get('https://itunes.apple.com/search', params=params)
         if response.status_code == 200:
@@ -107,12 +110,19 @@ def search_catalog(request):
                 if product['price'] > 0:
                     products.append(product)
 
-            context = {
-                'products': products,
-                'profile': profile,
-                'term': search_query,
-                'sponsor': sponsor
-            }
+            if profile.is_driver or profile.is_sponsor:
+                context = {
+                    'products': products,
+                    'profile': profile,
+                    'term': search_query,
+                    'sponsor': sponsor,
+                }
+            elif request.user.is_superuser:
+                context = {
+                    'products': products,
+                    'profile': profile,
+                    'term': search_query,
+                }
             response = render(request, 'product_list.html', context)
             response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
             response['Pragma'] = 'no-cache'
