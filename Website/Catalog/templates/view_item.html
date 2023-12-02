@@ -1,0 +1,25 @@
+{% extends "about/base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="shadow p-4 bg-body rounded text-center">
+                <img src="{{ image }}" alt="{{ title }} cover" class="img-fluid mb-3">
+                <h4>Title: {{ title }}</h4>
+                <p>Artist: {{ artist }}</p>
+                <p>Genre: {{ genre }}</p>
+                {% if profile.is_driver %}
+                    <p>Points: {{ price }}</p>
+                {% else %}
+                    <p>Points: ${{ price }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<p></p>
+<div class="row justify-content-start mt-3 col-md-6 mx-auto"><a href="{{ last_search_url }}" class="btn btn-outline-primary">Go Back</a></div>
+<p></p>
+{% endblock %}
