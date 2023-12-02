@@ -1,0 +1,10 @@
+{% extends "about/base.html" %}
+{% block content %}
+<h1>Choose Catalog</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ assign_form.as_p }}
+    <button type="submit">Select Sponsor</button>
+</form>
+
+{% endblock content %}

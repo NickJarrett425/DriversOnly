@@ -1,6 +1,5 @@
 from django import forms
 from .models import Application
-from Catalog.models import Product
 from members.models import SponsorList
 
 class ApplicationForm(forms.ModelForm):
