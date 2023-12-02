@@ -3,22 +3,26 @@ from django.http import HttpResponse, Http404
 from urllib.parse import unquote
 import requests
 from django.contrib import messages
-from members.forms import AssignSponsorForm
+from members.forms import ChooseSponsorForm
 from members.models import UserProfile, SponsorList
 
 def choose_catalog(request):
+    user_sponsors = SponsorList.objects.filter(sponsored_users__user=request.user)
+
     if request.method == "POST":
-        assign_form = AssignSponsorForm(request.POST)
-        if assign_form.is_valid():
-            sponsor_name = assign_form.cleaned_data['sponsor_name']
-            # Store the selected sponsor's name in the session
-            request.session['selected_sponsor'] = sponsor_name
+        form = ChooseSponsorForm(request.POST, sponsor_queryset=user_sponsors)
+        if form.is_valid():
+            selected_sponsor_id = form.cleaned_data['sponsor_choices']
+            selected_sponsor = SponsorList.objects.get(id=selected_sponsor_id)
+            
+            # Perform actions with the selected sponsor, for example, store it in the session
+            request.session['selected_sponsor'] = selected_sponsor.sponsor_name
             return redirect('search_catalog')
     else:
-        assign_form = AssignSponsorForm()
+        form = ChooseSponsorForm(sponsor_queryset=user_sponsors)
 
     context = {
-        'assign_form': assign_form,
+        'form': form,
     }
     return render(request, 'choose_catalog.html', context)
 
@@ -33,22 +37,19 @@ def search_catalog(request):
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
         messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
         return redirect('/about')
-    
+
     request.session['last_search_url'] = request.get_full_path()
     search_type = 'itunes'
 
     if search_type == 'itunes':
-        search_query = request.GET.get('search')
-        if search_query:
-            term = search_query
-        else:
-           term = ''
+        search_query = request.GET.get('search', '')
         country = request.GET.get('country', 'us')
         limit = request.GET.get('limit', '100')
         lang = request.GET.get('lang', 'en')
         explicit = request.GET.get('explicit', 'No')
+        
         params = {
-            'term': term,
+            'term': search_query,
             'media': 'all',
             'country': country,
             'limit': limit,
@@ -58,11 +59,14 @@ def search_catalog(request):
 
         sponsor_name = request.session.get('selected_sponsor')
         sponsor = SponsorList.objects.get(sponsor_name=sponsor_name)
-
+        
         response = requests.get('https://itunes.apple.com/search', params=params)
         if response.status_code == 200:
             itunes_data = response.json()
             products = []
+            matched_artist_results = []
+            other_results = []
+
             for item in itunes_data.get('results', []):
                 title = item.get('trackName')
                 artist = item.get('artistName')
@@ -89,27 +93,38 @@ def search_catalog(request):
                     'genre': item.get('primaryGenreName'),
                     'price': track_price
                 }
+
+                # Prioritize results where the artist's name matches the search query
+                if search_query.lower() in artist.lower():
+                    matched_artist_results.append(product)
+                else:
+                    other_results.append(product)
+
+            # Combine the matched artist results and other results
+            sorted_products = matched_artist_results + other_results
+
+            for product in sorted_products:
                 if product['price'] > 0:
                     products.append(product)
-
 
             context = {
                 'products': products,
                 'profile': profile,
-                'term': term,
+                'term': search_query,
+                'sponsor': sponsor
             }
             response = render(request, 'product_list.html', context)
-            response['Cache-Control'] = 'no-cache, no-store, must-revalidate'  # Add this line to prevent caching
-            response['Pragma'] = 'no-cache'  # Add this line
-            response['Expires'] = '0'  # Add this line
+            response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+            response['Pragma'] = 'no-cache'
+            response['Expires'] = '0'
             return response
 
         else:
             context = {'error': 'An error occurred while fetching data from iTunes.'}
-            return render(request, 'error.html', context)  # Make sure to have an error.html or change this to an existing template
+            return render(request, 'error.html', context)
 
     else:
-        return HttpResponse("Unsupported search type", status=400)  # Bad request response
+        return HttpResponse("Unsupported search type", status=400)
     
 def view_item(request):
     if not request.user.is_authenticated:
