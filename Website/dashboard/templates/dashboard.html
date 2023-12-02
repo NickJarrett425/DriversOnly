@@ -2,85 +2,79 @@
 {% load static %}
 
 {% block content %}
-{% if user.is_superuser %}
-    <p><h1>Admin Dashboard</h1></p>
-    <li>
-        <strong>Applications to OnlyDrivers</strong>
-        <a href="{% url "application_list" %}" class="btn btn-primary" role="button">View Applications</a>
-    </li>
-</br>
-    <li>
-        <strong>Active Drivers in OnlyDrivers</strong>
-        <a href="{% url "driver_list" %}" class="btn btn-primary" role="button">View Drivers</a>
-    </li>
-</br>
-    <li>
-        <strong>Add a New Sponsor User to an OnlyDrivers organization</strong>
-        <a href="{% url "add_sponsor_user" %}" class="btn btn-primary" role="button">Add User</a>
-    </li>
-</br>
-    <h2>View Reports</h2>
-    <li>
-        <a href="{% url "login_report" %}" class="btn btn-primary" role="button">Login Report</a>
-    </li>
-</br>
-{% elif profile.is_sponsor %}
-    <p> <h1>{{ sponsor.sponsor_name }} Sponsor Organization Dashboard</h1></p>
-    <li>
-        <strong>Applications to {{ sponsor.sponsor_name }}</strong>
-        <a href="{% url "application_list" %}" class="btn btn-primary" role="button">View Applications</a>
-        </br>
-    </li>
-</br>
-    <li>
-        <strong>Active Drivers in {{ sponsor.sponsor_name }}</strong>
-        <a href="{% url "driver_list" %}" class="btn btn-primary" role="button">View Drivers</a>
-    </li>
-</br>
-    <li>
-        <strong>Add a New Sponsor User to {{ sponsor.sponsor_name }}</strong>
-        <a href="{% url "add_sponsor_user" %}" class="btn btn-primary" role="button">Add User</a>
-    </li>
-</br>
-{% comment %}Will be implemented when sponsor reports are available.{% endcomment %}
-{% comment %}<h2>View Reports</h2>
-    <li>
-        <a href="{% url "login_report" %}" class="btn btn-primary" role="button">Login Report</a>
-    </li>
-</br>
-{% endcomment %}
-{% elif profile.is_driver %}
-    {% if driver.sponsors.all %}
-    <h1>Your Driver Dashboard</h1>
-    <li>
-        <strong>Apply to a sponsor.</strong>
-        <a href="{% url "application_form" %}" class="btn btn-primary" role="button">Apply</a>
-    </li>
-    </br>
-    <li>
-        <strong>Manage your sponsors:</strong>
-        <a href="{% url "sponsors_list" %}" class="btn btn-primary" role="button">Your Sponsors</a>
-    </li>
-    </br>
-    <li>
-        <strong>Your applications:</strong>
-        <a href="{% url "application_list" %}" class="btn btn-primary" role="button">View Applications</a>
-    </li>
-    
-    
-    {% else %}
-        <div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 100vh;">
-            <a href="{% url 'application_form' %}" class="text-center" style="margin-bottom: 20px; text-decoration: none; color: black;">
-                <p>It looks like you don't have a sponsor yet.</p>
-                <img src="{% static 'application.png' %}" alt="Application" width="300">
-                <p>Click here to start an application!</p>
-            </a>
-            <div class="align-items-center d-flex flex-column">
-                <strong class="text-center float-none" style="margin-bottom: 10px";>Your Applications</strong>
-                <p><a href="{% url "application_list" %}" class="btn btn-primary float-none text-center" role="button">View Applications</a></p>
+    {% if user.is_superuser %}
+        <div class="container mt-4">
+            <h1 class="text-center mb-4">Admin Dashboard</h1>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h3>Applications to OnlyDrivers</h3>
+                    <a href="{% url "application_list" %}" class="btn btn-secondary" role="button">View Applications</a>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h3>Active Drivers in OnlyDrivers</h3>
+                    <a href="{% url "driver_list" %}" class="btn btn-secondary" role="button">View Drivers</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h3>Add a New Sponsor User to an OnlyDrivers organization</h3>
+                    <a href="{% url "add_sponsor_user" %}" class="btn btn-secondary" role="button">Add User</a>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h2>View Reports</h2>
+                    <a href="{% url "login_report" %}" class="btn btn-secondary" role="button">Login Report</a>
+                </div>
             </div>
         </div>
-            
+    {% elif profile.is_sponsor %}
+        <div class="container mt-4">
+            <h1 class="text-center mb-4">{{ sponsor.sponsor_name }} Sponsor Organization Dashboard</h1>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h3>Applications to {{ sponsor.sponsor_name }}</h3>
+                    <a href="{% url "application_list" %}" class="btn btn-secondary" role="button">View Applications</a>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h3>Active Drivers in {{ sponsor.sponsor_name }}</h3>
+                    <a href="{% url "driver_list" %}" class="btn btn-secondary" role="button">View Drivers</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h3>Add a New Sponsor User to {{ sponsor.sponsor_name }}</h3>
+                    <a href="{% url "add_sponsor_user" %}" class="btn btn-secondary" role="button">Add User</a>
+                </div>
+            </div>
+        </div>
+    {% elif profile.is_driver %}
+        {% if driver.sponsors.all %}
+            <div class="container mt-4">
+                <h1 class="text-center mb-4">Your Driver Dashboard</h1>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h3>Apply to a sponsor</h3>
+                        <a href="{% url "application_form" %}" class="btn btn-secondary" role="button">Apply</a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h3>Manage your sponsors</h3>
+                        <a href="{% url "sponsors_list" %}" class="btn btn-secondary" role="button">Your Sponsors</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h3>Your applications</h3>
+                        <a href="{% url "application_list" %}" class="btn btn-secondary" role="button">View Applications</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="container mt-4">
+                <div class="text-center">
+                    <h1>Your Driver Dashboard</h1>
+                    <p>It looks like you don't have a sponsor yet.</p>
+                    <a href="{% url 'application_form' %}" class="btn btn-secondary" role="button">Start an Application</a>
+                </div>
+            </div>
+        {% endif %}
     {% endif %}
-{% endif %}
 {% endblock %}
