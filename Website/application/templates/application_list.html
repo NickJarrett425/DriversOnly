@@ -33,14 +33,15 @@
                     <strong>No open applications for {{sponsor.sponsor_name}}</strong>
                 {% elif profile.is_driver %}
                     <strong>No open applications</strong>
-                    <a href="{% url "application_form" %}" class="btn btn-outline-secondary" role="button">Apply Here</a>
+                    <a href="{% url "application_form" %}" class="btn btn-outline-secondary float-end" role="button">Apply Here</a>
                 {% endif %}
             </div>
         {% endfor %}
     </div>
 
     <h2 class="mt-4">View Closed Applications</h2>
-    <a href="{% url "application_closed" %}" class="btn btn-primary" role="button">Closed Applications</a>
+    <a href="{% url "application_closed" %}" class="btn btn
+    -secondary" role="button">Closed Applications</a>
     <p></p>
     <a href="{% url "dashboard" %}" class="btn btn-outline-primary" role="button">Back</a>
 </div>
