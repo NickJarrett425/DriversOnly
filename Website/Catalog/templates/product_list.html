@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row justify-content-center align-items-center">
             <div class="col-8">
-                <h1 class="mb-4 text-center">Your Sponsor's Catalog</h1>
+                <h1 class="mb-4 text-center">{{ sponsor.sponsor_name }}'s Driver Catalog</h1>
                 <form action="{% url 'search_catalog' %}" method="GET">
                     <div class="input-group">
                         <input type="text" name="search" class="form-control" placeholder="Search...">
