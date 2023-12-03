@@ -44,6 +44,10 @@
                     <h3>Add a New Sponsor User to {{ sponsor.sponsor_name }}</h3>
                     <a href="{% url "add_sponsor_user" %}" class="btn btn-secondary" role="button">Add User</a>
                 </div>
+                <div class="col-md-6 mb-3">
+                    <h2>View Reports</h2>
+                    <a href="{% url "report_login" %}" class="btn btn-secondary" role="button">Login Report</a>
+                </div>
             </div>
         </div>
     {% elif profile.is_driver %}

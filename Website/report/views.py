@@ -16,6 +16,24 @@ from django.conf import settings
 import datetime
 
 
+def report_login(request):
+    if request.method == "POST":
+        report_form = login_filter(request.POST)                
+        if report_form.is_valid():
+            user = report_form.cleaned_data['user']
+            start_date_range = report_form.cleaned_data['start_date_range']
+            end_date_range = report_form.cleaned_data['end_date_range']
+
+            if user == "":
+                response = all_date_range_login_attempts(request,start_date_range,end_date_range)
+            elif start_date_range == datetime(''): 
+                response = all_user_login_attempts(request,user)
+            return(response)
+        else:
+            return(render(request,"report/login.html",{'form':report_form}))
+    else:
+        form = login_filter()
+        return render( request, "report/login.html", {'form':form})
 
 # Create your views here.
 def build_pdf_page(canvas, doc):
