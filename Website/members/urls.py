@@ -3,7 +3,6 @@ from .import views
 
 urlpatterns = [
     path('', views.login_user, name="login"),
-    path('choose/', views.choose_sponsor, name='choose_sponsor'),
     path('logout_user/', views.logout_user, name="logout"),
     path('organization/drivers/list/', views.driver_list, name="driver_list"),
     path('organization/view/driver/<int:id>/', views.view_driver, name="view_driver"),

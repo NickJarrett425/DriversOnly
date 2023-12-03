@@ -21,9 +21,15 @@
                             <a class="nav-link" href="{% url 'admin:index' %}">Site Manager</a>
                         </li>  
                     {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'search_catalog' %}">Catalog</a>
-                    </li>
+                    {% if profile.is_driver %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'choose_catalog' %}">Catalog</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'search_catalog' %}">Catalog</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
                     </li>  
@@ -44,8 +50,7 @@
             </ul>
         </div>
         {% if profile.is_driver and user.is_authenticated %}
-            {% comment %} <strong class="text-warning float-end">Points: {{ points }}</strong> {% endcomment %}
-            <strong class="text-warning float-end">Sponsor Points: {{ points }}</strong>
+            <strong class="text-warning float-end">Points: {{ points }}</strong>
         {% endif %}
     </div>
 </nav>
