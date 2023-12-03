@@ -66,17 +66,20 @@ class AssignSponsorForm(forms.ModelForm):
     def get_choices(self):
         choices = SponsorList.objects.values_list('sponsor_name', 'sponsor_name').distinct()
         return choices
-    
-class ChooseSponsorForm(forms.Form):
-    sponsor_choices = forms.ChoiceField(label='Select Sponsor')
 
+class ChooseSponsorForm(forms.Form):
     def __init__(self, *args, **kwargs):
         sponsor_queryset = kwargs.pop('sponsor_queryset', None)
         super(ChooseSponsorForm, self).__init__(*args, **kwargs)
         
         if sponsor_queryset:
-            sponsor_choices = [(sponsor.id, sponsor.sponsor_name) for sponsor in sponsor_queryset]
-            self.fields['sponsor_choices'].choices = [('', '--- Select Sponsor ---')] + sponsor_choices
+            sponsor_choices = [(str(sponsor.id), sponsor.sponsor_name) for sponsor in sponsor_queryset]
+            self.fields['sponsor_choices'] = forms.ChoiceField(
+                label='Select Sponsor',
+                choices=[('', '--- Select Sponsor ---')] + sponsor_choices,
+                widget=forms.Select(attrs={'class': 'form-control'})
+            )
+
     
 class PointReasonForm(forms.ModelForm):
 

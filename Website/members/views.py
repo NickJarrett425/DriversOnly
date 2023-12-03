@@ -25,10 +25,9 @@ def login_user(request):
             except UserProfile.DoesNotExist:
                 profile = None
             if profile.is_driver:
-                response = choose_sponsor(request)
-                return response
+                return redirect('/choose/')
             else:
-                return redirect('about/')
+                return redirect('/about/')
         else:
             messages.success(request, ("There was an error logging in, please try again."))
             login_attempt = login_log(username=username, login_success="False")
@@ -78,9 +77,8 @@ def register_user(request):
         form = RegisterUserForm()
 
     return render(request, 'registration/register_user.html', {'form':form,})
-
-def choose_sponsor(request):
     
+def choose_sponsor(request):
     if not request.user.is_authenticated:
         messages.error(request, "You need to log in or register to view your profile")
         return redirect('/')
@@ -91,17 +89,15 @@ def choose_sponsor(request):
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
         messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
         return redirect('/about')
+
     if profile.is_driver:
+        driver = DriverProfile.objects.get(user=request.user)
         user_sponsors = SponsorList.objects.filter(sponsored_users__user=request.user)
-        try:
-            driver = DriverProfile.objects.get(user=request.user)
-        except DriverProfile.DoesNotExist:
-            driver = None
-        if request.method == "POST":
+
+        if request.method == 'POST':
             form = ChooseSponsorForm(request.POST, sponsor_queryset=user_sponsors)
             if form.is_valid():
-                selected_sponsor = form.cleaned_data['sponsor_choices']
-                selected_sponsor_id = selected_sponsor.
+                selected_sponsor_id = form.cleaned_data['sponsor_choices']
                 driver.selected_sponsor_id = selected_sponsor_id
                 driver.save()
                 return redirect('/about')
@@ -112,6 +108,9 @@ def choose_sponsor(request):
             'form': form,
         }
         return render(request, 'driver_functions/choose_sponsor.html', context)
+    else:
+        # Handle the case where the DriverProfile for the user doesn't exist
+        return redirect('/error')
 
 def view_profile(request):
     if not request.user.is_authenticated:
