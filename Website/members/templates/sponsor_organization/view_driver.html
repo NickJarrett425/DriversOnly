@@ -16,16 +16,6 @@
         <p>State: {{ driver.state }}</p>
         <p>ZIP Code: {{ driver.zipcode }}</p>
         <p>Driver's License: {{ driver.drivers_license }}</p>
-        
-        <h2>Sponsors:</h2>
-        <ul>
-            {% for driver_sponsor in driver_sponsors %}
-            <p><li>{{ driver_sponsor.sponsor_name }}</li></p>
-            
-            {% empty %}
-                <p><li>No sponsors for {{driver.user.username}}</li></p>
-            {% endfor %}
-        </ul>
 
         <h2>Vehicle Information</h2>
         <p>Vehicle Year: {{ driver.year }}</p>
