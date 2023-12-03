@@ -1,9 +1,17 @@
 {% extends 'about/base.html' %}
 
 {% block content %}
+{%if suser%}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <p>User is not in your Sponsor Organization.</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"
+    aria-label="Close"></button>
+</div>
+
+{% endif %}
 {% if form.errors %}
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    There was an error with your form...
+    <p>There was an error with your form. Remove the dates if no date range needed.</p>
     <button type="button" class="btn-close" data-bs-dismiss="alert"
     aria-label="Close"></button>
 </div>

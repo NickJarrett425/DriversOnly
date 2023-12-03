@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import login_log
-from members.models import UserProfile
+from members.models import UserProfile, DriverProfile, SponsorUserProfile
+from django.contrib.auth.models import User
 from django.http import HttpResponse, FileResponse
 import csv
 import io
@@ -14,36 +15,69 @@ from reportlab.lib.styles import getSampleStyleSheet
 import os
 from django.conf import settings
 import datetime
-from .forms import login_filter
+from .forms import admin_login_filter, user_login_filter
 
 
 
 def report_login(request):
+
     if request.method == "POST":
-        report_form = login_filter(request.POST)                
-        if report_form.is_valid():
-            user = report_form.cleaned_data['user']
-            start_date_range = report_form.cleaned_data['start_date_range']
-            end_date_range = report_form.cleaned_data['end_date_range']
+        if not request.user.is_authenticated:
+            messages.error(request, "You need to log in or register to view your profile")
+            return redirect('/')
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+        if profile.is_driver:
+            try:
+                driver = DriverProfile.objects.get(user=request.user)
+            except DriverProfile.DoesNotExist:
+                driver = None
+            sponsors = driver.sponsors.all()
 
-            if user == "":
-                response = all_date_range_login_attempts(request,start_date_range,end_date_range)
-            elif start == "": 
-                print("test_user")
-            print(user,start_date_range,end_date_range)
+            return render(request, 'registration/profile.html', {'profile': profile, 'driver': driver, 'sponsors': sponsors})
+        elif profile.is_sponsor:
+            report_form = admin_login_filter(request.POST)                
+            if report_form.is_valid():
+                user = report_form.cleaned_data['user']
+                
+                                    
+                start_date_range = report_form.cleaned_data['start_date_range']
+                end_date_range = report_form.cleaned_data['end_date_range']
 
-
-            response = all_login_attempts_download_pdf(request)
-            return(response)
+                if ((user == "") and (start_date_range != None)):
+                    response = all_date_range_login_attempts(request,start_date_range,end_date_range)
+                elif ((user != "") and (start_date_range == None)):
+                    if valid_user_for_sponsor(request,user):  
+                        response = all_user_login_attempts(request,user)
+                    else:
+                        return(render(request,"report/login.html",{'form':report_form,'suser':True}))
+                elif ((user == "") and (start_date_range == None)):     
+                    response = all_login_attempts_spon(request)      
+                return(response)
+            else:
+                return(render(request,"report/login.html",{'form':report_form}))
         else:
-            return(render(request,"report/login.html",{'form':report_form}))
+            report_form = admin_login_filter(request.POST)                
+            if report_form.is_valid():
+                user = report_form.cleaned_data['user']
+                start_date_range = report_form.cleaned_data['start_date_range']
+                end_date_range = report_form.cleaned_data['end_date_range']
+
+                if ((user == "") and (start_date_range != None)):
+                    response = all_date_range_login_attempts(request,start_date_range,end_date_range)
+                elif ((user != "") and (start_date_range == None)): 
+                    response = all_user_login_attempts(request,user)
+                elif ((user == "") and (start_date_range == None)):     
+                    response = all_login_attempts(request)      
+                return(response)
+            else:
+                return(render(request,"report/login.html",{'form':report_form}))
     else:
-        form = login_filter()
+        form = admin_login_filter()
         return render( request, "report/login.html", {'form':form})
 
-
-# Create your views here.
 def build_pdf_page(canvas, doc):
+
+    current_date = datetime.datetime.today().strftime("%m-%d-%Y")
 
     width, height = letter
     
@@ -51,7 +85,8 @@ def build_pdf_page(canvas, doc):
     title_style = styles['Title']
     title_style.alighnment = 1
 
-    title = Paragraph(doc.title, title_style)    
+
+    title = Paragraph(doc.title+ "<br/>"+  "Generated: "  + current_date, title_style)    
 
     text_width = title.wrap(width, height)[0]
     x = (width - text_width) / 2
@@ -72,72 +107,9 @@ def build_pdf_page(canvas, doc):
     y = footer_h
     footer.drawOn(canvas,500,y)
 
-
-
-
-def all_login_attempts(request):
-    if not request.user.is_authenticated:
-        messages.error(request, "You need to be logged in to view reports.")
-        return redirect('/')
-    user = request.user
-
-    if user.is_superuser:
-        login_list = login_log.objects.all()
-        return render(request, 'report/all_login_attempts.html',
-                    {'login_list': login_list})
-    else:
-        return redirect('/about')
-
-def all_login_attempts_download_txt(request):
-    if not request.user.is_authenticated:
-        messages.error(request, "You need to be logged in to view reports.")
-        return redirect('/')
-    user = request.user
-
-    if user.is_superuser:
-        response = HttpResponse(content_type='text/plain')
-        response['Content-Disposition'] = 'attachment; filename=logins.txt'
-        login_list = login_log.objects.all()
-
-        lines = []
-        template = "{date}, {username}, {result}\n"
-
-        for log in login_list:
-            lines.append(template.format(date=log.Datestamp,username=log.username,result=log.login_success))
-        response.writelines(lines)
-        return response
-    else:
-        return redirect('/about')
-
-
-def all_login_attempts_download_csv(request):
-    if not request.user.is_authenticated:
-        messages.error(request, "You need to be logged in to view reports.")
-        return redirect('/')
-    user = request.user
-
-    if user.is_superuser:
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename=logins.csv'
-
-        login_list = login_log.objects.all()
-        writer = csv.writer(response)
-        writer.writerow(['Date& Time', 'user', 'result'])
-
-        for log in login_list:
-            writer.writerow([log.Datestamp, log.username, log.login_success])
-        
-        return response
-    else:
-        return redirect('/about')
-
-
 def generate_pdf(title,data):
     buff = io.BytesIO()
-    current_date = datetime.datetime.today()
-    formatted_date = current_date.strftime("%m-%d-%Y")
-    report_title = title + " " + formatted_date
-    doc = SimpleDocTemplate(buff, pagesize=letter, title=report_title)
+    doc = SimpleDocTemplate(buff, pagesize=letter, title=title)
 
     common_row_height = 25
     page_height = letter[1]
@@ -168,7 +140,61 @@ def generate_pdf(title,data):
 
     return HttpResponse(buff, content_type='application/pdf')
 
-def all_login_attempts_download_pdf(request):    
+def valid_user_for_sponsor(request,val_user):
+
+        sponsor = SponsorUserProfile.objects.get(user=request.user)
+        try:
+            user = User.objects.filter(username=val_user)[0]
+            result = DriverProfile.objects.filter(sponsors__sponsor_name=sponsor.sponsor_name, user=(user.id)).exists
+        except:
+            return(False)
+
+        return(result)
+
+
+def all_login_attempts_download_txt(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to view reports.")
+        return redirect('/')
+    user = request.user
+
+    if user.is_superuser:
+        response = HttpResponse(content_type='text/plain')
+        response['Content-Disposition'] = 'attachment; filename=logins.txt'
+        login_list = login_log.objects.all()
+
+        lines = []
+        template = "{date}, {username}, {result}\n"
+
+        for log in login_list:
+            lines.append(template.format(date=log.Datestamp,username=log.username,result=log.login_success))
+        response.writelines(lines)
+        return response
+    else:
+        return redirect('/about')
+
+def all_login_attempts_download_csv(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to view reports.")
+        return redirect('/')
+    user = request.user
+
+    if user.is_superuser:
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=logins.csv'
+
+        login_list = login_log.objects.all()
+        writer = csv.writer(response)
+        writer.writerow(['Date& Time', 'user', 'result'])
+
+        for log in login_list:
+            writer.writerow([log.Datestamp, log.username, log.login_success])
+        
+        return response
+    else:
+        return redirect('/about')
+
+def all_login_attempts(request):    
     login_list = login_log.objects.all()
 
     table_header = ['Date and Time', 'Username', 'Login Success'] # Headers
@@ -184,10 +210,30 @@ def all_login_attempts_download_pdf(request):
     response = generate_pdf("Login Attempts Report",data)
     return (response)
 
+def all_login_attempts_spon(request):    
+
+    sponsor = SponsorUserProfile.objects.get(user=request.user)
+    drivers = DriverProfile.objects.filter(sponsors__sponsor_name=sponsor.sponsor_name)
+
+    table_header = ['Date and Time', 'Username', 'Login Success'] # Headers
+
+    data = [table_header]
+
+    for driver in drivers:
+        login_list = login_log.objects.filter(username=driver.username)
+        for log in login_list:
+            formatted_date = log.Datestamp.strftime('%m-%d-%Y %H:%M')
+            login_result = bool(log.login_success)
+            row = [formatted_date, log.username, login_result]
+            data.append(row)
+
+    response = generate_pdf("Login Attempts Report",data)
+    return (response)
+
 def all_user_login_attempts(request,user):
     #user is expected to be a string not an object
 
-    login_list = login_log(user=user)
+    login_list = login_log.objects.filter(username=user)
     table_header = ['Date and Time', 'Login Success'] # Headers
     data = [table_header]
 
@@ -197,14 +243,14 @@ def all_user_login_attempts(request,user):
         row = [formatted_date, login_result]
         data.append(row)
     
-    title = user + "Login Attempts Report"
+    title = user + " Login Attempts Report"
     response = generate_pdf(title,data)
     return(response)
 
 def all_date_range_login_attempts(request,start_range,end_range):
     #ranges are expected to be strings
 
-    login_list = login_log(date__range=[start_range,end_range])
+    login_list = login_log.objects.filter(Datestamp__range=[start_range,end_range])
     table_header = ['Date and Time', 'Username', 'Login Success'] # Headers
     data = [table_header]
 
@@ -214,6 +260,6 @@ def all_date_range_login_attempts(request,start_range,end_range):
         row = [formatted_date, log.username, login_result]
         data.append(row)
     
-    title = "Login Attempts Report in a date range - Generated:"
+    title  = "Login Attempts Report in a date range"
     response = generate_pdf(title,data)
     return(response)
