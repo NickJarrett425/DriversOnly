@@ -551,13 +551,11 @@ def enter_email(request):
         email_address = form.cleaned_data['email']
         messages.success(request, f"An email has been sent to {email_address}. \nPlease check your inbox.")
 
-        send_mail(
-    "OnlyDrivers: Reset Your Password",
-    "Forgot your password?\n"
-    "No worries, it happens! Click the link below to log in to your OnlyDrivers account.",
-    'onlydrivers4910@gmail.com',
-    [email_address]
-)
-
+        send_mail("OnlyDrivers: Reset Your Password",
+                  "Forgot your password?\n" \
+                  "No worries, it happens! Click the link below to log in to your OnlyDrivers account." \
+                  "This link expires in 10 minutes and can only be used once.",
+                  settings.EMAIL_HOST_USER, 
+                  [email_address])
         
     return render(request, 'password_change/enter_email.html', {'form': form})
