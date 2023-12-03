@@ -28,12 +28,8 @@ def report_login(request):
 
             if user == "":
                 response = all_date_range_login_attempts(request,start_date_range,end_date_range)
-            elif start == "": 
-                print("test_user")
-            print(user,start_date_range,end_date_range)
-
-
-            response = all_login_attempts_download_pdf(request)
+            elif start_date_range == datetime(''): 
+                response = all_user_login_attempts(request,user)
             return(response)
         else:
             return(render(request,"report/login.html",{'form':report_form}))

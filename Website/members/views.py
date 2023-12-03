@@ -1,5 +1,5 @@
-from .models import UserProfile, DriverProfile, SponsorList, SponsorUserProfile, PointReason
-from .forms import RegisterUserForm, UserProfileForm, DriverProfileForm, AssignSponsorForm, PointReasonForm, EmailForm
+from .models import UserProfile, DriverProfile, SponsorList, SponsorUserProfile, PointReason, DriverPointsForSponsor
+from .forms import RegisterUserForm, UserProfileForm, DriverProfileForm, AssignSponsorForm, PointReasonForm, EmailForm, ChooseSponsorForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
@@ -20,7 +20,15 @@ def login_user(request):
             login(request, user)
             login_attempt = login_log(username=username, login_success="True")
             login_attempt.save()
-            return redirect('about/')
+            try:
+                profile, created = UserProfile.objects.get_or_create(user=request.user)
+            except UserProfile.DoesNotExist:
+                profile = None
+            if profile.is_driver:
+                response = choose_sponsor(request)
+                return response
+            else:
+                return redirect('about/')
         else:
             messages.success(request, ("There was an error logging in, please try again."))
             login_attempt = login_log(username=username, login_success="False")
@@ -31,6 +39,10 @@ def login_user(request):
 
 def logout_user(request):
     if request.user.is_authenticated:
+        profile = UserProfile.objects.get(user=request.user)
+        if profile.is_driver:
+            driver = DriverProfile.objects.get(user=request.user)
+            driver.selected_sponsor_id = None
         logout(request)
         messages.success(request, ("You were successfully logged out."))       
     else:
@@ -66,6 +78,40 @@ def register_user(request):
         form = RegisterUserForm()
 
     return render(request, 'registration/register_user.html', {'form':form,})
+
+def choose_sponsor(request):
+    
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to log in or register to view your profile")
+        return redirect('/')
+    try:
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+    except UserProfile.DoesNotExist:
+        profile = None
+    if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
+        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        return redirect('/about')
+    if profile.is_driver:
+        user_sponsors = SponsorList.objects.filter(sponsored_users__user=request.user)
+        try:
+            driver = DriverProfile.objects.get(user=request.user)
+        except DriverProfile.DoesNotExist:
+            driver = None
+        if request.method == "POST":
+            form = ChooseSponsorForm(request.POST, sponsor_queryset=user_sponsors)
+            if form.is_valid():
+                selected_sponsor = form.cleaned_data['sponsor_choices']
+                selected_sponsor_id = selected_sponsor.
+                driver.selected_sponsor_id = selected_sponsor_id
+                driver.save()
+                return redirect('/about')
+        else:
+            form = ChooseSponsorForm(sponsor_queryset=user_sponsors)
+
+        context = {
+            'form': form,
+        }
+        return render(request, 'driver_functions/choose_sponsor.html', context)
 
 def view_profile(request):
     if not request.user.is_authenticated:
@@ -206,7 +252,8 @@ def view_driver(request, id):
         
     elif request.user.is_superuser:
         driver = DriverProfile.objects.get(userprofile_ptr_id=id)
-        return render(request, 'sponsor_organization/view_driver.html', {'driver': driver,})
+        driver_sponsors = driver.sponsors.all()
+        return render(request, 'sponsor_organization/view_driver.html', {'driver': driver, 'driver_sponsors': driver_sponsors,})
     else:
         messages.error(request, "You do not have the proper permissions to access this page.")
         return redirect('/about')
