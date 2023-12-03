@@ -18,6 +18,8 @@
                         <button type="submit" class="btn btn-secondary">Search</button>
                     </div>
                 </form>
+            </div class="col-4 text-end">
+                <a href="{% url 'view_cart' %}" class="btn btn-primary">Shopping Cart</a>
             </div>
         </div>
     </div>
@@ -41,6 +43,8 @@
                                 {% endif %}
                             </p>
                             <a href="{% url 'view_item' %}?title={{ product.title|urlencode }}&artist={{ product.artist|urlencode }}&image={{ product.image|urlencode }}&genre={{ product.genre|urlencode }}&price={{ product.price }}" class="btn btn-secondary">View Item</a>
+                            <!-- Add to Cart Button -->
+                            <button class="btn btn-secondary add-to-cart-button" data-product-id="{{ product.id }}">Add to Cart</button>
                         </div>
                     </div>
                 </div>
@@ -56,5 +60,34 @@
         <p>{{ error }}</p>
     {% endif %}
 </div>
+
+<script>
+    // Handle the click event of the "Add to Cart" button
+    $('.add-to-cart-button').on('click', function() {
+        const button = $(this);
+        const productId = button.data('product-id');
+
+        // Send an AJAX request to add the item to the cart
+        $.ajax({
+            url: "{% url 'add_to_cart' %}",  // Update this URL
+            type: "POST",
+            data: {
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+                product_id: productId,
+            },
+            success: function(response) {
+                if (response.success) {
+                    button.text('Added to Cart');  // Update button text
+                    button.prop('disabled', true);  // Disable the button after adding
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function() {
+                alert('An error occurred while adding the item to the cart');
+            }
+        });
+    });
+</script>
 
 {% endblock %}

@@ -5,6 +5,12 @@ import requests
 from django.contrib import messages
 from members.forms import ChooseSponsorForm
 from members.models import UserProfile, SponsorList, SponsorUserProfile
+from django.urls import reverse
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Product, Cart
+from django.http import JsonResponse
+
 
 def choose_catalog(request):
     user_sponsors = SponsorList.objects.filter(sponsored_users__user=request.user)
@@ -168,3 +174,32 @@ def view_item(request):
         # Any additional data you want to send to the template
     }
     return render(request, 'view_item.html', context)
+
+
+def add_to_cart(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'success': False, 'message': 'User not authenticated'})
+
+    if request.method == 'POST':
+        product_id = request.POST.get('product_id')  # Adjust this based on your form field
+        product = get_object_or_404(Product, id=product_id)
+
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart.products.add(product)
+
+        return JsonResponse({'success': True, 'message': 'Item added to the cart'})
+
+    # Handle the case where the request method is not POST (e.g., GET request)
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+def view_cart(request):
+    if not request.user.is_authenticated:
+        return redirect('login')  # Redirect to login if not authenticated
+    
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_items = cart.products.all()
+    
+    context = {
+        'cart_items': cart_items,
+    }
+    return render(request, 'view_cart.html', context)

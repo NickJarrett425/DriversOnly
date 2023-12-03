@@ -1,0 +1,43 @@
+{% extends "about/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Your Shopping Cart</h2>
+
+    {% if cart.products.all %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for product in cart.products.all %}
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="{{ product.image }}" class="card-img-top" alt="{{ product.title }} cover">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.title }}</h5>
+                            <p class="card-text">Artist: {{ product.artist }}</p>
+                            <p class="card-text">Genre: {{ product.genre }}</p>
+                            <p class="card-text">
+                                {% if profile.is_driver %}
+                                    Points: {{ product.price }}
+                                {% else %}
+                                    Points: ${{ product.price }}
+                                {% endif %}
+                            </p>
+                            <!-- Add functionality to remove item from cart -->
+                            <form method="post" action="{% url 'add_to_cart' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <button type="submit" class="btn btn-secondary">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">Your cart is empty.</p>
+    {% endif %}
+    
+    <div class="text-center mt-4">
+    <!-- You can add more content to your shopping cart page here -->
+    </div>
+</div>
+{% endblock %}
