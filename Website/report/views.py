@@ -16,6 +16,7 @@ from django.conf import settings
 import datetime
 
 
+<<<<<<< HEAD
 def report_login(request):
     if request.method == "POST":
         report_form = login_filter(request.POST)                
@@ -38,6 +39,8 @@ def report_login(request):
     else:
         form = login_filter()
         return render( request, "report/login.html", {'form':form})
+=======
+>>>>>>> f795c91ca9ca4d5972d55a246df23390dc96eae0
 
 # Create your views here.
 def build_pdf_page(canvas, doc):
