@@ -1,0 +1,69 @@
+{% extends "registration/base.html" %}
+
+{% block content %}
+    <h2>Organization Level Editing for {{ Org }}</h2>
+    <br>
+    <br>
+    {% if Viewer.is_organization %}
+<div class="Form-content">
+    <form method="post">
+        {% csrf_token %}
+        <h3>Change Organization Name</h3>
+        {{ Org_form.OrganizationName }}
+                <h3> Point Settings </h3>
+        <div class = "form-row">
+            <div class = "form-group">
+                <label class = "small mb-1">Point Value</label>
+                {{ Org_form.pointConvert }}
+                <br>
+                <br>
+                <label class = "small mb-1">Negative Point Enable</label>
+                {{ Org_form.negativePointToggle }}
+            </div>
+            <div class = "form-group">
+                <h3> Contact Information </h3>
+                <label class = "small mb-1">Address</label>
+                {{ Org_form.address }}
+                <br>
+                <br>
+                <label class = "small mb-1">Contact</label>
+                {{ Org_form.PhoneNumber }}
+                <br>
+                <br>
+                <label class = "small mb-1">Email</label>
+                {{ Org_form.email }}
+            </div>
+        </div>
+        <br>
+        <br>
+        <button type="submit" class="btn btn-dark btn-lg">Save Changes</button>
+        <button type="reset" class="btn btn-dark btn-lg">Reset</button>
+    </form>
+</div>
+    {% endif %}
+    {% if Viewer.is_sponsor %}
+    <div class="Form-content">
+    <form method="post">
+        {% csrf_token %}
+            <div class = "form-group">
+                <h3> Contact Information </h3>
+                <label class = "small mb-1">Address</label>
+                {{ Org_form.address }}
+                <br>
+                <br>
+                <label class = "small mb-1">Contact</label>
+                {{ Org_form.PhoneNumber }}
+                <br>
+                <br>
+                <label class = "small mb-1">Email</label>
+                {{ Org_form.email }}
+            </div>
+        </div>
+        <br>
+        <br>
+        <button type="submit" class="btn btn-dark btn-lg">Save Changes</button>
+        <button type="reset" class="btn btn-dark btn-lg">Reset</button>
+    </form>
+</div>
+    {% endif %}
+{% endblock content %}

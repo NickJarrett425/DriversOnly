@@ -1,0 +1,43 @@
+{% extends 'about/base.html' %}
+
+{% block content %}
+{% if form.errors %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    There was an error with your form...
+    <button type="button" class="btn-close" data-bs-dismiss="alert"
+    aria-label="Close"></button>
+</div>
+{% endif %}
+{% if sponsor_user.is_sponsor %}
+    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">
+    <h1>Add a new user to {{ sponsor_user.sponsor_name }}</h1>
+<br/>
+    <form action="{% url "add_sponsor_user" %}" method=POST>
+        {% csrf_token %}
+        {{ form.as_p }}
+            
+<br/><br/>
+        <input type="submit"
+        value="Add User" class="
+        btn btn-secondary">
+    </form>
+</div>
+<br/><br/>
+{% elif user.is_superuser %}
+    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">
+        <h1>Add a new user to an OnlyDrivers organization.</h1>
+    <br/>
+        <form action="{% url "add_sponsor_user" %}" method=POST>
+            {% csrf_token %}
+            {{ assign_form.as_p }}
+            {{ form.as_p }}
+                
+    <br/><br/>
+            <input type="submit"
+            value="Add User" class="
+            btn btn-secondary">
+        </form>
+    </div>
+    <br/><br/>
+{% endif %}
+{% endblock %}

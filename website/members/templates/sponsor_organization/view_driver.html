@@ -1,0 +1,75 @@
+{% extends "about/base.html" %}
+
+{% block content %}
+{% if user.is_superuser%}
+    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">       
+        <h1>{{ driver.user.username }}'s Driver Profile</h1>
+        <p>Points: {{ driver.points }}</p>
+        <p>First Name: {{ driver.first_name }}</p>
+        <p>Middle Initial: {{ driver.middle_initial }}</p>
+        <p>Last Name: {{ driver.last_name }}</p>
+        <p>Phone Number: {{ driver.phone_number }}</p>
+        <p>Email: {{ driver.email }}</p>
+        <p>Date of Birth: {{ driver.date_of_birth }}</p>
+        <p>Street Address: {{ driver.street_address }}</p>
+        <p>City: {{ driver.city }}</p>
+        <p>State: {{ driver.state }}</p>
+        <p>ZIP Code: {{ driver.zipcode }}</p>
+        <p>Driver's License: {{ driver.drivers_license }}</p>
+
+        <h2>Vehicle Information</h2>
+        <p>Vehicle Year: {{ driver.year }}</p>
+        <p>Vehicle Make: {{ driver.make }}</p>
+        <p>Vehicle Model: {{ driver.model }}</p>
+        <p>Vehicle VIN: {{ driver.vin }}</p>
+        <p>Insurance Provider: {{ driver.provider_name }}</p>
+        <p>Insurance Policy Number: {{ driver.policy_number }}</p>
+
+        <h2>Emergency Contact</h2>
+        <p>Name: {{ driver.emergency_contact_name }}</p>
+        <p>Phone: {{ driver.emergency_contact_phone }}</p>
+    </div>
+    </br>
+{% elif profile.is_sponsor%}
+    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">       
+        <h1>{{ driver.user.username }}'s Driver Profile</h1>
+        <p>Points: {{ driver.points }}</p>
+        <p>First Name: {{ driver.first_name }}</p>
+        <p>Middle Initial: {{ driver.middle_initial }}</p>
+        <p>Last Name: {{ driver.last_name }}</p>
+        <p>Phone Number: {{ driver.phone_number }}</p>
+        <p>Email: {{ driver.email }}</p>
+        <p>Date of Birth: {{ driver.date_of_birth }}</p>
+        <p>Street Address: {{ driver.street_address }}</p>
+        <p>City: {{ driver.city }}</p>
+        <p>State: {{ driver.state }}</p>
+        <p>ZIP Code: {{ driver.zipcode }}</p>
+        <p>Driver's License: {{ driver.drivers_license }}</p>
+
+        <h2>Vehicle Information</h2>
+        <p>Vehicle Year: {{ driver.year }}</p>
+        <p>Vehicle Make: {{ driver.make }}</p>
+        <p>Vehicle Model: {{ driver.model }}</p>
+        <p>Vehicle VIN: {{ driver.vin }}</p>
+        <p>Insurance Provider: {{ driver.provider_name }}</p>
+        <p>Insurance Policy Number: {{ driver.policy_number }}</p>
+
+        <h2>Emergency Contact</h2>
+        <p>Name: {{ driver.emergency_contact_name }}</p>
+        <p>Phone: {{ driver.emergency_contact_phone }}</p>
+    </div>
+    </br>   
+{% else %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        There has been an error, please log in and try again.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"
+        aria-label="Close"></button>
+    </div>
+{% endif %}
+<p></p>
+<a href="{% url "edit_driver" driver.userprofile_ptr_id %}" class="btn btn-secondary" role="button">Edit Driver</a>
+<p></p>
+<p></p>
+<a href="{% url "driver_list" %}" class="btn btn-outline-primary" role="button">Back</a>
+<p></p>
+{% endblock %}

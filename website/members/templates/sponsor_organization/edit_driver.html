@@ -1,0 +1,308 @@
+{% extends "about/base.html" %}
+
+{% block content %}
+{% if user.is_superuser%}
+    <h1>{{ driver.user.username }}'s Driver Profile</h1>
+    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">
+        <h2>General Information</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ driver_form.non_field_errors }}
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.first_name.errors }}
+                <label for="{{ driver_form.first_name.id_for_label }}">First Name:</label>
+                {{ driver_form.first_name }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.middle_initial.errors }}
+                <label for="{{ driver_form.middle_initial.id_for_label }}">Middle Initial:</label>
+                {{ driver_form.middle_initial }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.last_name.errors }}
+                <label for="{{ driver_form.last_name.id_for_label }}">Last Name:</label>
+                {{ driver_form.last_name }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.phone_number.errors }}
+                <label for="{{ driver_form.phone_number.id_for_label }}">Phone Number:</label>
+                {{ driver_form.phone_number }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.email.errors }}
+                <label for="{{ driver_form.email.id_for_label }}">Email:</label>
+                {{ driver_form.email }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.date_of_birth.errors }}
+                <label for="{{ driver_form.date_of_birth.id_for_label }}">Date of Birth:</label>
+                {{ driver_form.date_of_birth }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.street_address.errors }}
+                <label for="{{ driver_form.street_address.id_for_label }}">Street Address:</label>
+                {{ driver_form.street_address }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.city.errors }}
+                <label for="{{ driver_form.city.id_for_label }}">City:</label>
+                {{ driver_form.city }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.state.errors }}
+                <label for="{{ driver_form.state.id_for_label }}">State:</label>
+                {{ driver_form.state }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.zipcode.errors }}
+                <label for="{{ driver_form.zipcode.id_for_label }}">ZIP Code:</label>
+                {{ driver_form.zipcode }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.drivers_license.errors }}
+                <label for="{{ driver_form.drivers_license.id_for_label }}">Driver's License:</label>
+                {{ driver_form.drivers_license }}
+            </div>
+            <p></p>
+
+            <h2>Vehicle Information</h2>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.year.errors }}
+                <label for="{{ driver_form.year.id_for_label }}">Vehicle Year:</label>
+                {{ driver_form.year }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.make.errors }}
+                <label for="{{ driver_form.make.id_for_label }}">Vehicle Make:</label>
+                {{ driver_form.make }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.model.errors }}
+                <label for="{{ driver_form.model.id_for_label }}">Vehicle Model:</label>
+                {{ driver_form.model }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.vin.errors }}
+                <label for="{{ driver_form.vin.id_for_label }}">Vehicle VIN:</label>
+                {{ driver_form.vin }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.provider_name.errors }}
+                <label for="{{ driver_form.provider_name.id_for_label }}">Insurance Provider:</label>
+                {{ driver_form.provider_name }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.policy_number.errors }}
+                <label for="{{ driver_form.policy_number.id_for_label }}">Insurance Policy Number:</label>
+                {{ driver_form.policy_number }}
+            </div>
+            <p></p>
+            <h2>Emergency Contact</h2>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.emergency_contact_name.errors }}
+                <label for="{{ driver_form.emergency_contact_name.id_for_label }}">Name:</label>
+                {{ driver_form.emergency_contact_name }}
+            </div>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.emergency_contact_phone.errors }}
+                <label for="{{ driver_form.emergency_contact_phone.id_for_label }}">Phone:</label>
+                {{ driver_form.emergency_contact_phone }}
+            </div>
+            <p></p>
+        </br>
+        <input type="submit"
+            value="Save Changes" class="
+            btn btn-secondary">    
+        </form>    
+    </div>
+    <p></p><p></p>
+    <a href="{% url "add_points" driver.userprofile_ptr_id %}" class="btn btn-secondary" role="button">Update Driver Points</a>
+    <p></p><p></p>
+{% elif profile.is_sponsor%}
+    <h1>{{ driver.user.username }}'s Driver Profile</h1>
+    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525">
+        <h2>General Information</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ driver_form.non_field_errors }}
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.first_name.errors }}
+                <label for="{{ driver_form.first_name.id_for_label }}">First Name:</label>
+                {{ driver_form.first_name }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.middle_initial.errors }}
+                <label for="{{ driver_form.middle_initial.id_for_label }}">Middle Initial:</label>
+                {{ driver_form.middle_initial }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.last_name.errors }}
+                <label for="{{ driver_form.last_name.id_for_label }}">Last Name:</label>
+                {{ driver_form.last_name }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.phone_number.errors }}
+                <label for="{{ driver_form.phone_number.id_for_label }}">Phone Number:</label>
+                {{ driver_form.phone_number }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.email.errors }}
+                <label for="{{ driver_form.email.id_for_label }}">Email:</label>
+                {{ driver_form.email }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.date_of_birth.errors }}
+                <label for="{{ driver_form.date_of_birth.id_for_label }}">Date of Birth:</label>
+                {{ driver_form.date_of_birth }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.street_address.errors }}
+                <label for="{{ driver_form.street_address.id_for_label }}">Street Address:</label>
+                {{ driver_form.street_address }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.city.errors }}
+                <label for="{{ driver_form.city.id_for_label }}">City:</label>
+                {{ driver_form.city }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.state.errors }}
+                <label for="{{ driver_form.state.id_for_label }}">State:</label>
+                {{ driver_form.state }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.zipcode.errors }}
+                <label for="{{ driver_form.zipcode.id_for_label }}">ZIP Code:</label>
+                {{ driver_form.zipcode }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.drivers_license.errors }}
+                <label for="{{ driver_form.drivers_license.id_for_label }}">Driver's License:</label>
+                {{ driver_form.drivers_license }}
+            </div>
+            <p></p>
+
+            <h2>Vehicle Information</h2>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.year.errors }}
+                <label for="{{ driver_form.year.id_for_label }}">Vehicle Year:</label>
+                {{ driver_form.year }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.make.errors }}
+                <label for="{{ driver_form.make.id_for_label }}">Vehicle Make:</label>
+                {{ driver_form.make }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.model.errors }}
+                <label for="{{ driver_form.model.id_for_label }}">Vehicle Model:</label>
+                {{ driver_form.model }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.vin.errors }}
+                <label for="{{ driver_form.vin.id_for_label }}">Vehicle VIN:</label>
+                {{ driver_form.vin }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.provider_name.errors }}
+                <label for="{{ driver_form.provider_name.id_for_label }}">Insurance Provider:</label>
+                {{ driver_form.provider_name }}
+            </div>
+            <p></p>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.policy_number.errors }}
+                <label for="{{ driver_form.policy_number.id_for_label }}">Insurance Policy Number:</label>
+                {{ driver_form.policy_number }}
+            </div>
+            <p></p>
+            <h2>Emergency Contact</h2>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.emergency_contact_name.errors }}
+                <label for="{{ driver_form.emergency_contact_name.id_for_label }}">Name:</label>
+                {{ driver_form.emergency_contact_name }}
+            </div>
+            <p></p>
+            <div class="fieldWrapper">
+                {{ driver_form.emergency_contact_phone.errors }}
+                <label for="{{ driver_form.emergency_contact_phone.id_for_label }}">Phone:</label>
+                {{ driver_form.emergency_contact_phone }}
+            </div>
+            <p></p>
+        </br>
+        <input type="submit"
+            value="Save Changes" class="
+            btn btn-secondary">    
+        </form>    
+    </div>
+    <p></p><p></p>
+    <a href="{% url "add_points" driver.userprofile_ptr_id %}" class="btn btn-secondary" role="button">Update Driver Points</a>
+    <p></p><p></p>
+{% endif %}
+
+{% endblock %}

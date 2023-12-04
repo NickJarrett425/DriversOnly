@@ -1,0 +1,17 @@
+{% extends "registration/base.html" %}
+
+{% block content %}
+    <h2>Create Your Organization </h2>
+    <form action="." method="POST" class="padding">{% csrf_token %}
+     <div class="form-group">
+         <label class="small mb-1">Organization: </label>
+         {{ OrgFormCreate.Login }}
+     </div>
+        <div class="form-group">
+            <label class="small mb-1">Password: </label>
+         {{ OrgFormCreate.Password}}
+     </div>
+    <button class="btn btn-lg btn-primary" type="submit" name="action">Confirm</button>
+    </form>
+{% endblock %}
+
