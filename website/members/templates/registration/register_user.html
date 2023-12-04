@@ -1,0 +1,25 @@
+{% extends 'registration/base.html' %}
+
+{% block content %}
+{% if form.errors %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    There was an error with your form...
+    <button type="button" class="btn-close" data-bs-dismiss="alert"
+    aria-label="Close"></button>
+</div>
+{% endif %}
+    <div class="shadow w-75 p-4 mx-auto bg-body rounded">
+        <h1>Register</h1>
+        <br/>
+        <form action="{% url "register_user" %}" method=POST>
+            {% csrf_token %}
+            {{ form.as_p }}
+                
+            <br/><br/>
+            <input type="submit"
+            value="Register" class="
+            btn btn-secondary">
+        </form>
+    </div>
+<br/><br/>
+{% endblock %}

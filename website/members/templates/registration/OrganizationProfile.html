@@ -1,0 +1,27 @@
+{% extends "about/base.html" %}
+{% block content %}
+
+    <h1>Organization Name: {{ Org.OrganizationName }}</h1>
+    <h2>Address: {{ Org.address }}</h2>
+    <h2>Contact: {{ Org.phoneNumber }}</h2>
+    <h2>Email: {{ Org.email }}</h2>
+    <br>
+    {% if UserType.is_organization %}
+        <h3> Organization Data </h3>
+        <hr>
+        Point Conversion ratio: {{ Org.pointConversion }}
+        <br>
+        Negative Points Allowed: {{ Org.negativePoint }}
+        <br>
+        <br>
+        <p><a href="{% url "organizationUpdate" %}" class="btn btn-primary " role="button">Update Organization</a></p>
+    {% endif %}
+    {% if UserType.is_sponsor %}
+    <h3> Organization Data </h3>
+        <hr>
+        Point Conversion ratio: {{ Org.pointConversion }}
+        <br>
+        Negative Points Allowed: {{ Org.negativePoint }}
+        <p><a href="{% url "organizationUpdate" %}" class="btn btn-primary " role="button">Update Organization</a></p>
+    {% endif %}
+{% endblock content %}
