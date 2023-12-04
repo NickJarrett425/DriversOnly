@@ -1,0 +1,67 @@
+{% extends "about/base.html" %}
+
+{% block content %}
+{% if user.is_superuser %}
+    <h1>Closed Driver Applications to OnlyDrivers</h1>
+    <ul class="application-list">
+        {% for result in results %}
+            {% if result.is_approved %}
+                <li class="application-item">
+                    <strong>{{ result.driver.user.username }}'s Application to {{ result.sponsor_name }}</strong><strong style="color: rgb(50, 205, 50);"> ( Approved )</strong><strong>:</strong>
+                    <a href="{% url "application_review" result.id %}" class="btn btn-secondary" role="button">Review Application</a>
+                </li>
+            {% else %}
+                <li class="application-item">
+                    <strong>{{ result.driver.user.username }}'s Application to {{ result.sponsor_name }}</strong><strong style="color: rgb(255, 0, 0);"> ( Denied )</strong><strong>:</strong>
+                    <a href="{% url "application_review" result.id %}" class="btn btn-secondary" role="button">Review Application</a>
+                </li>
+            {% endif %}
+        </br>
+        {% empty %}
+            <li class="no-applications">No closed applications available</li>
+        {% endfor %}
+    </ul>
+{% elif profile.is_sponsor %}
+    <h1>Closed Applications to {{sponsor.sponsor_name}}</h1>
+    <ul class="application-list">
+        {% for result in results %}
+            {% if result.is_approved %}
+                <li class="application-item">
+                    <strong>{{ result.driver.user.username }}'s Application</strong><strong style="color: rgb(50, 205, 50);"> ( Approved )</strong><strong>:</strong>
+                    <a href="{% url "application_review" result.id %}" class="btn btn-secondary" role="button">Review Application</a>
+                </li>
+            {% else %}
+                <li class="application-item">
+                    <strong>{{ result.driver.user.username }}'s Application</strong><strong style="color: rgb(255, 0, 0);"> ( Denied )</strong><strong>:</strong>
+                    <a href="{% url "application_review" result.id %}" class="btn btn-secondary" role="button">Review Application</a>
+                </li>
+            {% endif %}
+        </br>
+        {% empty %}
+            <li class="no-applications">No closed applications available</li>
+        {% endfor %}
+    </ul>
+{% elif profile.is_driver %}
+<h1>Your Closed Applications</h1>
+    <ul class="application-list">
+        {% for result in results %}
+            {% if result.is_approved %}
+                <li class="application-item">
+                    <strong>Your Application to {{ result.sponsor_name }}</strong><strong style="color: rgb(50, 205, 50);"> ( Approved )</strong><strong>:</strong>
+                    <a href="{% url "application_review" result.id %}" class="btn btn-secondary" role="button">Review Application</a>
+                </li>
+            {% else %}
+                <li class="application-item">
+                    <strong>Your Application to {{ result.sponsor_name }}</strong><strong style="color: rgb(255, 0, 0);"> ( Denied )</strong><strong>:</strong>
+                    <a href="{% url "application_review" result.id %}" class="btn btn-secondary" role="button">Review Application</a>
+                </li>
+            {% endif %}
+        </br>
+        {% empty %}
+            <li class="no-applications">No closed applications available</li>
+            <a href="{% url "application_form" %}" class="btn btn-outline-secondary" role="button">Apply Here</a>
+        {% endfor %}
+    </ul>
+{% endif %}
+<a href="{% url "application_list" %}" class="btn btn-outline-primary" role="button">Back</a>
+{% endblock %}
