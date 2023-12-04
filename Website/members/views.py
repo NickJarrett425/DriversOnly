@@ -509,7 +509,7 @@ def enter_email(request):
                   "Forgot your password?\n" \
                   "No worries, it happens! Click the link below to log in to your OnlyDrivers account." \
                   "This link expires in 10 minutes and can only be used once.",
-                  settings.EMAIL_HOST_USER, 
+                  'onlydrivers4910@gmail.com', 
                   [email_address])
         
     return render(request, 'password_change/enter_email.html', {'form': form})
