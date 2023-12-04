@@ -1,0 +1,25 @@
+{% extends 'registration/base.html' %}
+
+{% block content %}
+<br/><br/> 
+    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525px">
+    <h1 class="center">Enter Email</h1>
+<br/>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input type="email" style="width: 475px" class="form-control" name="email" aria-describedby="emailHelp" required>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <input type="submit" value="Submit" class="btn btn-secondary">
+        </div>
+    </form>
+
+    <br/><br/>
+    <div>
+        <a href="{% url 'login' %}" class="btn btn-secondary" role="button">Back to Login</a>
+    </div>
+    
+{% endblock %}
