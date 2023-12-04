@@ -1,5 +1,6 @@
 from django.urls import path
-from .import views
+from . import views
+from .views import enter_email, reset_password_confirm
 
 urlpatterns = [
     path('', views.login_user, name="login"),
@@ -15,5 +16,6 @@ urlpatterns = [
     path('profile/sponsors/confirmation/<int:id>', views.leave_sponsor_confirm, name='leave_sponsor_confirm'),
     path('profile/sponsors/leave/<int:id>', views.leave_sponsor, name='leave_sponsor'),
     path('register_user/', views.register_user, name="register_user"),
-    path('enter_email/', views.enter_email, name="enter_email")
+    path('reset-password/', enter_email, name='enter_email'),
+    path('reset-password/<str:token>/', reset_password_confirm, name='reset_password_confirm'),
 ]

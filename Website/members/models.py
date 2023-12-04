@@ -58,3 +58,8 @@ class PointReason(models.Model):
     driver = models.ForeignKey(DriverProfile, on_delete=models.SET_NULL, null=True)
     sponsor = models.ForeignKey(SponsorUserProfile, on_delete=models.SET_NULL, null=True)
     is_add = models.BooleanField('point change type', default=True)
+    
+class PasswordResetToken(models.Model):
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    token = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)

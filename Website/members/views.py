@@ -1,4 +1,4 @@
-from .models import UserProfile, DriverProfile, SponsorList, SponsorUserProfile, PointReason
+from .models import UserProfile, DriverProfile, SponsorList, SponsorUserProfile, PointReason, PasswordResetToken
 from .forms import RegisterUserForm, UserProfileForm, DriverProfileForm, AssignSponsorForm, PointReasonForm, EmailForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -8,6 +8,8 @@ from django.contrib.auth.forms import UserCreationForm
 from report.models import login_log
 from django.core.mail import send_mail
 from django.conf import settings
+from django.utils.crypto import get_random_string
+from django.utils import timezone
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -500,16 +502,50 @@ def leave_sponsor(request, id):
     return redirect('/dashboard')
 
 def enter_email(request):
-    form = EmailForm(request.POST)
-    if form.is_valid():
-        email_address = form.cleaned_data['email']
-        messages.success(request, f"An email has been sent to {email_address}. \nPlease check your inbox.")
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            user_profile = UserProfile.objects.filter(email=email).first()
 
-        send_mail("OnlyDrivers: Reset Your Password",
-                  "Forgot your password?\n" \
-                  "No worries, it happens! Click the link below to log in to your OnlyDrivers account." \
-                  "This link expires in 10 minutes and can only be used once.",
-                  'onlydrivers4910@gmail.com', 
-                  [email_address])
-        
+            if user_profile:
+                # Generate and save a reset token
+                token = get_random_string(length=32)
+                PasswordResetToken.objects.create(user_profile=user_profile, token=token)
+
+                # Send email with reset link
+                reset_link = request.build_absolute_uri('/reset-password/' + token + '/')
+                send_mail('Password Reset Request', f'Click the link to reset your password: {reset_link}', 'onlydrivers4910@gmail.com', [email])
+
+                messages.success(request, 'Password reset link sent to your email.')
+            else:
+                messages.error(request, 'User with this email address does not exist.')
+        else:
+            messages.error(request, 'Invalid form submission.')
+    else:
+        form = EmailForm()
+
     return render(request, 'password_change/enter_email.html', {'form': form})
+
+def reset_password_confirm(request, token):
+    reset_token = PasswordResetToken.objects.filter(token=token).first()
+
+    if reset_token and timezone.now() - reset_token.created_at < timezone.timedelta(hours=1):
+        if request.method == 'POST':
+            password = request.POST.get('password')
+            user_profile = reset_token.user_profile.user
+            user_profile.set_password(password)
+            user_profile.save()
+
+            # Log the user in
+            user = authenticate(request, username=user_profile.username, password=password)
+            login(request, user)
+
+            # Delete the used reset token
+            reset_token.delete()
+
+            messages.success(request, 'Password reset successfully.')
+            return redirect('/about')  # Replace 'home' with your desired redirect path
+        return render(request, 'password_change/reset_password_confirm.html', {'token': token})
+    else:
+        return redirect('enter_email')  # Redirect to the password reset request page
