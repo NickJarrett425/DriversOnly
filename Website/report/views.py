@@ -15,7 +15,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 import os
 from django.conf import settings
 import datetime
-from .forms import admin_login_filter, user_login_filter
+from .forms import admin_login_filter
 
 
 
@@ -26,15 +26,7 @@ def report_login(request):
             messages.error(request, "You need to log in or register to view your profile")
             return redirect('/')
         profile, created = UserProfile.objects.get_or_create(user=request.user)
-        if profile.is_driver:
-            try:
-                driver = DriverProfile.objects.get(user=request.user)
-            except DriverProfile.DoesNotExist:
-                driver = None
-            sponsors = driver.sponsors.all()
-
-            return render(request, 'registration/profile.html', {'profile': profile, 'driver': driver, 'sponsors': sponsors})
-        elif profile.is_sponsor:
+        if profile.is_sponsor:
             report_form = admin_login_filter(request.POST)                
             if report_form.is_valid():
                 user = report_form.cleaned_data['user']
@@ -44,7 +36,7 @@ def report_login(request):
                 end_date_range = report_form.cleaned_data['end_date_range']
 
                 if ((user == "") and (start_date_range != None)):
-                    response = all_date_range_login_attempts(request,start_date_range,end_date_range)
+                    response = all_date_range_login_attempts_spon(request,start_date_range,end_date_range)
                 elif ((user != "") and (start_date_range == None)):
                     if valid_user_for_sponsor(request,user):  
                         response = all_user_login_attempts(request,user)
@@ -72,6 +64,7 @@ def report_login(request):
             else:
                 return(render(request,"report/login.html",{'form':report_form}))
     else:
+        print("test")
         form = admin_login_filter()
         return render( request, "report/login.html", {'form':form})
 
@@ -263,3 +256,27 @@ def all_date_range_login_attempts(request,start_range,end_range):
     title  = "Login Attempts Report in a date range"
     response = generate_pdf(title,data)
     return(response)
+
+def all_date_range_login_attempts_spon(request,start_range,end_range):
+
+    #ranges are expected to be strings
+
+    sponsor = SponsorUserProfile.objects.get(user=request.user)
+    drivers = DriverProfile.objects.filter(sponsors__sponsor_name=sponsor.sponsor_name)
+
+    table_header = ['Date and Time', 'Username', 'Login Success'] # Headers
+    data = [table_header]
+
+    for driver in drivers:
+        login_list = login_log.objects.filter(Datestamp__range=[start_range,end_range],username=driver.username)
+        for log in login_list:
+            formatted_date = log.Datestamp.strftime('%m-%d-%Y %H:%M')
+            login_result = bool(log.login_success)
+            row = [formatted_date, log.username, login_result]
+            data.append(row)
+    
+    title  = "Login Attempts Report in a date range"
+    response = generate_pdf(title,data)
+    return(response)
+
+
