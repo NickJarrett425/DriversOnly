@@ -6,24 +6,25 @@ from django.contrib import messages
 from members.forms import ChooseSponsorForm
 from members.models import UserProfile, SponsorList, SponsorUserProfile
 
-# def choose_catalog(request):
-#     user_sponsors = SponsorList.objects.filter(sponsored_users__user=request.user)
+def choose_catalog(request):
+    user_sponsors = SponsorList.objects.filter(sponsored_users__user=request.user)
 
-#     if request.method == "POST":
-#         form = ChooseSponsorForm(request.POST, sponsor_queryset=user_sponsors)
-#         if form.is_valid():
-#             selected_sponsor_id = form.cleaned_data['sponsor_choices']
-#             selected_sponsor = SponsorList.objects.get(id=selected_sponsor_id)
+    if request.method == "POST":
+        form = ChooseSponsorForm(request.POST, sponsor_queryset=user_sponsors)
+        if form.is_valid():
+            selected_sponsor_id = form.cleaned_data['sponsor_choices']
+            selected_sponsor = SponsorList.objects.get(id=selected_sponsor_id)
             
-#             request.session['selected_sponsor'] = selected_sponsor.sponsor_name
-#             return redirect('search_catalog')
-#     else:
-#         form = ChooseSponsorForm(sponsor_queryset=user_sponsors)
+            # Perform actions with the selected sponsor, for example, store it in the session
+            request.session['selected_sponsor'] = selected_sponsor.sponsor_name
+            return redirect('search_catalog')
+    else:
+        form = ChooseSponsorForm(sponsor_queryset=user_sponsors)
 
-#     context = {
-#         'form': form,
-#     }
-#     return render(request, 'choose_catalog.html', context)
+    context = {
+        'form': form,
+    }
+    return render(request, 'choose_catalog.html', context)
 
 def search_catalog(request):
     if not request.user.is_authenticated:

@@ -28,7 +28,7 @@ class SponsorList(models.Model):
         return self.sponsor_name
 
 class DriverProfile(UserProfile):
-    selected_sponsor_id = models.IntegerField(default=0)
+    points = models.IntegerField(default=0)
     sponsors = models.ManyToManyField(SponsorList, related_name='sponsored_users')
     street_address = models.CharField(max_length= 85, blank=True)
     city = models.CharField(max_length=40, blank=True)
@@ -51,14 +51,6 @@ class DriverProfile(UserProfile):
 
     def __str__(self):
         return self.user.username
-
-
-class DriverPointsForSponsor(models.Model):
-    driver = models.ForeignKey(DriverProfile, on_delete=models.SET_NULL, null=True)
-    sponsor = models.ForeignKey(SponsorList, on_delete=models.SET_NULL, null=True)
-    points = models.IntegerField(default=0)
-    
-
 
 class PointReason(models.Model):
     point_amt = models.IntegerField(default=0)
