@@ -4,7 +4,7 @@ from urllib.parse import unquote
 import requests
 from django.contrib import messages
 from members.forms import ChooseSponsorForm
-from members.models import UserProfile, SponsorList, SponsorUserProfile, DriverProfile
+from members.models import UserProfile, SponsorList, SponsorUserProfile
 
 # def choose_catalog(request):
 #     user_sponsors = SponsorList.objects.filter(sponsored_users__user=request.user)
@@ -56,9 +56,8 @@ def search_catalog(request):
             'explicit': explicit,
         }
         if profile.is_driver:
-            driver = DriverProfile.objects.get(user=request.user)
-            sponsor_name = driver.selected_sponsor_id
-            sponsor = SponsorList.objects.get(id=sponsor_name)
+            sponsor_name = request.session.get('selected_sponsor')
+            sponsor = SponsorList.objects.get(sponsor_name=sponsor_name)
         elif profile.is_sponsor:
             sponsor_user = SponsorUserProfile.objects.get(user=request.user)
             sponsor = SponsorList.objects.get(sponsor_name=sponsor_user.sponsor_name)
