@@ -1,3 +1,4 @@
 # DriversOnly
 
-## DriversOnly is a web application for the trucking industry that incentivizes and improves truck drivers' on-road performance by allowing companies to reward drivers with points for positive behavior, redeemable for products in their sponsor's catalog.
+## Project Overview
+DriversOnly is a web application designed to incentivize and improve the on-road performance of truck drivers. Developed for the trucking industry, the system allows companies (sponsors) to reward drivers with points for good behavior and enables drivers to redeem these points for products in their sponsor's catalog. The system is built on Django for the backend and Bootstrap for the frontend, utilizing the iTunes API for product catalog information.
