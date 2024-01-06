@@ -15,7 +15,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = ['54.81.167.211', 'localhost', 'team06.cpsc4911.com']
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -127,8 +127,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Email Server Info
-EMAIL_BACKEND = 'django_ses.SESBackend'
-AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-AWS_SES_REGION_NAME = 'us-east-1'
-AWS_SES_REGION_ENDPOINT = 'email.us-east-1.amazonaws.com'
+#EMAIL_BACKEND = 'django_ses.SESBackend'
+#AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+#AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+#AWS_SES_REGION_NAME = 'us-east-1'
+#AWS_SES_REGION_ENDPOINT = 'email.us-east-1.amazonaws.com'
