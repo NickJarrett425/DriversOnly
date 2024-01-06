@@ -10,8 +10,8 @@ _Note: If using Unix or MacOS, replace python with python3 in each command._
 2. Navigate to the project directory.
 3. Set up a virtual environment: **`python -m venv venv`**
 4. Activate the virtual environment:
-  - On Windows: **`venv\Scripts\activate`**
-  - On Unix or MacOS: **`source venv/bin/activate`**
+    - On Windows: **`venv\Scripts\activate`**
+    - On Unix or MacOS: **`source venv/bin/activate`**
 5. Install dependencies: **`pip install -r requirements.txt`a**
 6. Create and apply database migrations: **`python manage.py migrate`**
 7. Run the development server: **`python manage.py runserver`**
