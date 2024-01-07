@@ -2,6 +2,6 @@
 virt/
 virtual/
 
-# Ignore the .env file.
 *.env
 *.pyc
+*.ppk
