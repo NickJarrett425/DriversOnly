@@ -5,3 +5,4 @@ virtual/
 *.env
 *.pyc
 *.ppk
+*.lnk
