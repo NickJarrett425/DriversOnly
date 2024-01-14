@@ -1,6 +1,7 @@
 # Ignore the virtual environment
 virt/
 virtual/
+Website/collected_static
 
 *.env
 *.pyc
