@@ -1,5 +1,5 @@
-{% load static %}
 
+{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -23,14 +23,19 @@
                 
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"
-                    aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endfor %}
         {% endif %}
-    {% block content %}
+        {% block content %}
 
-    {% endblock %}
+        {% endblock %}
+    </div>
+
+    <!-- Copyright Notice -->
+    <div class="text-center mt-5">
+        <p>&copy; 2024 Nicholas Jarrett, David Bradley, Neil Kuehn, and Dhruvisha Patel. All rights reserved.</p>
+    </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
@@ -44,3 +49,5 @@
     -->
   </body>
 </html>
+
+
