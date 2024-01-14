@@ -3,7 +3,7 @@
 Founding Developers: Nicholas Jarrett, David Bradley, Neil Kuehn, and Dhruvisha Patel
 
 ## Project Overview
-DriversOnly is a web application designed to incentivize and improve the on-road performance of truck drivers. Developed for the trucking industry, the system allows companies (sponsors) to reward drivers with points for good behavior and enables drivers to redeem these points for products in their sponsor's catalog. The system is built on Django for the backend and Bootstrap for the frontend, utilizing the iTunes API for product catalog information.
+DriversOnly is a web application designed to incentivize and improve the on-road performance of truck drivers. Developed for the trucking industry, the system allows companies (sponsors) to reward drivers with points for good behavior and enables drivers to redeem these points for products in their sponsor's catalog. The system is built on Django for the backend and Bootstrap for the frontend, utilizing the iTunes API for product catalog information. This project is a proof of concept.
 
 Other Technologies Used: Amazon RDS, Amazon EC2, Amazon SES, Amazon Route53, and Apache
 
