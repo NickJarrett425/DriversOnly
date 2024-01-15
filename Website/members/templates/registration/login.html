@@ -1,32 +1,125 @@
 {% extends 'registration/base.html' %}
 
 {% block content %}
-<br/><br/> 
+  <div style="position: relative;">
+    <div class="help-container">
+      <a href="#" id="help-button" class="help-button">
+        <div class="custom-button">
+          <span class="button-text">Hiring Managers Click Here</span>
+        </div>
+      </a>
+      <div id="help-text" class="hidden">
+        <div id="help-textarea">
+          <strong>Welcome, Hiring Manager!</strong><br>
+
+          I'm delighted to have you here. As a web developer passionate about creating seamless online experiences, I invite you to explore my personal project.<br><br>
+          
+          <strong>Test Driver Login:</strong><br>
+          - Username: test_driver<br>
+          - Password: idontlikedriving<br><br>
+          
+          <strong>Test Sponsor Login:</strong><br>
+          - Username: test_sponsor<br>
+          - Password: idontlikedriving<br><br>
+          
+          These credentials are crafted exclusively for you to delve into the intricacies of my work. Whether it's responsive design, smooth interactions, or innovative solutions, I hope you find the project reflective of my commitment to excellence.
+          
+          If you have any questions or wish to discuss how my skills align with your team's needs, please don't hesitate to reach out. You can contact me directly via email at <strong>nicholas.jarrett10@gmail.com</strong>.<br><br>
+          
+          Happy exploring, and I look forward to the possibility of working together!<br><br>
+          
+          Best regards,<br>
+          Nicholas Jarrett
+        </div>
+      </div>
+    </div>
+    <br/><br/> 
     <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525px">
-    <h1 class="center">Login</h1>
-<br/>
-    <form action="" method="POST">
+      <h1 class="center">Login</h1>
+      <br/>
+      <form action="" method="POST">
         {% csrf_token %}
         <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Username</label>
-            <input type="text" style="width: 475px" class="form-control" name="username" aria-describedby="emailHelp">
+          <label for="exampleInputEmail1" class="form-label">Username</label>
+          <input type="text" style="width: 475px" class="form-control" name="username" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" style="width: 475px" class="form-control" name="password">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input type="password" style="width: 475px" class="form-control" name="password">
         </div>
 
         <div class="d-flex justify-content-between">
-            <input type="submit" value="Login" class="btn btn-secondary">
-            <a href="{% url 'enter_email' %}" class="btn btn-secondary" role="button">Forgot Password?</a>
+          <input type="submit" value="Login" class="btn btn-secondary">
+          <a href="{% url 'enter_email' %}" class="btn btn-secondary" role="button">Forgot Password?</a>
         </div>
-    </form>
+      </form>
 
-    <br/><br/>
-    <div>
+      <br/><br/>
+      <div>
         Need an Account? 
         <br/>
         <a href="{% url 'register_user' %}" class="btn btn-secondary" role="button">Register Here</a>
+      </div>
     </div>
-    
+  </div>
+
+  <style>
+    .help-container {
+      position: relative;
+    }
+  
+    .help-button {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      text-decoration: none;
+    }
+
+    .custom-button {
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s; 
+    }
+
+    .custom-button:hover {
+      background-color: #217DBB; 
+    }
+
+    .button-text {
+      margin: 0 auto;
+      font-size: 16px;
+    }
+  
+    #help-text {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background-color: #f1f1f1;
+      padding: 10px;
+      border-radius: 5px;
+      display: none;
+    }
+  
+    #help-textarea {
+      width: 350px;
+      height: 430px;
+      box-sizing: border-box;
+      font-size: 11px;
+    }
+  </style>
+
+  <script>
+    document.getElementById("help-button").addEventListener("click", function(event) {
+      event.preventDefault();
+      var helpText = document.getElementById("help-text");
+      helpText.style.display = helpText.style.display === "none" || helpText.style.display === "" ? "block" : "none";
+    });
+  </script>
+  
 {% endblock %}
