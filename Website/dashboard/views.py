@@ -11,7 +11,7 @@ def dashboard(request):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
 
     if request.user.is_superuser:   

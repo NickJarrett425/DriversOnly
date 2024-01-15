@@ -78,7 +78,7 @@ def view_profile(request):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     if profile.is_driver:
         try:
@@ -109,7 +109,7 @@ def edit_profile(request):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
 
     if profile.is_driver:
@@ -168,7 +168,7 @@ def driver_list(request):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     
     if profile.is_sponsor:
@@ -191,7 +191,7 @@ def view_driver(request, id):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     
     if profile.is_sponsor:
@@ -222,7 +222,7 @@ def edit_driver(request, id):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     if profile.is_sponsor or request.user.is_superuser:
         try:
@@ -275,7 +275,7 @@ def add_points(request, id):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     if profile.is_sponsor:
         try:
@@ -376,7 +376,7 @@ def add_sponsor_user(request):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     if profile.is_sponsor:
         sponsor_user = SponsorUserProfile.objects.get(user=request.user)
@@ -454,7 +454,7 @@ def sponsor_list(request):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     if profile.is_driver:
         driver = DriverProfile.objects.get(user=request.user)
@@ -476,7 +476,7 @@ def leave_sponsor_confirm(request, id):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     if profile.is_driver:
         sponsor = SponsorList.objects.get(id=id)
@@ -492,7 +492,7 @@ def leave_sponsor(request, id):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     driver = DriverProfile.objects.get(user=request.user)
     sponsor = SponsorList.objects.get(id=id)

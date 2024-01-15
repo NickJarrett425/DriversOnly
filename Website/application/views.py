@@ -30,7 +30,7 @@ def application_list(request):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     if profile.is_driver:
         driver = DriverProfile.objects.get(user=request.user)
@@ -57,7 +57,7 @@ def application_closed(request):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     if profile.is_driver:
         driver = DriverProfile.objects.get(user=request.user)
@@ -83,7 +83,7 @@ def application_review(request, id):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     if profile.is_driver:
         driver = DriverProfile.objects.get(user=request.user)
@@ -119,7 +119,7 @@ def application_deny(request, id):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     application = Application.objects.get(id=id)
     if not application.is_open and not request.user.is_superuser and not profile.is_driver:
@@ -180,7 +180,7 @@ def application_approve(request, id):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     application = Application.objects.get(id=id)
     if not application.is_open and not request.user.is_superuser:
@@ -210,7 +210,7 @@ def application_waitlist(request, id):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     application = Application.objects.get(id=id)
     profile = UserProfile.objects.get(user=request.user)
@@ -236,7 +236,7 @@ def application_edit(request, id):
     except UserProfile.DoesNotExist:
         profile = None
     if not request.user.is_superuser and not profile.is_sponsor and not profile.is_driver:
-        messages.error(request, "There is an error with your account, please contact Team06 at team06.onlydrivers@gmail.com for support.")
+        messages.error(request, "There is an error with your account, please contact Team06 at onlydrivers4910@gmail.com for support.")
         return redirect('/about')
     if profile.is_sponsor or request.user.is_superuser:
         application = Application.objects.get(id=id)
