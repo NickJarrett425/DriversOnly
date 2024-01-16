@@ -34,18 +34,18 @@
       </div>
     </div>
     <br/><br/> 
-    <div class="shadow p-4 mx-auto bg-body rounded" style="width: 525px">
+    <div class="shadow p-4 mx-auto bg-body rounded" style="max-width: 525px; width: 100%;">
       <h1 class="center">Login</h1>
       <br/>
       <form action="" method="POST">
         {% csrf_token %}
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Username</label>
-          <input type="text" style="width: 475px" class="form-control" name="username" aria-describedby="emailHelp">
+          <input type="text" style="width: 100%" class="form-control" name="username" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
           <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input type="password" style="width: 475px" class="form-control" name="password">
+          <input type="password" style="width: 100%" class="form-control" name="password">
         </div>
 
         <div class="d-flex justify-content-between">
@@ -111,6 +111,10 @@
       height: 415px;
       box-sizing: border-box;
       font-size: 11px;
+    }
+
+    .shadow {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
   </style>
 
