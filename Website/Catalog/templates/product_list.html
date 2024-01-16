@@ -10,7 +10,7 @@
                 {% elif profile.is_sponsor %}
                     <h1 class="mb-4 text-center">{{ sponsor.sponsor_name }}'s Catalog</h1>
                 {% elif user.is_superuser %}
-                    <h1 class="mb-4 text-center">OnlyDrivers Catalog</h1>
+                    <h1 class="mb-4 text-center">DriversOnly Catalog</h1>
                 {% endif %}    
                 <form action="{% url 'search_catalog' %}" method="GET">
                     <div class="input-group">
@@ -47,7 +47,13 @@
             {% endfor %}
         </div>
     {% elif term == '' %}
-        <p class="text-center text-danger fw-bold">Please enter a search term.</p>
+        {% if profile.is_driver %}
+            <p class="text-center text-danger fw-bold">Discover and buy a wide range of products from iTunes. Easily find what you're looking for in {{ sponsor.sponsor_name }}'s driver catalog.</p>
+        {% elif profile.is_sponsor %}
+            <p class="text-center text-danger fw-bold">Discover and buy a wide range of products from iTunes. Easily find what you're looking for in {{ sponsor.sponsor_name }}'s catalog.</p>
+        {% elif user.is_superuser %}
+            <p class="text-center text-danger fw-bold">Discover and buy a wide range of products from iTunes. Easily find what you're looking for in DriverOnly's catalog.</p>
+        {% endif %}
     {% else %}
         <p>No products found.</p>
     {% endif %}
