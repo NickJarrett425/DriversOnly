@@ -33,5 +33,5 @@ Found a bug? Please submit an issue using the "Issues" tab above. If you want to
 
 ## Demo Video
 <p align="center">
-[<img src="https://github.com/NickJarrett425/DriversOnly/blob/main/Website/static/Thumbnail.PNG" width="50%">](https://www.youtube.com/watch?v=AJJjYWOMbn4 "DriversOnly.org")
+    [<img src="https://github.com/NickJarrett425/DriversOnly/blob/main/Website/static/Thumbnail.PNG" width="50%">](https://www.youtube.com/watch?v=AJJjYWOMbn4 "DriversOnly.org")
 </p>
