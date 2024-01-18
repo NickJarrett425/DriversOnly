@@ -32,6 +32,4 @@ _Note: If using Unix or MacOS, replace python with python3 in each command._
 Found a bug? Please submit an issue using the "Issues" tab above. If you want to contribute by fixing the bug or adding a new features, please submit a pull request referencing the issue you created.
 
 ## Demo Video
-[![DriversOnly.org]
-(https://imgur.com/a/YZeyK7t)]
-(https://www.youtube.com/watch?v=AJJjYWOMbn4 "DriversOnly.org")
+[<img src="https://imgur.com/a/YZeyK7t" width="50%">](https://www.youtube.com/watch?v=AJJjYWOMbn4 "DriversOnly.org")
