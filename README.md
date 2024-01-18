@@ -32,5 +32,4 @@ _Note: If using Unix or MacOS, replace python with python3 in each command._
 Found a bug? Please submit an issue using the "Issues" tab above. If you want to contribute by fixing the bug or adding a new features, please submit a pull request referencing the issue you created.
 
 ## Demo Video
-Coming soon...
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/AJJjYWOMbn4?si=EBss3acJZVHiRkma" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
