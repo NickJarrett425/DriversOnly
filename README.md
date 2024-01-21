@@ -24,7 +24,7 @@ _Note: If using Unix or MacOS, replace python with python3 in each command._
 1. Create a new branch for your feature/bug fix: **`git checkout -b [branch_name]`**
 2. Make changes to the codebase.
 3. Test your changes thoroughly.
-4. Commit your changesL **`git commit -m "Your descriptive message"`**
+4. Commit your changes: **`git commit -m "Your descriptive message"`**
 5. Push the branch to the repository: **`git push origin [branch_name]`**
 6. Create a pull request on GitHub.
 
